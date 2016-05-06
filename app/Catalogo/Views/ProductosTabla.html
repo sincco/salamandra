@@ -1,21 +1,26 @@
 {% include 'header.html' %}
+{% include 'menu.html' %}
 
-<h1>Productos</h1>
-<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
-	<thead>
-		<tr>
-			<th>Clave</th><th>Descripción</th><th>Existencias</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for producto in productos %}
-		<tr>
-			<td>{{ producto.CVE_ART|e }}</td>
-			<td>{{ producto.DESCR|e }}</td>
-			<td>{{ producto.EXIST|e }}</td>
-		</tr>
-		{% endfor %}
-	</tbody>
-</table>
+<div class="container">
+	<div class="row">
+		<h1>Productos</h1>
+		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
+			<thead>
+				<tr>
+					<th>Clave</th><th>Descripción</th><th>Existencias</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for producto in productos %}
+				<tr>
+					<td>{{ producto.CVE_ART|e }}</td>
+					<td>{{ producto.DESCR|e }}</td>
+					<td>{{ producto.EXIST|e }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
 
 {% include 'footer.html' %}
