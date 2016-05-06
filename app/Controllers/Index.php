@@ -5,4 +5,8 @@ class IndexController extends Sincco\Sfphp\Abstracts\Controller {
 		$view = $this->newView('Login');
 		echo $view->render();
 	}
+
+	public function login() {
+		echo "LOGIN";
+	}
 }
