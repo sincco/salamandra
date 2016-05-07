@@ -10,7 +10,7 @@
 		</div>
 		<div class="navbar-collapse collapse navbar-responsive-collapse">
 			<form class="navbar-form navbar-left" id="acceso">
-				<input type="text" class="form-control col-lg-8" placeholder="usuario" name="clave" id="usuario">
+				<input type="text" class="form-control col-lg-8" placeholder="usuario" name="user" id="usuario">
 				<input type="password" class="form-control col-lg-8" placeholder="contraseña" name="password" id="password">
 				<button type="button" class="btn btn-success" onclick="accesar()">entrar</button>
 			</form>
@@ -27,3 +27,35 @@
 		</div>
 	</div>
 </header>
+<script type="text/javascript">
+$(function(){
+    $("#password").keypress(function(event) {
+        if(event.which == 13) {
+            accesar()
+        }
+    })
+
+    $("#usuario").keypress(function(event) {
+        if(event.which == 13) {
+            accesar()
+        }
+    })
+})
+
+function accesar() {
+    loader.show()
+    sincco.consumirAPI('POST','{{constant('BASE_URL')}}login/apilogin',{userData:$("#acceso").serializeJSON()})
+    .done(function(data) {
+		loader.hide()
+        if(data.acceso) {
+            window.location = '{{constant('BASE_URL')}}dashboard'
+        } else {
+        	toastr.warning('Verifica tu usuario y contraseña.', 'Error de acceso')
+        }
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+    	console.log(errorThrown);
+        toastr.error('Error al hacer la petición de acceso.', 'Intenta de nuevo')
+        loader.hide()
+    })
+}
+</script>

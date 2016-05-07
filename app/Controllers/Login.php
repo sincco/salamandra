@@ -1,0 +1,52 @@
+<?php
+
+use \Sincco\Sfphp\Config\Reader;
+use \Sincco\Sfphp\Request;
+use \Sincco\Sfphp\Crypt;
+use \Sincco\Login\Login;
+
+/**
+ * Control de acceso al sistema
+ */
+class LoginController extends Sincco\Sfphp\Abstracts\Controller {
+	
+	/**
+	 * Acción por default
+	 * @return none
+	 */
+	public function index() {
+		if(! Login::isLogged() ) {
+			$view = $this->newView( 'Login' );
+			echo $view->render();
+		} else
+			Request::redirect( 'dashboard' );
+	}
+
+	/**
+	 * Peticion de acceso
+	 * @return none
+	 */
+	public function apiLogin() {
+		$db = Reader::get( 'bases' );
+		$db = $db['default'];
+		$db['password'] = trim( Crypt::decrypt( $db['password'] ) );
+		Login::setDatabase($db);
+		if( Login::login( Request::getParams( 'userData' ) ) )
+			$acceso = TRUE;
+		else
+			$acceso = FALSE;
+		echo json_encode( array( 'acceso'=>$acceso ) );
+	}
+
+	/**
+	 * Crea una nueva cuenta de usuario
+	 * @return none
+	 */
+	public function apiRegisterUser() {
+		$db = Reader::get( 'bases' );
+		$db = $db['default'];
+		$db['password'] = trim( Crypt::decrypt( $db['password'] ) );
+		Login::setDatabase( $db );
+		var_dump( Login::createUser( array( 'user'=>'ivan', 'email'=>'ivan', 'password'=>'eco123' ) ) );
+	}
+}

@@ -11,20 +11,20 @@
 		<url>http://sfphp.net/</url>
 	</front>
 	<bases>
-		<default>
+		<sae>
 			<host>/var/www/html/sfphp/</host>
 			<user>sysdba</user>
 			<password>lT6Ym0zNPLAsmRC1Heyrlek8x81CQEk7lUAxuMzf0p4=</password>
 			<dbname>SAE50EMPRE01.FDB</dbname>
 			<type>firebird</type>
-		</default>
-		<sae>
-			<host>mysql.sincco.com</host>
-			<user>usuario</user>
-			<password>cEgd800Zb4B9hmmuUMMtts7s/hLXyNYva2OLB5olZz4=</password>
-			<dbname>usuario</dbname>
-			<type>mysql</type>
 		</sae>
+		<default>
+			<host>localhost</host>
+			<user>salamandra</user>
+			<password>j9IQWZOr67hndkV1/GQw8U9ToR7X6R17VE6UanjKnHg=</password>
+			<dbname>salamandra</dbname>
+			<type>mysql</type>
+		</default>
 	</bases>
 	<dev>
 		<log>1</log>
