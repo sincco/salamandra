@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 08-05-2016 a las 20:40:14
+-- Tiempo de generación: 09-05-2016 a las 09:29:01
 -- Versión del servidor: 5.5.49-0ubuntu0.14.04.1
 -- Versión de PHP: 5.5.9-1ubuntu4.16
 
@@ -23,6 +23,32 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `produccionRecetas`
+--
+
+CREATE TABLE IF NOT EXISTS `produccionRecetas` (
+  `receta` int(11) NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(75) NOT NULL,
+  `status` char(1) NOT NULL,
+  PRIMARY KEY (`receta`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Cabecera de recetas' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `produccionRecetasDetalle`
+--
+
+CREATE TABLE IF NOT EXISTS `produccionRecetasDetalle` (
+  `receta` int(11) NOT NULL,
+  `producto` varchar(16) NOT NULL,
+  `cantidad` float NOT NULL,
+  UNIQUE KEY `recetas_detalle` (`receta`,`producto`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Ingredientes de recetas';
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `__menus`
 --
 
@@ -32,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `__menus` (
   `menuURL` varchar(150) DEFAULT NULL,
   `menuParent` int(11) NOT NULL,
   PRIMARY KEY (`menuId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='System menus' AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='System menus' AUTO_INCREMENT=9 ;
 
 --
 -- Volcado de datos para la tabla `__menus`
@@ -44,7 +70,9 @@ INSERT INTO `__menus` (`menuId`, `menuText`, `menuURL`, `menuParent`) VALUES
 (3, 'Proveedores', 'catalogo/proveedores', 1),
 (4, 'Productos', 'catalogo/productos', 1),
 (5, 'Configuración', NULL, 0),
-(6, 'Usuarios', 'usuarios', 5);
+(6, 'Usuarios', 'usuarios', 5),
+(7, 'Producción', NULL, 0),
+(8, 'Recetas', 'produccion/recetas', 7);
 
 -- --------------------------------------------------------
 
