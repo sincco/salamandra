@@ -13,9 +13,8 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 	 * @return none
 	 */
 	public function index() {
-		if(! Login::isLogged() )
-			Request::redirect( 'login' );
 		$view = $this->newView( 'Dashboard' );
+		$view->menus = $this->helper( 'UsersAccount' )->createMenus( $data );
 		echo $view->render();
 	}
 

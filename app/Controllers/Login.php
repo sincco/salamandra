@@ -23,6 +23,14 @@ class LoginController extends Sincco\Sfphp\Abstracts\Controller {
 	}
 
 	/**
+	 * Sale del sistema
+	 * @return none
+	 */
+	public function salir() {
+		$this->helper( 'UsersAccount' )->logout();
+	}
+
+	/**
 	 * Peticion de acceso
 	 * @return none
 	 */

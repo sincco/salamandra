@@ -25,6 +25,7 @@
     "extra": {
         "fbourigault-composer-mkdir": [
             "var/cache",
+            "var/session",
             "var/log",
             "etc/config"
         ]

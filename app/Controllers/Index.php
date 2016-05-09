@@ -2,6 +2,7 @@
 # pwd db 4nRcDsfSAQ62C8Lt
 
 use \Sincco\Login\Login;
+use \Sincco\Sfphp\Request;
 
 /**
  * Captura de petición al home
@@ -13,8 +14,9 @@ class IndexController extends Sincco\Sfphp\Abstracts\Controller {
 	 */
 	public function index() {
 		if(! Login::isLogged() ) {
-			$view = $this->newView('Login');
+			$view = $this->newView( 'Login' );
 			echo $view->render();
-		}
+		} else
+			Request::redirect( 'dashboard' );
 	}
 }

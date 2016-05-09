@@ -1,0 +1,33 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	<div class="row">
+		<h1>Usuarios</h1>
+		<button type="button" class="btn btn-success"><i class="fa fa-plus-circle" aria-hidden="true" onclick="jQuery.redirect('{{constant('BASE_URL')}}usuarios/agregar')"> Nuevo</i>
+</button>
+		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
+			<thead>
+				<tr>
+					<th>Clave</th><th>Email</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for usuario in usuarios %}
+				<tr>
+					<td>{{ usuario.userName|e }}</td>
+					<td>{{ usuario.userEmail|e }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<script type="text/javascript">
+$('table').on('dbl-click-row.bs.table', function ( row, element ) {
+    jQuery.redirect('{{constant('BASE_URL')}}usuarios/editar', { 'userName': element[0] });
+});
+</script>
+
+{% include 'footer.html' %}
