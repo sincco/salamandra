@@ -1,3 +1,4 @@
+./composer.lock
 etc/config/config_local.xml
 vendor/
 var/
