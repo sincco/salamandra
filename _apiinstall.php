@@ -2,6 +2,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 use Sincco\Sfphp\DB\Connector;
 use Sincco\Sfphp\Config\Writer;
+use Sincco\Sfphp\Crypt;
 
 define('DEV_CACHE', 1);
 define('PATH_ROOT', __DIR__);
@@ -65,6 +66,8 @@ try {
 
 function createXML($bases, $url) {
 	$_llave_encripcion = strtoupper(md5(microtime().rand()));
+	$bases['sae']['password'] = Crypt::encrypt( $bases['sae']['password'], $_llave_encripcion );
+	$bases['default']['password'] = Crypt::encrypt( $bases['default']['password'], $_llave_encripcion );
 	$_config = array (
 		'app' => array (
 			'key' => $_llave_encripcion,
