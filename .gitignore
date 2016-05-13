@@ -1,5 +1,5 @@
 ./composer.lock
-etc/config/config_local.xml
+etc/
 vendor/
 var/
 SAE50EMPRE01.FDB

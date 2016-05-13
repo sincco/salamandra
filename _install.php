@@ -22,12 +22,12 @@
 <div class="jumbotron">
 	<div class="row">
 		<div class="col-xs-12">
-			<h1></h1>
+			<h1>Salamandra</h1>
 			<p class="lead">Instalación del sistema</p>
 		</div>
 	</div>
 </div>
-
+<?php if( !file_exists( 'etc/config/config.xml' ) ) : ?>
 <div class="container">
 	<form role="form" id="instalacion">
 	<div class="panel panel-success">
@@ -36,7 +36,6 @@
 		</div>
 		<div class="panel-body">
 			<input type="hidden" name="type" value="mysql">
-			<input type="hidden" name="dbname" value="salamandra">
 			<div class="col-sm-4 col-xs-12">
 				<label>Host</label>
 				<input type="text" name="host" placeholder="host" class="form-control col-sm-4 col-xs-12">
@@ -82,7 +81,11 @@
 		<button type="button" class="btn btn-success" onclick="guardar()">Instalar</button>
 	</div>
 </div>
-
+<?php else : ?>
+	<div class="container">
+		<h3>Ya existe un archivo de configuración, por lo tanto no se puede aplicar una instalación</h3>
+	</div>
+<?php endif;?>
 <script type="text/javascript">
 function guardar() {
 	loader.show()
@@ -90,7 +93,7 @@ function guardar() {
 	.done(function(data) {
 		loader.hide()
 		if(data.respuesta) {
-			window.location = 'index'			
+			window.location = 'login'			
 		} else {
 			toastr.warning(data.mensaje, 'Error al instalar')
 		}
@@ -103,5 +106,3 @@ function guardar() {
 </script>
 
 </body>
-
-4nRcDsfSAQ62C8Lt

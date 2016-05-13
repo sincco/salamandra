@@ -1,6 +1,4 @@
 <?php
-# pwd db 4nRcDsfSAQ62C8Lt
-
 use \Sincco\Login\Login;
 use \Sincco\Sfphp\Request;
 
