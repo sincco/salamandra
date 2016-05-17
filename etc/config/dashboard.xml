@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<paneles>
+	<panel1>
+		<titulo>Ventas del día anterior</titulo>
+		<resumen>
+			<![CDATA[
+			SELECT COUNT(f.CVE_DOC) registros, SUM(f.CAN_TOT) importe 
+			FROM FACTF01 f INNER JOIN clie01 c ON f.CVE_CLPV =c.CLAVE 
+			WHERE FECHA_DOC <= cast('YESTERDAY' as date)
+			]]>
+		</resumen>
+		<detalle>
+			<![CDATA[
+			SELECT f.CVE_DOC, c.NOMBRE, f.STATUS,f.FECHA_DOC, f.CVE_VEND, f.CAN_TOT 
+			FROM FACTF01 f 
+			INNER JOIN clie01 c ON f.CVE_CLPV =c.CLAVE 
+			WHERE FECHA_DOC <= cast('YESTERDAY' as date)
+			]]>
+		</detalle>
+		<liga></liga>
+		<icono>fa-line-chart</icono>
+	</panel1>
+	<panel2>
+		<titulo>Cuentas por cobrar</titulo>
+		<resumen>
+			<![CDATA[
+			SELECT COUNT(CLAVE) registros, SUM(SALDO) importe 
+			FROM CLIE01 
+			WHERE SALDO > 1
+			]]>
+		</resumen>
+		<detalle>
+			<![CDATA[
+			SELECT CLAVE, STATUS, NOMBRE, ESTADO, TELEFONO,  DIASCRED, LIMCRED, SALDO FROM CLIE01 WHERE SALDO > 1
+			]]>
+		</detalle>
+		<liga></liga>
+		<icono>fa-money</icono>
+	</panel2>
+</paneles>
