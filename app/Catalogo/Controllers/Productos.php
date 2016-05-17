@@ -8,6 +8,6 @@ class ProductosController extends Sincco\Sfphp\Abstracts\Controller {
 		$view = $this->newView('Catalogo\ProductosTabla');
 		$view->productos = $data;
 		$view->menus = $this->helper( 'UsersAccount' )->createMenus( $data );
-		echo $view->render();
+		$view->render();
 	}
 }

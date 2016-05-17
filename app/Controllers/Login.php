@@ -17,7 +17,7 @@ class LoginController extends Sincco\Sfphp\Abstracts\Controller {
 	public function index() {
 		if(! Login::isLogged() ) {
 			$view = $this->newView( 'Login' );
-			echo $view->render();
+			$view->render();
 		} else
 			Request::redirect( 'dashboard' );
 	}

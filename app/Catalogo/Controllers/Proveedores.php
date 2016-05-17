@@ -8,6 +8,6 @@ class ProveedoresController extends Sincco\Sfphp\Abstracts\Controller {
 		$view = $this->newView('Catalogo\ProveedoresTabla');
 		$view->proveedores = $data;
 		$view->menus = $this->helper( 'UsersAccount' )->createMenus( $data );
-		echo $view->render();
+		$view->render();
 	}
 }

@@ -13,7 +13,7 @@ class UsuariosController extends Sincco\Sfphp\Abstracts\Controller {
 		$view = $this->newView( 'Catalogo\UsuariosTabla' );
 		$view->usuarios = $data;
 		$view->menus = $this->helper( 'UsersAccount' )->createMenus();
-		echo $view->render();
+		$view->render();
 	}
 
 	public function editar () {
@@ -23,14 +23,14 @@ class UsuariosController extends Sincco\Sfphp\Abstracts\Controller {
 		$view->usuarios = $data;
 		$view->action = "upd";
 		$view->menus = $this->helper( 'UsersAccount' )->createMenus();
-		echo $view->render();
+		$view->render();
 	}
 
 	public function agregar() {
 		$view = $this->newView( 'UsuariosAlta' );
 		$view->action = "ins";
 		$view->menus = $this->helper( 'UsersAccount' )->createMenus();
-		echo $view->render();
+		$view->render();
 	}
 
 	public function apiAgregar() {

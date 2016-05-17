@@ -13,3 +13,8 @@ body {
 }
 table { font-family: "Ubuntu", sans-serif;  font-size: 0.8em; }
 .container { margin-top: 75px; }
+
+.dashboard_panel1 { border-color: #E4D3FF; background-color: #E4D3FF; color: #714BAD; }
+.dashboard_panel2 { border-color: #B4E2FF; background-color: #B4E2FF; color: #4B87AD; }
+
+.dashboard_more { font-size: 0.9em; padding-top: 1em; color: inherit; }

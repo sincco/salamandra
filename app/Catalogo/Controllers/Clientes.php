@@ -8,6 +8,6 @@ class ClientesController extends Sincco\Sfphp\Abstracts\Controller {
 		$view = $this->newView('Catalogo\ClientesTabla');
 		$view->clientes = $data;
 		$view->menus = $this->helper( 'UsersAccount' )->createMenus( $data );
-		echo $view->render();
+		$view->render();
 	}
 }
