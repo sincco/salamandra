@@ -3,8 +3,8 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 09-05-2016 a las 09:29:01
--- Versión del servidor: 5.5.49-0ubuntu0.14.04.1
+-- Tiempo de generación: 17-05-2016 a las 18:56:42
+-- Versión del servidor: 5.6.30-0ubuntu0.14.04.1
 -- Versión de PHP: 5.5.9-1ubuntu4.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -19,6 +19,39 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `salamandra`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cotizaciones`
+--
+
+CREATE TABLE IF NOT EXISTS `cotizaciones` (
+  `cotizacion` int(11) NOT NULL AUTO_INCREMENT,
+  `fecha` date NOT NULL,
+  `cliente` int(11) NOT NULL,
+  `razonSocial` varchar(150) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `estatus` enum('Nueva','Enviada','Cancelada') NOT NULL,
+  `userId` int(11) NOT NULL,
+  PRIMARY KEY (`cotizacion`),
+  UNIQUE KEY `cotizacion_cliente` (`cliente`,`fecha`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Cotizaciones a clientes' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cotizacionesDetalle`
+--
+
+CREATE TABLE IF NOT EXISTS `cotizacionesDetalle` (
+  `cotizacion` int(11) NOT NULL,
+  `producto` varchar(16) NOT NULL,
+  `descripcion` varchar(150) NOT NULL,
+  `cantidad` double NOT NULL,
+  `precio` double NOT NULL,
+  UNIQUE KEY `cotizacion_producto` (`cotizacion`,`producto`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Detalle de cotizacion';
 
 -- --------------------------------------------------------
 

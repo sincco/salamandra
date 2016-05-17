@@ -1,7 +1,6 @@
 <?php
 
 use \Sincco\Sfphp\XML;
-use \Sincco\Sfphp\Request;
 use \Sincco\Sfphp\Response;
 
 /**
@@ -14,6 +13,7 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 	 * @return none
 	 */
 	public function index() {
+		$this->helper( 'UsersAccount' )->checkLogin();
 		$xml = new XML( 'etc/config/dashboard.xml' );
 		$paneles = [];
 		$mdlDashboard = $this->getModel( 'Dashboard' );
@@ -34,7 +34,7 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 
 	public function apiDetallePanelCols() {
 		$xml = new XML( 'etc/config/dashboard.xml' );
-		$panel = $xml->data[ Request::getParams( 'panel' ) ];
+		$panel = $xml->data[ $this->getParams( 'panel' ) ];
 		$mdlDashboard = $this->getModel( 'Dashboard' );
 		$columnas = array_keys( array_pop( $mdlDashboard->run( str_replace( "SELECT ", "SELECT FIRST 1 ", $panel[ 'detalle' ] ) ) ) );
 		$respuesta = [];
@@ -46,7 +46,7 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 
 	public function apiDetallePanel() {
 		$xml = new XML( 'etc/config/dashboard.xml' );
-		$panel = $xml->data[ Request::getParams( 'panel' ) ];
+		$panel = $xml->data[ $this->getParams( 'panel' ) ];
 		$mdlDashboard = $this->getModel( 'Dashboard' );
 		new Response( 'json', $mdlDashboard->run( $panel[ 'detalle' ] ) );
 	}

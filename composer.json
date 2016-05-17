@@ -12,6 +12,7 @@
     "require": {
         "sincco/sfphp": "dev-master",
         "sincco/login": "dev-master",
+        "sincco/tokenizer": "dev-master",
         "fbourigault/composer-mkdir": "^2.0"
     },
     "scripts": {

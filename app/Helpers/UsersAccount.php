@@ -3,7 +3,8 @@
 use \Sincco\Sfphp\Config\Reader;
 use \Sincco\Sfphp\Request;
 use \Sincco\Sfphp\Crypt;
-use \Sincco\Login\Login;
+use \Sincco\Tools\Login;
+use \Sincco\Tools\Tokenizer;
 
 /**
  * Funciones para manejo de cuentas de usuario
@@ -71,6 +72,10 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 			}
 		}
 		return $response;
+	}
+
+	public function createTokenForApi() {
+		var_dump(Login::isLogged());
 	}
 
 }

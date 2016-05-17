@@ -1,5 +1,5 @@
 <?php
-use \Sincco\Login\Login;
+use \Sincco\Tools\Login;
 use \Sincco\Sfphp\Request;
 
 /**

@@ -3,7 +3,7 @@
 use \Sincco\Sfphp\Config\Reader;
 use \Sincco\Sfphp\Request;
 use \Sincco\Sfphp\Crypt;
-use \Sincco\Login\Login;
+use \Sincco\Tools\Login;
 
 /**
  * Control de acceso al sistema
