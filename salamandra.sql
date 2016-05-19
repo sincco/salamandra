@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `cotizacionesDetalle` (
   `cotizacion` int(11) NOT NULL,
   `producto` varchar(16) NOT NULL,
   `descripcion` varchar(150) NOT NULL,
+  `unidad` varchar(10) NOT NULL,
   `cantidad` double NOT NULL,
   `precio` double NOT NULL,
   UNIQUE KEY `cotizacion_producto` (`cotizacion`,`producto`)

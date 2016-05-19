@@ -8,20 +8,58 @@
 		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
 			<thead>
 				<tr>
-					<th>Fecha</th><th>Cliente</th><th>Estatus</th>
+					<th>Folio</th><th>Fecha</th><th>Cliente</th><th>Estatus</th><th></th>
 				</tr>
 			</thead>
 			<tbody>
 				{% for cotizacion in cotizaciones %}
 				<tr>
-					<td>{{ cotizacion.CLAVE|e }}</td>
-					<td>{{ cotizacion.STATUS|e }}</td>
-					<td>{{ cotizacion.NOMBRE|e }}</td>
+					<td>COT{{ cotizacion.cotizacion|e }}</td>
+					<td>{{ cotizacion.fecha|e }}</td>
+					<td>{{ cotizacion.razonSocial|e }}</td>
+					<td>{{ cotizacion.estatus|e }}</td>
+					<td><button type="button" class="btn btn-xs btn-info"><i class="fa fa-envelope" aria-hidden="true" onclick="$( '#modal-envio' ).modal( 'show' )"><span> Enviar</span></i></button> <button type="button" class="btn btn-xs btn-info"><i class="fa fa-eye" aria-hidden="true" onclick="jQuery.redirect('{{constant('BASE_URL')}}ventas/cotizaciones/previo', { id:'{{ cotizacion.cotizacion }}' }, 'POST', '_blank')"><span> Ver</span></i></button></td>
 				</tr>
 				{% endfor %}
 			</tbody>
 		</table>
 	</div>
 </div>
+
+<div id="modal-envio" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 id="modal-titulo" class="modal-title">Enviar cotización al cliente</h4>
+			</div>
+			<div class="modal-body">
+				<div class="col-lg-6">
+					<div class="input-group input-group-lg">
+						<input type="text" class="form-control" id="email-cliente" placeholder="correo@cliente.com">
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-success"><i class="fa fa-envelope" aria-hidden="true" onclick="enviar()"><span> Enviar</span></i></button>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+function enviar() {
+	$( '#modal-envio' ).modal( 'hide' )
+	loader.show()
+	sincco.consumirAPI( 'POST', '{{constant("BASE_URL")}}ventas/cotizaciones/enviar', { id: 1, email: $( '#email-cliente' ).val() } )
+	.done( function( data ) {
+		console.log( data )
+		loader.hide()
+	}).fail( function( jqXHR, textStatus, errorThrown ) {
+		console.log( errorThrown )
+		loader.hide()
+	})
+}
+</script>
 
 {% include 'footer.html' %}

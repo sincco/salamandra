@@ -9,6 +9,7 @@
 	<div class="row">
 
     <input type="hidden" id="vendedor" value="{{constant('SESSION_USERID')}}">
+    <input type="hidden" id="email-default" value="pa.ivan.miranda@gmail.com">
 
     <div class="col-xs-5">
       <div class="row">
@@ -67,84 +68,87 @@
 
 <script type="text/javascript">
 var
-data = [],
-grid = document.getElementById('grid-venta'),
-hot;
+  grid = document.getElementById('grid-venta'),
+  hot
 
-hot = new Handsontable(grid, {
-  data: data,
-  minSpareRows: 1,
-  colHeaders: true,
-  rowHeaders: true,
-  fixedRowsTop: 0,
-  startCols: 4,
-  colHeaders: ['Clave', 'Descripcion', 'Unidad', 'Precio', 'Cantidad', 'Subtotal'],
-  columns: [
-    {data:'clave'},
-    {data:'descripcionCorta',readOnly: true},
-    {data:'unidad', readOnly: true},
-    {data:'precio', type: 'numeric', format: '0,0.000', language: 'en', readOnly: true},
-    {data:'cantidad', type: 'numeric', format: '0,0.000', language: 'en'},
-    {data:'subtotal', type: 'numeric', format: '0,0.000', language: 'en', readOnly: true},
-  ], 
-  contextMenu: true,
-  afterChange: function (changes, source) {
-    if ((source == 'edit' || source == 'paste')) {
-      if(changes[ 0 ][ 1 ] == "clave") {
-        sincco.consumirAPI( 'POST', '{{constant("BASE_URL")}}catalogo/productos/apiClave', { data: changes[ 0 ][ 3 ], listaPrecio: $( '#lista-precio' ).val() } )
-        .done( function( data ) {
-          if( data.length ) {
-            hot.setDataAtCell( changes[ 0 ][ 0 ], 1, data[ 0 ].DESCR )
-            hot.setDataAtCell( changes[ 0 ][ 0 ], 2, data[ 0 ].UNI_MED )
-            hot.setDataAtCell( changes[ 0 ][ 0 ], 3, data[ 0 ].PRECIO )
-            hot.setDataAtCell( changes[ 0 ][ 0 ], 4, 1 )
-          } else {
-            hot.setDataAtCell( changes[ 0 ][ 0 ], 1, 'NO EXISTE' )
-            toastr.error( 'El producto no existe.', 'Intenta de nuevo' )
-          }
-        }).fail( function( jqXHR, textStatus, errorThrown ) {
-          console.log( errorThrown )
-        })
-      }
-      if(changes[0][1] == "cantidad") {
-        var subtotal = parseFloat( hot.getDataAtCell( changes[ 0 ][ 0 ], 3 ) ) * parseFloat( hot.getDataAtCell( changes[ 0 ][ 0 ], 4 ) )
-        hot.setDataAtCell( changes[ 0 ][ 0 ], 5, subtotal )
-      }
-      actualizaTotal()
-    }
-  }
-})
+crearTabla();
 
-hot.updateSettings({
-  beforeKeyDown: function ( e ) {
-    var selection = hot.getSelected()
-    if( e.keyCode == 113 ) {
-      $( '#fila-actual' ).val( selection[0] )
-      loader.show()
-      e.preventDefault()
-      lastChange = null
-      e.stopImmediatePropagation();
-      $( '#tabla-productos' ).bootstrapTable( {
-        method: 'get',
-        url: '{{constant('BASE_URL')}}catalogo/productos/apicatalogo',
-        columns: [ { field:'CVE_ART', title:'Clave' }, { field:'DESCR', title:'Descripcion' }, { field:'UNI_MED', title:'Unidad' } ],
-        height: 600,
-        striped: true,
-        pagination: true,
-        pageSize: 25,
-        pageList: [10, 25, 50, 100, 200],
-        search: true,
-        showColumns: true,
-        showRefresh: true,
-        showExport: true,
-        mobileResponsive: true,
-        minimumCountColumns: 2
-      } )
-      $( '#modal' ).modal( 'show' )
-      loader.hide()
+function crearTabla () {
+  hot = new Handsontable(grid, {
+    data: [],
+    minSpareRows: 1,
+    colHeaders: true,
+    rowHeaders: true,
+    fixedRowsTop: 0,
+    startCols: 4,
+    colHeaders: ['Clave', 'Descripcion', 'Unidad', 'Precio', 'Cantidad', 'Subtotal'],
+    columns: [
+      {data:'clave'},
+      {data:'descripcionCorta',readOnly: true},
+      {data:'unidad', readOnly: true},
+      {data:'precio', type: 'numeric', format: '0,0.000', language: 'en', readOnly: true},
+      {data:'cantidad', type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'subtotal', type: 'numeric', format: '0,0.000', language: 'en', readOnly: true},
+    ], 
+    contextMenu: true,
+    afterChange: function (changes, source) {
+      if ((source == 'edit' || source == 'paste')) {
+        if(changes[ 0 ][ 1 ] == "clave") {
+          sincco.consumirAPI( 'POST', '{{constant("BASE_URL")}}catalogo/productos/apiClave', { data: changes[ 0 ][ 3 ], listaPrecio: $( '#lista-precio' ).val() } )
+          .done( function( data ) {
+            if( data.length ) {
+              hot.setDataAtCell( changes[ 0 ][ 0 ], 1, data[ 0 ].DESCR )
+              hot.setDataAtCell( changes[ 0 ][ 0 ], 2, data[ 0 ].UNI_MED )
+              hot.setDataAtCell( changes[ 0 ][ 0 ], 3, data[ 0 ].PRECIO )
+              hot.setDataAtCell( changes[ 0 ][ 0 ], 4, 1 )
+            } else {
+              hot.setDataAtCell( changes[ 0 ][ 0 ], 1, 'NO EXISTE' )
+              toastr.error( 'El producto no existe.', 'Intenta de nuevo' )
+            }
+          }).fail( function( jqXHR, textStatus, errorThrown ) {
+            console.log( errorThrown )
+          })
+        }
+        if(changes[0][1] == "cantidad") {
+          var subtotal = parseFloat( hot.getDataAtCell( changes[ 0 ][ 0 ], 3 ) ) * parseFloat( hot.getDataAtCell( changes[ 0 ][ 0 ], 4 ) )
+          hot.setDataAtCell( changes[ 0 ][ 0 ], 5, subtotal )
+        }
+        actualizaTotal()
+      }
     }
-  }
-})
+  })
+
+  hot.updateSettings({
+    beforeKeyDown: function ( e ) {
+      var selection = hot.getSelected()
+      if( e.keyCode == 113 ) {
+        $( '#fila-actual' ).val( selection[0] )
+        loader.show()
+        e.preventDefault()
+        lastChange = null
+        e.stopImmediatePropagation();
+        $( '#tabla-productos' ).bootstrapTable( {
+          method: 'get',
+          url: '{{constant('BASE_URL')}}catalogo/productos/apicatalogo',
+          columns: [ { field:'CVE_ART', title:'Clave' }, { field:'DESCR', title:'Descripcion' }, { field:'UNI_MED', title:'Unidad' } ],
+          height: 600,
+          striped: true,
+          pagination: true,
+          pageSize: 25,
+          pageList: [10, 25, 50, 100, 200],
+          search: true,
+          showColumns: true,
+          showRefresh: true,
+          showExport: true,
+          mobileResponsive: true,
+          minimumCountColumns: 2
+        } )
+        $( '#modal' ).modal( 'show' )
+        loader.hide()
+      }
+    }
+  })
+}
 
 function actualizaTotal() {
   var totalVenta = 0
@@ -168,16 +172,14 @@ function notificar() {
 
 function guardar() {
   loader.show()
-  sincco.consumirAPI('POST','{{constant("BASE_URL")}}ventas/cotizaciones/apiguardar', {cliente: $( '#lista-cliente' ).val(), razonSocial: $( '#lista-cliente option:selected' ).text(), vendedor: $( '#vendedor' ).val(), estatus: 'Nueva', productos: hot.getData() } )
+  sincco.consumirAPI('POST','{{constant("BASE_URL")}}ventas/cotizaciones/apiguardar', { data: [ {cliente: $( '#lista-cliente' ).val(), razonSocial: $( '#lista-cliente option:selected' ).text(), email: $('#email-default').val(), vendedor: $( '#vendedor' ).val(), estatus: 'Nueva', productos: hot.getData() } ] } )
   .done( function( data ) {
-    if( data.respuesta.venta ) {
-      $("#venta").val(data.respuesta.venta)
-      $("#guardar").html(" ")
-      $("#notificar").html('&nbsp;<a class="btn btn-success btn-md" href="#" onclick="notificar()" role="button">Notificar</a>')
+    if( data.id ) {
+      hot.loadData([])
+      toastr.success( 'Cotización ' + data.id + ' generada.', 'Éxito' )
       loader.hide()
-    }
-    else{
-       $("#errores").html('<div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>Hubo un error al guardar los datos, intenta de nuevo</div>')
+    } else {
+       toastr.error( 'Hubo un error al guardar los datos.', 'Intenta de nuevo' )
        loader.hide()
      }
   }).fail(function(jqXHR, textStatus, errorThrown) {

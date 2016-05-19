@@ -1,0 +1,50 @@
+{% include 'header.html' %}
+
+<div class="container">
+
+	<div class="row"><h1>Cotización - COT{{ cotizacion.cotizacion|e }}</h1></div>
+
+	<div class="row">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Cliente</th><th>Razon Social</th><th>Fecha</th>
+				</tr> 
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{ cotizacion.cliente|e }}</td>
+					<td>{{ cotizacion.razonSocial|e }}</td>
+					<td>{{ cotizacion.fecha|date("d/M/Y", constant('APP_TIMEZONE')) }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="row">
+		<div class="panel panel-default">
+			<div class="panel-heading">Detalle</div>
+			<table class="table">
+				<thead>
+					<tr>
+					<th>Producto</th><th>Descripción</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th>
+					</tr> 
+				</thead>
+				<tbody>
+				{% for producto in detalle %}
+					<tr>
+						<th scope="row">{{ producto.producto|e }}</th>
+						<td>{{ producto.descripcion|e }}</td>
+						<td>{{ producto.cantidad|number_format(2, '.', ',') }} ({{ producto.unidad|e }}/s)</td>
+						<td>$ {{ producto.precio|number_format(2, '.', ',') }}</td>
+						<td>$ {{ producto.subtotal|number_format(2, '.', ',') }}</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
+
+{% include 'footer.html' %}
