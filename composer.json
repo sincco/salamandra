@@ -2,17 +2,13 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/sincco/sfphp"
-        },
-        {
-            "type": "vcs",
             "url": "git@github.com:sincco/login.git"
         }
     ],
     "require": {
         "sincco/sfphp": "dev-master",
+        "sincco/tokenizer": "~1.0",
         "sincco/login": "dev-master",
-        "sincco/tokenizer": "dev-master",
         "fbourigault/composer-mkdir": "^2.0"
     },
     "scripts": {

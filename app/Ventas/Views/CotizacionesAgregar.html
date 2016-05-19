@@ -1,0 +1,131 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	<div class="row">
+		<!--<h1>Agregar Cotización</h1>-->
+	</div>
+	<div class="row">
+		<div class="col-xs-6">Lista de precios</div>
+		<div class="col-xs-6">
+			<select id="lista-precio" class="form-control col-xs-6">
+			{% for precio in precios %}
+				<option value="{{precio.CVE_PRECIO}}">{{precio.DESCRIPCION}}</option>
+			{% endfor %}
+			</select>
+		</div>
+	</div>
+	<div class="row">
+		<div id="grid-venta" class="handsontable"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+var
+data = [],
+grid = document.getElementById('grid-venta'),
+hot;
+
+hot = new Handsontable(grid, {
+  data: data,
+  minSpareRows: 1,
+  colHeaders: true,
+  rowHeaders: true,
+  fixedRowsTop: 0,
+  startCols: 4,
+  colHeaders: ['Clave', 'Descripcion', 'Unidad', 'Precio', 'Cantidad', 'Subtotal'],
+  columns: [
+    {data:'clave'},
+    {data:'descripcionCorta',readOnly: true},
+    {data:'unidad', readOnly: true},
+    {data:'precio', type: 'numeric', format: '0,0.000', language: 'en', readOnly: true},
+    {data:'cantidad', type: 'numeric', format: '0,0.000', language: 'en'},
+    {data:'subtotal', type: 'numeric', format: '0,0.000', language: 'en', readOnly: true},
+  ], 
+  contextMenu: true,
+  afterChange: function (changes, source) {
+    if ((source == 'edit' || source == 'paste')) {
+      if(changes[0][1] == "clave") {
+        sincco.consumirAPI('POST','{{constant("BASE_URL")}}catalogo/productos/apiClave', {data: changes[0][3], listaPrecio: $('#lista-precio').val()})
+        .done(function(data) {
+          if(data.length) {
+            hot.setDataAtCell(changes[0][0],1,data[0].DESCR)
+            hot.setDataAtCell(changes[0][0],2,data[0].UNI_MED)
+            hot.setDataAtCell(changes[0][0],3,data[0].PRECIO)
+            hot.setDataAtCell(changes[0][0],4,1)
+          } else {
+            hot.setDataAtCell(changes[0][0],1,'NO EXISTE')
+            toastr.error('El producto no existe.', 'Intenta de nuevo')
+          }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+          console.log(errorThrown)
+        })
+      }
+      if(changes[0][1] == "cantidad") {
+        var subtotal = parseFloat(hot.getDataAtCell(changes[0][0],4))*parseFloat(hot.getDataAtCell(changes[0][0],3))
+        var iva = parseInt(hot.getDataAtCell(changes[0][0],6)) * (parseInt($("#ivaPorcentaje").val())/100)
+        iva = subtotal * iva
+        ieps = subtotal * ieps
+        var ieps = parseInt(hot.getDataAtCell(changes[0][0],7)) * (parseInt($("#iepsPorcentaje").val())/100)
+        hot.setDataAtCell(changes[0][0],9, iva)
+        hot.setDataAtCell(changes[0][0],10, ieps)
+        hot.setDataAtCell(changes[0][0],5, subtotal + iva + ieps)
+      }
+      actualizaTotal()
+    }
+  }
+})
+
+function actualizaTotal() {
+  var totalVenta = 0
+  hot.getData().forEach(function(element, index, array) {
+    if(!isNaN(parseFloat(element.subtotal))) {
+      totalVenta = totalVenta + parseFloat(element.subtotal)
+    }
+  })
+  $('#totalVenta').html(Math.round(totalVenta * 100) /100)
+  $('#total').val(Math.round(totalVenta * 100) /100)
+  $('#efectivo').val(Math.round(totalVenta * 100) /100)
+  $('#tarjeta').val('0.000')
+  $('#monedero').val('0.000')
+  $('#cambio').val('0.000')
+  return true
+}
+
+function notificar() {
+  $('#myModal').modal('show')
+}
+
+function guardar() {
+  loader.show()
+  sincco.consumirAPI('POST','{{constant("BASE_URL")}}cotizaciones/apiPost', {cliente: $("[name='cliente']").val(), vendedor: $("[name='vendedor']").val(), estatus: $("[name='estatus']").val(), pagos: {efectivo: parseFloat($("#efectivo").val()) - parseFloat($("#cambio").html()), tarjeta: $("#tarjeta").val(), monedero: $("#monedero").val()}, productos: hot.getData()} )
+  .done(function(data) {
+    if(data.respuesta.venta) {
+      $("#venta").val(data.respuesta.venta)
+      $("#guardar").html(" ")
+      $("#notificar").html('&nbsp;<a class="btn btn-success btn-md" href="#" onclick="notificar()" role="button">Notificar</a>')
+      loader.hide()
+    }
+    else{
+       $("#errores").html('<div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>Hubo un error al guardar los datos, intenta de nuevo</div>')
+       loader.hide()
+     }
+  }).fail(function(jqXHR, textStatus, errorThrown) {
+    console.log('Error',errorThrown)
+    loader.hide()
+  })
+}
+
+function enviar() {
+  loader.show()
+  sincco.consumirAPI('POST','{{constant("BASE_URL")}}cotizaciones/enviar', { id: $("#venta").val(), correo: $("#correo").val() } )
+  .done(function(data) {
+    loader.hide()
+    msgModal.show('info','Correo enviado')
+  }).fail(function(jqXHR, textStatus, errorThrown) {
+    loader.hide()
+    console.log('Error',errorThrown)
+  })
+}
+</script>
+{% include 'footer.html' %}

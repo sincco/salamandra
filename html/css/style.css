@@ -5,7 +5,7 @@ html {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
-h1, h2, h3, h4, h5, h6, p, a, span { font-family: "Ubuntu", sans-serif; }
+h1, h2, h3, h4, h5, h6, p, a, span, button, i { font-family: "Ubuntu", sans-serif; }
 body {
   line-height: 1.42857143;
   color: #555555;
