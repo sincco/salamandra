@@ -35,8 +35,16 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 		$db = $db[ 'default' ];
 		$db[ 'password' ] = trim( Crypt::decrypt( $db['password'] ) );
 		Login::setDatabase( $db );
-		if(! Login::isLogged() )
+		if(! $data = Login::isLogged() ) {
 			Request::redirect( 'login' );
+		}
+		else {
+			if( !defined( 'SESSION_USERID' ) ) {
+				define( 'SESSION_USERID', $data[ 'userId' ] );
+				define( 'SESSION_USERNAME', $data[ 'userName' ] );
+				define( 'SESSION_USEREMAIL', $data[ 'userEmail' ] );
+			}
+		}
 	}
 
 	/**

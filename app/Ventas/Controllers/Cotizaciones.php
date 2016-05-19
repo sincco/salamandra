@@ -10,10 +10,16 @@ class CotizacionesController extends Sincco\Sfphp\Abstracts\Controller {
 	}
 
 	public function agregar() {
-		$mdlProductos = $this->getModel( 'Catalogo\Productos' );
-		$view = $this->newView('Ventas\CotizacionesAgregar');
-		$view->menus = $this->helper( 'UsersAccount' )->createMenus( $data );
-		$view->precios = $mdlProductos->getListaPrecios();
+		$mdlProductos	= $this->getModel( 'Catalogo\Productos' );
+		$mdlClientes	= $this->getModel( 'Catalogo\Clientes' );
+		$view 			= $this->newView('Ventas\CotizacionesAgregar');
+		$view->menus 	= $this->helper( 'UsersAccount' )->createMenus( $data );
+		$view->precios 	= $mdlProductos->getListaPrecios();
+		$view->clientes = $mdlClientes->getAll();
 		$view->render();
+	}
+
+	public function apiGuardar() {
+		var_dump($this->getParams());
 	}
 }

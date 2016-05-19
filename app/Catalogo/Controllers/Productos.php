@@ -18,4 +18,10 @@ class ProductosController extends Sincco\Sfphp\Abstracts\Controller {
 		$data = $mdlProductos->getByClave( $this->getParams( 'data' ), $this->getParams( 'listaPrecio' ) );
 		new Response( 'json', $data );
 	}
+
+	public function apiCatalogo() {
+		$mdlProductos = $this->getModel( 'Catalogo\Productos' );
+		$data = $mdlProductos->getAll();
+		new Response( 'json', $data );
+	}
 }

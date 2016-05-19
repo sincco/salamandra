@@ -5,19 +5,64 @@
 	<div class="row">
 		<!--<h1>Agregar Cotización</h1>-->
 	</div>
+
 	<div class="row">
-		<div class="col-xs-6">Lista de precios</div>
-		<div class="col-xs-6">
-			<select id="lista-precio" class="form-control col-xs-6">
-			{% for precio in precios %}
-				<option value="{{precio.CVE_PRECIO}}">{{precio.DESCRIPCION}}</option>
-			{% endfor %}
-			</select>
-		</div>
+
+    <input type="hidden" id="vendedor" value="{{constant('SESSION_USERID')}}">
+
+    <div class="col-xs-5">
+      <div class="row">
+        <div class="col-xs-6">Cliente</div>
+        <div class="col-xs-6">
+          <select id="lista-cliente" class="form-control col-xs-6">
+          {% for cliente in clientes %}
+            <option value="{{cliente.CLAVE}}">{{cliente.NOMBRE}}</option>
+          {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+		<div class="col-xs-5">
+      <div class="row">
+        <div class="col-xs-6">Lista de precios</div>
+  		  <div class="col-xs-6">
+    			<select id="lista-precio" class="form-control col-xs-6">
+    			{% for precio in precios %}
+    				<option value="{{precio.CVE_PRECIO}}">{{precio.DESCRIPCION}}</option>
+    			{% endfor %}
+    			</select>
+  		  </div>
+      </div>
+    </div>
+
+    <div class="col-xs-2">
+      <button type="button" class="btn btn-success"><i class="fa fa-hdd-o" aria-hidden="true" onclick="guardar()"><span> Guardar</span></i></button>
+    </div>
+
 	</div>
+
+  <hr>
+
 	<div class="row">
 		<div id="grid-venta" class="handsontable"></div>
 	</div>
+
+</div>
+
+<div id="modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 id="modal-titulo" class="modal-title">Buscar producto</h4>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="fila-actual">
+        <table id="tabla-productos"></table>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script type="text/javascript">
@@ -45,33 +90,58 @@ hot = new Handsontable(grid, {
   contextMenu: true,
   afterChange: function (changes, source) {
     if ((source == 'edit' || source == 'paste')) {
-      if(changes[0][1] == "clave") {
-        sincco.consumirAPI('POST','{{constant("BASE_URL")}}catalogo/productos/apiClave', {data: changes[0][3], listaPrecio: $('#lista-precio').val()})
-        .done(function(data) {
-          if(data.length) {
-            hot.setDataAtCell(changes[0][0],1,data[0].DESCR)
-            hot.setDataAtCell(changes[0][0],2,data[0].UNI_MED)
-            hot.setDataAtCell(changes[0][0],3,data[0].PRECIO)
-            hot.setDataAtCell(changes[0][0],4,1)
+      if(changes[ 0 ][ 1 ] == "clave") {
+        sincco.consumirAPI( 'POST', '{{constant("BASE_URL")}}catalogo/productos/apiClave', { data: changes[ 0 ][ 3 ], listaPrecio: $( '#lista-precio' ).val() } )
+        .done( function( data ) {
+          if( data.length ) {
+            hot.setDataAtCell( changes[ 0 ][ 0 ], 1, data[ 0 ].DESCR )
+            hot.setDataAtCell( changes[ 0 ][ 0 ], 2, data[ 0 ].UNI_MED )
+            hot.setDataAtCell( changes[ 0 ][ 0 ], 3, data[ 0 ].PRECIO )
+            hot.setDataAtCell( changes[ 0 ][ 0 ], 4, 1 )
           } else {
-            hot.setDataAtCell(changes[0][0],1,'NO EXISTE')
-            toastr.error('El producto no existe.', 'Intenta de nuevo')
+            hot.setDataAtCell( changes[ 0 ][ 0 ], 1, 'NO EXISTE' )
+            toastr.error( 'El producto no existe.', 'Intenta de nuevo' )
           }
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-          console.log(errorThrown)
+        }).fail( function( jqXHR, textStatus, errorThrown ) {
+          console.log( errorThrown )
         })
       }
       if(changes[0][1] == "cantidad") {
-        var subtotal = parseFloat(hot.getDataAtCell(changes[0][0],4))*parseFloat(hot.getDataAtCell(changes[0][0],3))
-        var iva = parseInt(hot.getDataAtCell(changes[0][0],6)) * (parseInt($("#ivaPorcentaje").val())/100)
-        iva = subtotal * iva
-        ieps = subtotal * ieps
-        var ieps = parseInt(hot.getDataAtCell(changes[0][0],7)) * (parseInt($("#iepsPorcentaje").val())/100)
-        hot.setDataAtCell(changes[0][0],9, iva)
-        hot.setDataAtCell(changes[0][0],10, ieps)
-        hot.setDataAtCell(changes[0][0],5, subtotal + iva + ieps)
+        var subtotal = parseFloat( hot.getDataAtCell( changes[ 0 ][ 0 ], 3 ) ) * parseFloat( hot.getDataAtCell( changes[ 0 ][ 0 ], 4 ) )
+        hot.setDataAtCell( changes[ 0 ][ 0 ], 5, subtotal )
       }
       actualizaTotal()
+    }
+  }
+})
+
+hot.updateSettings({
+  beforeKeyDown: function ( e ) {
+    var selection = hot.getSelected()
+    if( e.keyCode == 113 ) {
+      $( '#fila-actual' ).val( selection[0] )
+      loader.show()
+      e.preventDefault()
+      lastChange = null
+      e.stopImmediatePropagation();
+      $( '#tabla-productos' ).bootstrapTable( {
+        method: 'get',
+        url: '{{constant('BASE_URL')}}catalogo/productos/apicatalogo',
+        columns: [ { field:'CVE_ART', title:'Clave' }, { field:'DESCR', title:'Descripcion' }, { field:'UNI_MED', title:'Unidad' } ],
+        height: 600,
+        striped: true,
+        pagination: true,
+        pageSize: 25,
+        pageList: [10, 25, 50, 100, 200],
+        search: true,
+        showColumns: true,
+        showRefresh: true,
+        showExport: true,
+        mobileResponsive: true,
+        minimumCountColumns: 2
+      } )
+      $( '#modal' ).modal( 'show' )
+      loader.hide()
     }
   }
 })
@@ -98,9 +168,9 @@ function notificar() {
 
 function guardar() {
   loader.show()
-  sincco.consumirAPI('POST','{{constant("BASE_URL")}}cotizaciones/apiPost', {cliente: $("[name='cliente']").val(), vendedor: $("[name='vendedor']").val(), estatus: $("[name='estatus']").val(), pagos: {efectivo: parseFloat($("#efectivo").val()) - parseFloat($("#cambio").html()), tarjeta: $("#tarjeta").val(), monedero: $("#monedero").val()}, productos: hot.getData()} )
-  .done(function(data) {
-    if(data.respuesta.venta) {
+  sincco.consumirAPI('POST','{{constant("BASE_URL")}}ventas/cotizaciones/apiguardar', {cliente: $( '#lista-cliente' ).val(), razonSocial: $( '#lista-cliente option:selected' ).text(), vendedor: $( '#vendedor' ).val(), estatus: 'Nueva', productos: hot.getData() } )
+  .done( function( data ) {
+    if( data.respuesta.venta ) {
       $("#venta").val(data.respuesta.venta)
       $("#guardar").html(" ")
       $("#notificar").html('&nbsp;<a class="btn btn-success btn-md" href="#" onclick="notificar()" role="button">Notificar</a>')
@@ -127,5 +197,10 @@ function enviar() {
     console.log('Error',errorThrown)
   })
 }
+
+$('#tabla-productos').on('dbl-click-row.bs.table', function ( row, element ) {
+  hot.setDataAtCell( $( '#fila-actual' ).val(), 0, element.CVE_ART )
+  $( '#modal' ).modal( 'hide' )
+})
 </script>
 {% include 'footer.html' %}
