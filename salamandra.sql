@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 17-05-2016 a las 18:56:42
+-- Tiempo de generación: 18-05-2016 a las 19:19:45
 -- Versión del servidor: 5.6.30-0ubuntu0.14.04.1
 -- Versión de PHP: 5.5.9-1ubuntu4.16
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `cotizaciones` (
   `cotizacion` int(11) NOT NULL AUTO_INCREMENT,
   `fecha` date NOT NULL,
-  `cliente` int(11) NOT NULL,
+  `cliente` varchar(10) NOT NULL,
   `razonSocial` varchar(150) NOT NULL,
   `email` varchar(150) NOT NULL,
   `estatus` enum('Nueva','Enviada','Cancelada') NOT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `__menus` (
   `menuURL` varchar(150) DEFAULT NULL,
   `menuParent` int(11) NOT NULL,
   PRIMARY KEY (`menuId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='System menus' AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='System menus' AUTO_INCREMENT=11 ;
 
 --
 -- Volcado de datos para la tabla `__menus`
@@ -105,7 +105,9 @@ INSERT INTO `__menus` (`menuId`, `menuText`, `menuURL`, `menuParent`) VALUES
 (5, 'Configuración', NULL, 0),
 (6, 'Usuarios', 'usuarios', 5),
 (7, 'Producción', NULL, 0),
-(8, 'Recetas', 'produccion/recetas', 7);
+(8, 'Recetas', 'produccion/recetas', 7),
+(9, 'Ventas', NULL, 0),
+(10, 'Cotizaciones', 'ventas/cotizaciones', 9);
 
 -- --------------------------------------------------------
 
