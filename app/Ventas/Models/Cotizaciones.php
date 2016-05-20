@@ -50,4 +50,19 @@ class CotizacionesModel extends Sincco\Sfphp\Abstracts\Model {
 		}
 	}
 
+	public function update( $set, $where ) {
+		$campos = [];
+		$condicion = [];
+		foreach ( $set as $campo => $valor )
+			$campos[] = $campo . "=:" . $campo;
+		foreach ( $where as $campo => $valor )
+			$condicion[] = $campo . "=:" . $campo;
+		$campos = implode( ",", $campos );
+		$condicion = implode( " AND ", $condicion );
+		$query = 'UPDATE cotizaciones 
+			SET ' . $campos . ' WHERE ' . $condicion;
+		$parametros = array_merge( $set, $where );
+		return $this->query( $query, $parametros );
+	}
+
 }

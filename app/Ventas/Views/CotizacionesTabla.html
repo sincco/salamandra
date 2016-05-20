@@ -18,7 +18,13 @@
 					<td>{{ cotizacion.fecha|e }}</td>
 					<td>{{ cotizacion.razonSocial|e }}</td>
 					<td>{{ cotizacion.estatus|e }}</td>
-					<td><button type="button" class="btn btn-xs btn-info"><i class="fa fa-envelope" aria-hidden="true" onclick="$( '#modal-envio' ).modal( 'show' )"><span> Enviar</span></i></button> <button type="button" class="btn btn-xs btn-info"><i class="fa fa-eye" aria-hidden="true" onclick="jQuery.redirect('{{constant('BASE_URL')}}ventas/cotizaciones/previo', { id:'{{ cotizacion.cotizacion }}' }, 'POST', '_blank')"><span> Ver</span></i></button></td>
+					<td>
+						<button type="button" class="btn btn-xs btn-info"><i class="fa fa-eye" aria-hidden="true" onclick="jQuery.redirect('{{constant('BASE_URL')}}ventas/cotizaciones/previo', { id:'{{ cotizacion.cotizacion }}' }, 'POST', '_blank')"><span> Ver</span></i></button>
+					{% if cotizacion.estatus != 'Cancelada' %}
+						<button type="button" class="btn btn-xs btn-warning"><i class="fa fa-envelope" aria-hidden="true" onclick="$( '#modal-envio' ).modal( 'show' ); $('#id-cotizacion').val({{ cotizacion.cotizacion }});"><span> Enviar</span></i></button>
+						<button type="button" class="btn btn-xs btn-danger"><i class="fa fa-trash" aria-hidden="true" onclick="cancelar({{ cotizacion.cotizacion }})"><span> Cancelar</span></i></button>
+					{% endif %}
+					</td>
 				</tr>
 				{% endfor %}
 			</tbody>
@@ -36,9 +42,10 @@
 			<div class="modal-body">
 				<div class="col-lg-6">
 					<div class="input-group input-group-lg">
+						<input type="hidden" value="" id="id-cotizacion">
 						<input type="text" class="form-control" id="email-cliente" placeholder="correo@cliente.com">
 						<span class="input-group-btn">
-							<button type="button" class="btn btn-success"><i class="fa fa-envelope" aria-hidden="true" onclick="enviar()"><span> Enviar</span></i></button>
+							<button type="button" class="btn btn-success"><i class="fa fa-envelope" aria-hidden="true" onclick="enviar($('#id-cotizacion').val())"><span> Enviar</span></i></button>
 						</span>
 					</div>
 				</div>
@@ -48,15 +55,27 @@
 </div>
 
 <script type="text/javascript">
-function enviar() {
+function enviar( idCotizacion ) {
 	$( '#modal-envio' ).modal( 'hide' )
 	loader.show()
-	sincco.consumirAPI( 'POST', '{{constant("BASE_URL")}}ventas/cotizaciones/enviar', { id: 1, email: $( '#email-cliente' ).val() } )
+	sincco.consumirAPI( 'POST', '{{constant("BASE_URL")}}ventas/cotizaciones/apienviar', { id: idCotizacion, email: $( '#email-cliente' ).val() } )
 	.done( function( data ) {
-		console.log( data )
+		toastr.success( 'Cotización enviada.', 'Éxito' )
 		loader.hide()
 	}).fail( function( jqXHR, textStatus, errorThrown ) {
-		console.log( errorThrown )
+		toastr.error( 'Error al efectuar la operación.', 'Intenta de nuevo' )
+		loader.hide()
+	})
+}
+
+function cancelar( idCotizacion ) {
+	loader.show()
+	sincco.consumirAPI( 'POST', '{{constant("BASE_URL")}}ventas/cotizaciones/apicancelar', { id: idCotizacion } )
+	.done( function( data ) {
+		toastr.success( 'Cotización cancelada.', 'Éxito' )
+		loader.hide()
+	}).fail( function( jqXHR, textStatus, errorThrown ) {
+		toastr.error( 'Error al efectuar la operación.', 'Intenta de nuevo' )
 		loader.hide()
 	})
 }

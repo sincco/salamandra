@@ -30,14 +30,21 @@ class CotizacionesController extends Sincco\Sfphp\Abstracts\Controller {
 		$view->render();
 	}
 
-	public function enviar() {
+	public function apiEnviar() {
 		$model = $this->getModel( 'Ventas\Cotizaciones' );
+		$model->update( [ 'estatus'=>'Enviada' ], [ 'cotizacion'=>$this->getParams( 'id' ) ] );
 		$view 			= $this->newView( 'Ventas\CotizacionesPrevio' );
 		$data 			= $model->getById( $this->getParams( 'id' ) );
 		$view->cotizacion  = $data[ 0 ];
 		$view->detalle  = $data;
 		$cotizacion 	= $view->getContent();
 		$respuesta 		= $this->helper( 'ElasticEmail' )->send( $this->getParams( 'email' ), 'Cotización', '', $cotizacion, 'contacto@sincco.com', APP_COMPANY );
+		new Response( 'json', [ 'respuesta'=>$respuesta ] );
+	}
+
+	public function apiCancelar() {
+		$model = $this->getModel( 'Ventas\Cotizaciones' );
+		$respuesta = $model->update( [ 'estatus'=>'Cancelada' ], [ 'cotizacion'=>$this->getParams( 'id' ) ] );
 		new Response( 'json', [ 'respuesta'=>$respuesta ] );
 	}
 
