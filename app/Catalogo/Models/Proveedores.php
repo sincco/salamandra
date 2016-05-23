@@ -3,10 +3,10 @@
 class ProveedoresModel extends Sincco\Sfphp\Abstracts\Model {
 
 	public function __construct() {
-		parent::__construct('sae');
+		parent::__construct( 'sae' );
 	}
 	
 	public function getAll() {
-		return $this->query("SELECT * FROM Prov01 WHERE STATUS = :STATUS", array("STATUS"=>"A"));
+		return $this->query( 'SELECT * FROM Prov' . $_SESSION[ 'companiaClave' ] . ' WHERE STATUS = :STATUS', [ 'STATUS'=>'A' ] );
 	}
 }
