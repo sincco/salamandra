@@ -14,7 +14,7 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 	 */
 	public function index() {
 		$this->helper( 'UsersAccount' )->checkLogin();
-		$xml = new XML( 'etc/config/dashboard.xml' );
+		$xml = new XML( 'etc/config/dashboard' . $_SESSION[ 'companiaClave' ] . '.xml' );
 		$paneles = [];
 		$mdlDashboard = $this->getModel( 'Dashboard' );
 		foreach ( $xml->data as $llave => $panel ) {
@@ -33,7 +33,7 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 	}
 
 	public function apiDetallePanelCols() {
-		$xml = new XML( 'etc/config/dashboard.xml' );
+		$xml = new XML( 'etc/config/dashboard' . $_SESSION[ 'companiaClave' ] . '.xml' );
 		$panel = $xml->data[ $this->getParams( 'panel' ) ];
 		$mdlDashboard = $this->getModel( 'Dashboard' );
 		$columnas = array_keys( array_pop( $mdlDashboard->run( str_replace( "SELECT ", "SELECT FIRST 1 ", $panel[ 'detalle' ] ) ) ) );
@@ -45,7 +45,7 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 	}
 
 	public function apiDetallePanel() {
-		$xml = new XML( 'etc/config/dashboard.xml' );
+		$xml = new XML( 'etc/config/dashboard' . $_SESSION[ 'companiaClave' ] . '.xml' );
 		$panel = $xml->data[ $this->getParams( 'panel' ) ];
 		$mdlDashboard = $this->getModel( 'Dashboard' );
 		new Response( 'json', $mdlDashboard->run( $panel[ 'detalle' ] ) );

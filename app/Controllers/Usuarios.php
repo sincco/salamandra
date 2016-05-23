@@ -18,7 +18,7 @@ class UsuariosController extends Sincco\Sfphp\Abstracts\Controller {
 
 	public function editar () {
 		$mdlUsuarios = $this->getModel( 'Usuarios' );
-		$data = $mdlUsuarios->loadByUserName( Request::getParams( 'userName' ) );
+		$data = $mdlUsuarios->loadByUserName( $this->getParams( 'userName' ) );
 		$view = $this->newView( 'UsuariosAlta' );
 		$view->usuarios = $data;
 		$view->action = "upd";
@@ -34,7 +34,7 @@ class UsuariosController extends Sincco\Sfphp\Abstracts\Controller {
 	}
 
 	public function apiAgregar() {
-		$user = Request::getParams( 'userData' );
+		$user = $this->getParams( 'userData' );
 		if( $user[ 'action' ] == 'ins' )
 			echo json_encode( array( 'respuesta'=>$this->helper( 'UsersAccount' )->createUser( $user ) ) );
 		else 
