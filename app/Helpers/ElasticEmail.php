@@ -2,8 +2,8 @@
 final class ElasticEmailHelper {
 	public function send($para, $asunto, $contenidoTxt, $contenidoHtml, $de, $deNombre) {
 		$respuesta = "";
-		$_data = "username=".urlencode('pa.ivan.miranda@gmail.com');
-		$_data .= "&api_key=".urlencode('708e469e-97ef-48bb-a4c7-2e99c3aeca55');
+		$_data = "username=".urlencode('ventas.tricorp@gmail.com');
+		$_data .= "&api_key=".urlencode('fb0016c8-37ee-43e7-8b9d-aeaaf60ae322');
 		$_data .= "&from=".urlencode($de);
 		$_data .= "&from_name=".urlencode($deNombre);
 		$_data .= "&to=".urlencode($para);
