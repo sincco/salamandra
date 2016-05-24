@@ -1,0 +1,64 @@
+{% include 'header_full.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	<div class="row">
+		<h1>Empresas</h1>
+		<button type="button" class="btn btn-success"><i class="fa fa-plus-circle" aria-hidden="true" onclick="jQuery.redirect('{{constant('BASE_URL')}}empresas/agregar')"> <span>Nueva</span></i></button>
+		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
+			<thead>
+				<tr>
+					<th>Clave</th><th>Razón Social</th><th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for empresa in empresas %}
+				<tr>
+					<td>{{ empresa.empresa|e }}</td>
+					<td>{{ empresa.razonSocial|e }}</td>
+					<td>
+						<button type="button" class="btn btn-xs btn-danger"><i class="fa fa-trash" aria-hidden="true" onclick="borrar('{{ empresa.empresa|e }}')"><span> Borrar</span></i></button>
+					{% if empresa.estatus != 'Bloqueada' %}
+						<button type="button" class="btn btn-xs btn-warning"><i class="fa fa-lock" aria-hidden="true" onclick="actualizar('{{ empresa.empresa|e }}', 'Bloqueada')"><span> Bloquear</span></i></button>
+					{% else %}
+						<button type="button" class="btn btn-xs btn-primary"><i class="fa fa-unlock" aria-hidden="true" onclick="actualizar('{{ empresa.empresa|e }}', 'Activa')"><span> Reactivar</span></i></button>
+					{% endif %}
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<script type="text/javascript">
+$('table').on('dbl-click-row.bs.table', function ( row, element ) {
+    //jQuery.redirect('{{constant('BASE_URL')}}empresas/editar', { 'userName': element[0] });
+});
+
+function borrar( empresa ) {
+	loader.show()
+	sincco.consumirAPI( 'POST', '{{constant("BASE_URL")}}empresas/apiborrar', { empresa: empresa } )
+	.done( function( data ) {
+		toastr.success( 'Empresa eliminada.', 'Éxito' )
+		loader.hide()
+	}).fail( function( jqXHR, textStatus, errorThrown ) {
+		toastr.error( 'Error al efectuar la operación.', 'Intenta de nuevo' )
+		loader.hide()
+	})
+}
+
+function actualizar( empresa, estatus ) {
+	loader.show()
+	sincco.consumirAPI( 'POST', '{{constant("BASE_URL")}}empresas/apieditar', { where: { empresa:empresa }, set: { estatus: estatus } } )
+	.done( function( data ) {
+		toastr.success( 'Empresa actualizada.', 'Éxito' )
+		loader.hide()
+	}).fail( function( jqXHR, textStatus, errorThrown ) {
+		toastr.error( 'Error al efectuar la operación.', 'Intenta de nuevo' )
+		loader.hide()
+	})
+}
+</script>
+
+{% include 'footer_full.html' %}

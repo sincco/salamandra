@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 18-05-2016 a las 19:19:45
+-- Tiempo de generación: 23-05-2016 a las 19:19:18
 -- Versión del servidor: 5.6.30-0ubuntu0.14.04.1
 -- Versión de PHP: 5.5.9-1ubuntu4.16
 
@@ -36,7 +36,14 @@ CREATE TABLE IF NOT EXISTS `cotizaciones` (
   `userId` int(11) NOT NULL,
   PRIMARY KEY (`cotizacion`),
   UNIQUE KEY `cotizacion_cliente` (`cliente`,`fecha`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Cotizaciones a clientes' AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Cotizaciones a clientes' AUTO_INCREMENT=2 ;
+
+--
+-- Volcado de datos para la tabla `cotizaciones`
+--
+
+INSERT INTO `cotizaciones` (`cotizacion`, `fecha`, `cliente`, `razonSocial`, `email`, `estatus`, `userId`) VALUES
+(1, '2016-05-19', '1', 'ACERLAN, S.A. DE C.V.', 'pa.ivan.miranda@gmail.com', 'Enviada', 1);
 
 -- --------------------------------------------------------
 
@@ -53,6 +60,35 @@ CREATE TABLE IF NOT EXISTS `cotizacionesDetalle` (
   `precio` double NOT NULL,
   UNIQUE KEY `cotizacion_producto` (`cotizacion`,`producto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Detalle de cotizacion';
+
+--
+-- Volcado de datos para la tabla `cotizacionesDetalle`
+--
+
+INSERT INTO `cotizacionesDetalle` (`cotizacion`, `producto`, `descripcion`, `unidad`, `cantidad`, `precio`) VALUES
+(1, '11108305', 'RECTIFICADOR USC 9R 1/4&#34;  (11', 'pieza', 558, 1),
+(1, '11108406', 'RECTIFICADOR USC 25R 110V OBSOLETO (11', 'pieza', 432.54, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `empresas`
+--
+
+CREATE TABLE IF NOT EXISTS `empresas` (
+  `empresa` char(3) NOT NULL,
+  `razonSocial` varchar(150) NOT NULL,
+  `estatus` enum('Activa','Bloqueada') NOT NULL,
+  UNIQUE KEY `empresa` (`empresa`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Empresas registradas en SAE';
+
+--
+-- Volcado de datos para la tabla `empresas`
+--
+
+INSERT INTO `empresas` (`empresa`, `razonSocial`, `estatus`) VALUES
+('01', 'Tricorp', 'Activa'),
+('02', 'Otra empresa', 'Activa');
 
 -- --------------------------------------------------------
 
@@ -83,6 +119,26 @@ CREATE TABLE IF NOT EXISTS `produccionRecetasDetalle` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `usuariosEmpresas`
+--
+
+CREATE TABLE IF NOT EXISTS `usuariosEmpresas` (
+  `userId` int(11) NOT NULL,
+  `empresa` char(3) NOT NULL,
+  UNIQUE KEY `usuario_empresa` (`userId`,`empresa`) COMMENT 'usuario_empresa'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Empresas permitidas por usuario';
+
+--
+-- Volcado de datos para la tabla `usuariosEmpresas`
+--
+
+INSERT INTO `usuariosEmpresas` (`userId`, `empresa`) VALUES
+(1, '01'),
+(2, '01');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `__menus`
 --
 
@@ -92,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `__menus` (
   `menuURL` varchar(150) DEFAULT NULL,
   `menuParent` int(11) NOT NULL,
   PRIMARY KEY (`menuId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='System menus' AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='System menus' AUTO_INCREMENT=12 ;
 
 --
 -- Volcado de datos para la tabla `__menus`
@@ -108,7 +164,8 @@ INSERT INTO `__menus` (`menuId`, `menuText`, `menuURL`, `menuParent`) VALUES
 (7, 'Producción', NULL, 0),
 (8, 'Recetas', 'produccion/recetas', 7),
 (9, 'Ventas', NULL, 0),
-(10, 'Cotizaciones', 'ventas/cotizaciones', 9);
+(10, 'Cotizaciones', 'ventas/cotizaciones', 9),
+(11, 'Seleccionar Compañía', 'selcia', 5);
 
 -- --------------------------------------------------------
 
