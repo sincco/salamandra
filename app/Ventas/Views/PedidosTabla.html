@@ -1,0 +1,28 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	<div class="row">
+		<h1>Pedidos</h1>
+		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
+			<thead>
+				<tr>
+					<th>Folio</th><th>Fecha</th><th>Cliente</th><th>Importe</th><th>Vendedor</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for pedido in pedidos %}
+				<tr>
+					<td>{{ pedido.CVE_DOC|e }}</td>
+					<td>{{ pedido.FECHA_DOC|date("d/m/Y") }}</td>
+					<td>{{ pedido.CLIENTE|e }}</td>
+					<td>{{ pedido.IMPORTE|number_format(2, '.', ',') }}</td>
+					<td>{{ pedido.VENDEDOR|e }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% include 'footer.html' %}

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 23-05-2016 a las 19:19:18
+-- Tiempo de generación: 24-05-2016 a las 09:56:44
 -- Versión del servidor: 5.6.30-0ubuntu0.14.04.1
 -- Versión de PHP: 5.5.9-1ubuntu4.16
 
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `__menus` (
   `menuURL` varchar(150) DEFAULT NULL,
   `menuParent` int(11) NOT NULL,
   PRIMARY KEY (`menuId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='System menus' AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='System menus' AUTO_INCREMENT=13 ;
 
 --
 -- Volcado de datos para la tabla `__menus`
@@ -165,7 +165,8 @@ INSERT INTO `__menus` (`menuId`, `menuText`, `menuURL`, `menuParent`) VALUES
 (8, 'Recetas', 'produccion/recetas', 7),
 (9, 'Ventas', NULL, 0),
 (10, 'Cotizaciones', 'ventas/cotizaciones', 9),
-(11, 'Seleccionar Compañía', 'selcia', 5);
+(11, 'Seleccionar Compañía', 'selcia', 5),
+(12, 'Pedidos', 'ventas/pedidos', 9);
 
 -- --------------------------------------------------------
 
