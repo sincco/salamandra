@@ -38,7 +38,7 @@ class CotizacionesController extends Sincco\Sfphp\Abstracts\Controller {
 		$view->cotizacion  = $data[ 0 ];
 		$view->detalle  = $data;
 		$cotizacion 	= $view->getContent();
-		$respuesta 		= $this->helper( 'ElasticEmail' )->send( $this->getParams( 'email' ), 'Cotización', '', $cotizacion, 'contacto@sincco.com', APP_COMPANY );
+		$respuesta 		= $this->helper( 'ElasticEmail' )->send( $this->getParams( 'email' ), 'Cotización', '', $cotizacion, 'contacto@tricorp.com', APP_COMPANY );
 		new Response( 'json', [ 'respuesta'=>$respuesta ] );
 	}
 
