@@ -2,6 +2,10 @@
     "repositories": [
         {
             "type": "vcs",
+            "url": "git@github.com:sincco/sfphp.git"
+        },
+        {
+            "type": "vcs",
             "url": "git@github.com:sincco/login.git"
         },
         {
