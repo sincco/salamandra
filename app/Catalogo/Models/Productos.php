@@ -10,6 +10,10 @@ class ProductosModel extends Sincco\Sfphp\Abstracts\Model {
 		return $this->query('SELECT * FROM Inve' . $_SESSION[ 'companiaClave' ] );
 	}
 
+	public function getActivos() {
+		return $this->query('SELECT * FROM Inve' . $_SESSION[ 'companiaClave' ] . ' WHERE STATUS=:estatus', [ 'estatus'=>'A' ] );
+	}
+
 	public function getByClave( $data, $listaPrecio = '1' ) {
 		return $this->query('SELECT prd.CVE_ART, prd.DESCR, prd.EXIST, prd.STOCK_MIN, prd.UNI_MED, prd.COSTO_PROM, pre.CVE_PRECIO, pre.PRECIO
 			FROM INVE' . $_SESSION[ 'companiaClave' ] . ' prd

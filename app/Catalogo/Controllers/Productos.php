@@ -21,7 +21,7 @@ class ProductosController extends Sincco\Sfphp\Abstracts\Controller {
 
 	public function apiCatalogo() {
 		$mdlProductos = $this->getModel( 'Catalogo\Productos' );
-		$data = $mdlProductos->getAll();
+		$data = $mdlProductos->getActivos();
 		new Response( 'json', $data );
 	}
 }
