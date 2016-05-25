@@ -7,14 +7,14 @@ class EmpresasController extends Sincco\Sfphp\Abstracts\Controller {
 		$modelo = $this->getModel( 'Empresas' );
 		$view = $this->newView( 'EmpresasTabla' );
 		$view->empresas = $modelo->getAll();
-		$view->menus = $this->helper( 'UsersAccount' )->createMenus( $data );
+		$view->menus = $this->helper( 'UsersAccount' )->createMenus();
 		$view->render();
 	}
 
 	public function agregar() {
 		$this->helper( 'UsersAccount' )->checkLogin();
 		$view = $this->newView( 'EmpresasAlta' );
-		$view->menus = $this->helper( 'UsersAccount' )->createMenus( $data );
+		$view->menus = $this->helper( 'UsersAccount' )->createMenus();
 		$view->render();
 	}
 

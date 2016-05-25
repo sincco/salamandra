@@ -28,7 +28,7 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 		}
 		$view = $this->newView( 'Dashboard' );
 		$view->paneles = $paneles;
-		$view->menus = $this->helper( 'UsersAccount' )->createMenus( $data );
+		$view->menus = $this->helper( 'UsersAccount' )->createMenus();
 		$view->render();
 	}
 

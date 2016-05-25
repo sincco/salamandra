@@ -7,7 +7,7 @@ class ProveedoresController extends Sincco\Sfphp\Abstracts\Controller {
 		$data = $mdlProveedores->getAll();
 		$view = $this->newView('Catalogo\ProveedoresTabla');
 		$view->proveedores = $data;
-		$view->menus = $this->helper( 'UsersAccount' )->createMenus( $data );
+		$view->menus = $this->helper( 'UsersAccount' )->createMenus();
 		$view->render();
 	}
 }
