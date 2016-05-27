@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . 'paths.php';
+main();
+
+/**
+ * Process 
+ * @return [type] [description]
+ */
+public function main() {	
+	$comand = array_shift($argv);
+	$params = $argv;
+	switch (variable) {
+		case 'value':
+			# code...
+			break;
+		
+		default:
+			# code...
+			break;
+	}
+}
