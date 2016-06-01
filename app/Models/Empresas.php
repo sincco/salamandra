@@ -3,7 +3,7 @@
 class EmpresasModel extends Sincco\Sfphp\Abstracts\Model {
 
 	public function getAll() {
-		return $this->query( 'SELECT empresa, razonSocial, estatus FROM empresas ORDER BY empresa ASC' );
+		return $this->connector->query( 'SELECT empresa, razonSocial, estatus FROM empresas ORDER BY empresa ASC' );
 	}
 
 	public function insert( $data ) {
@@ -17,7 +17,7 @@ class EmpresasModel extends Sincco\Sfphp\Abstracts\Model {
 		$campos		= implode( ",", $campos );
 		$variables	= implode( ",", $variables );
 		$query = 'INSERT INTO empresas (' . $campos . ' ) VALUES ( ' . $variables . ')';
-		return $this->query( $query, $data );
+		return $this->connector->query( $query, $data );
 	}
 
 	public function update( $set, $where ) {
@@ -32,16 +32,16 @@ class EmpresasModel extends Sincco\Sfphp\Abstracts\Model {
 		$query = 'UPDATE empresas 
 			SET ' . $campos . ' WHERE ' . $condicion;
 		$parametros = array_merge( $set, $where );
-		return $this->query( $query, $parametros );
+		return $this->connector->query( $query, $parametros );
 	}
 
 	public function delete( $data ) {
 		$query = 'DELETE FROM empresas WHERE empresa = :empresa';
-		return $this->query( $query, [ 'empresa'=>$data ]);
+		return $this->connector->query( $query, [ 'empresa'=>$data ]);
 	}
 
 	public function empresasByUser( $userId ) {
-		return $this->query( 'SELECT emp.empresa, emp.razonSocial 
+		return $this->connector->query( 'SELECT emp.empresa, emp.razonSocial 
 			FROM empresas emp 
 			INNER JOIN usuariosEmpresas usr USING (empresa) 
 			WHERE usr.userId = :userId AND emp.estatus = :estatus', 

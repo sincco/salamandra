@@ -3,13 +3,13 @@
 class CotizacionesModel extends Sincco\Sfphp\Abstracts\Model {
 
 	public function getAll() {
-		return $this->query( 'SELECT cot.cotizacion, cot.fecha, cot.razonSocial, cot.estatus
+		return $this->connector->query( 'SELECT cot.cotizacion, cot.fecha, cot.razonSocial, cot.estatus
 			FROM cotizaciones cot
 			ORDER BY cot.cotizacion' );
 	}
 
 	public function getById( $data ) {
-		return $this->query( 'SELECT cot.cotizacion, cot.fecha, cot.razonSocial, cot.estatus,
+		return $this->connector->query( 'SELECT cot.cotizacion, cot.fecha, cot.razonSocial, cot.estatus,
 			det.producto, det.descripcion, det.unidad, det.cantidad, det.precio, det.cantidad * det.precio AS subtotal
 			FROM cotizaciones cot
 			INNER JOIN cotizacionesDetalle det USING( cotizacion )
@@ -22,7 +22,7 @@ class CotizacionesModel extends Sincco\Sfphp\Abstracts\Model {
 			SET fecha=NOW(), cliente=:Cliente, 
 			razonSocial=:RazonSocial, email=:Email, 
 			estatus=:Estatus,userId=:UserId';
-		$id = $this->query( $query, [
+		$id = $this->connector->query( $query, [
 			'Cliente'=>$data[ 'cliente' ],
 			'RazonSocial'=>$data[ 'razonSocial' ],
 			'Email'=>$data[ 'email' ],
@@ -37,7 +37,7 @@ class CotizacionesModel extends Sincco\Sfphp\Abstracts\Model {
 				SET cotizacion=:Cotizacion, producto=:Producto, 
 				descripcion=:Descripcion, unidad=:Unidad,
 				cantidad=:Cantidad, precio=:Precio';
-				$detalle = $this->query( $query, [
+				$detalle = $this->connector->query( $query, [
 					'Cotizacion'=>$id,
 					'Producto'=>$producto[ 0 ],
 					'Descripcion'=>$producto[ 1 ],
@@ -62,7 +62,7 @@ class CotizacionesModel extends Sincco\Sfphp\Abstracts\Model {
 		$query = 'UPDATE cotizaciones 
 			SET ' . $campos . ' WHERE ' . $condicion;
 		$parametros = array_merge( $set, $where );
-		return $this->query( $query, $parametros );
+		return $this->connector->query( $query, $parametros );
 	}
 
 }

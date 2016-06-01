@@ -4,24 +4,21 @@ class ProductosModel extends Sincco\Sfphp\Abstracts\Model {
 
 	public function __construct() {
 		parent::__construct( 'sae' );
+		$this->setTable( 'Inve' . $_SESSION[ 'companiaClave' ] );
 	}
 	
-	public function getAll() {
-		return $this->query('SELECT * FROM Inve' . $_SESSION[ 'companiaClave' ] );
-	}
-
 	public function getActivos() {
-		return $this->query('SELECT * FROM Inve' . $_SESSION[ 'companiaClave' ] . ' WHERE STATUS=:estatus', [ 'estatus'=>'A' ] );
+		return $this->connector->query('SELECT * FROM Inve' . $_SESSION[ 'companiaClave' ] . ' WHERE STATUS=:estatus', [ 'estatus'=>'A' ] );
 	}
 
 	public function getByClave( $data, $listaPrecio = '1' ) {
-		return $this->query('SELECT prd.CVE_ART, prd.DESCR, prd.EXIST, prd.STOCK_MIN, prd.UNI_MED, prd.COSTO_PROM, pre.CVE_PRECIO, pre.PRECIO
+		return $this->connector->query('SELECT prd.CVE_ART, prd.DESCR, prd.EXIST, prd.STOCK_MIN, prd.UNI_MED, prd.COSTO_PROM, pre.CVE_PRECIO, pre.PRECIO
 			FROM INVE' . $_SESSION[ 'companiaClave' ] . ' prd
 			INNER JOIN PRECIO_X_PROD' . $_SESSION[ 'companiaClave' ] . ' pre USING ( CVE_ART )
 			WHERE prd.CVE_ART = :DATA AND pre.CVE_PRECIO = :PRECIO', [ 'DATA'=>$data, 'PRECIO'=>$listaPrecio ] );
 	}
 
 	public function getListaPrecios() {
-		return $this->query('SELECT * FROM precios' . $_SESSION[ 'companiaClave' ] );
+		return $this->connector->query('SELECT * FROM precios' . $_SESSION[ 'companiaClave' ] );
 	}
 }

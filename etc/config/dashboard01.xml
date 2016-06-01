@@ -6,7 +6,7 @@
 			<![CDATA[
 			SELECT COUNT(f.CVE_DOC) registros, SUM(f.CAN_TOT) importe 
 			FROM FACTF01 f INNER JOIN clie01 c ON f.CVE_CLPV =c.CLAVE 
-			WHERE FECHA_DOC <= cast('YESTERDAY' as date)
+			WHERE FECHA_DOC = cast('YESTERDAY' as date)
 			]]>
 		</resumen>
 		<detalle>
@@ -14,7 +14,7 @@
 			SELECT f.CVE_DOC, c.NOMBRE, f.STATUS,f.FECHA_DOC, f.CVE_VEND, f.CAN_TOT 
 			FROM FACTF01 f 
 			INNER JOIN clie01 c ON f.CVE_CLPV =c.CLAVE 
-			WHERE FECHA_DOC <= cast('YESTERDAY' as date)
+			WHERE FECHA_DOC = cast('YESTERDAY' as date)
 			]]>
 		</detalle>
 		<liga></liga>

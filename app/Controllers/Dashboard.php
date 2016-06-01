@@ -14,6 +14,10 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 	 */
 	public function index() {
 		$this->helper( 'UsersAccount' )->checkLogin();
+
+		//$productos = $this->getModel( 'Catalogo\Productos' );
+		//var_dump($productos->getAll());
+		//die();
 		$xml = new XML( 'etc/config/dashboard' . $_SESSION[ 'companiaClave' ] . '.xml' );
 		$paneles = [];
 		$mdlDashboard = $this->getModel( 'Dashboard' );

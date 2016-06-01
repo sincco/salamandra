@@ -7,7 +7,7 @@ class DashboardModel extends Sincco\Sfphp\Abstracts\Model {
 	}
 	
 	public function run( $query ) {
-		return $this->query( $query );
+		return $this->connector->query( $query );
 	}
 
 }

@@ -7,6 +7,6 @@ class ProveedoresModel extends Sincco\Sfphp\Abstracts\Model {
 	}
 	
 	public function getAll() {
-		return $this->query( 'SELECT * FROM Prov' . $_SESSION[ 'companiaClave' ] . ' WHERE STATUS = :STATUS', [ 'STATUS'=>'A' ] );
+		return $this->connector->query( 'SELECT * FROM Prov' . $_SESSION[ 'companiaClave' ] . ' WHERE STATUS = :STATUS', [ 'STATUS'=>'A' ] );
 	}
 }
