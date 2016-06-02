@@ -2,6 +2,7 @@
 
 use \Sincco\Sfphp\XML;
 use \Sincco\Sfphp\Response;
+use \Sincco\Tools\Debug;
 
 /**
  * Dashboard del sistema
@@ -13,26 +14,16 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 	 * @return none
 	 */
 	public function index() {
-
-		$recetas = $this->getModel( 'Produccion\Recetas' );
-		$recetas->receta = 1;
-		$recetas->descripcion = 'Receta 1';
-		$recetas->estatus = 'Activo';
-		//$recetas->getSql();
-		//$recetas->getAll();
-		$empresas = $recetas->empresas()->where( 'estatus', 'Activa' );
-		//var_dump($empresas);
-		//var_dump($productos->getAll());
-		die();
 		$this->helper( 'UsersAccount' )->checkLogin();
 		$xml = new XML( 'etc/config/dashboard' . $_SESSION[ 'companiaClave' ] . '.xml' );
 		$paneles = [];
 		$mdlDashboard = $this->getModel( 'Dashboard' );
 		foreach ( $xml->data as $llave => $panel ) {
+			$resumen = $mdlDashboard->run( $panel[ 'resumen' ] );
 			$paneles[] = [ 
 				'titulo'=>$panel[ 'titulo' ],
 				'liga'=>$panel[ 'liga' ],
-				'data'=>array_pop( $mdlDashboard->run( $panel[ 'resumen' ] ) ),
+				'data'=>array_pop( $resumen ),
 				'llave'=>$llave,
 				'icono'=>$panel[ 'icono' ],
 			];
@@ -47,7 +38,8 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 		$xml = new XML( 'etc/config/dashboard' . $_SESSION[ 'companiaClave' ] . '.xml' );
 		$panel = $xml->data[ $this->getParams( 'panel' ) ];
 		$mdlDashboard = $this->getModel( 'Dashboard' );
-		$columnas = array_keys( array_pop( $mdlDashboard->run( str_replace( "SELECT ", "SELECT FIRST 1 ", $panel[ 'detalle' ] ) ) ) );
+		$detalle = $mdlDashboard->run( str_replace( "SELECT ", "SELECT FIRST 1 ", $panel[ 'detalle' ] ) );
+		$columnas = array_keys( array_pop( $detalle ) );
 		$respuesta = [];
 		foreach ( $columnas as $_columna ) {
 			$respuesta[] = [ 'field'=>$_columna, 'title'=>ucwords( str_replace( '_', ' ', $_columna ) ), 'sortable'=>true ];

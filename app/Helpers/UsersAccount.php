@@ -40,7 +40,8 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 		}
 		else {
 			if( !defined( 'SESSION_USERID' ) ) {
-				$empresas = array_shift( $this->getModel( 'Usuarios' )->empresasByUser( $data[ 'userId' ] ) );
+				$empresas = $this->getModel( 'Usuarios' )->empresasByUser( $data[ 'userId' ] );
+				$empresas = array_shift( $empresas );
 				$_SESSION['companiaClave'] = $empresas[ 'empresa' ];
 				$_SESSION['companiaRazonSocial'] = $empresas[ 'razonSocial' ];
 				define( 'SESSION_USERID', $data[ 'userId' ] );

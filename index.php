@@ -8,7 +8,12 @@ use Sincco\Sfphp\Launcher;
 try {
 	Session::get();
 	new Launcher();
-}
-catch (\Sincco\Sfphp\Exception $err) {
-	$err->screenError($err);
+}catch (\Exception $err) {
+	$errorInfo = sprintf( '%s: %s in %s on line %s.',
+		'Error',
+		$err,
+		$err->getFile(),
+		$err->getLine()
+	);
+	Debug::dump( $errorInfo );
 }
