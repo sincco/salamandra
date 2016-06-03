@@ -20,12 +20,14 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 		$fechaInicio = ( is_null( $this->getParams( 'fechaInicio' ) ) ? date('Y-m-d') : $this->getParams( 'fechaInicio' ) );
 		$fechaFin = ( is_null( $this->getParams( 'fechaFin' ) ) ? date('Y-m-d') : $this->getParams( 'fechaFin' ) );
 		$params = [ 'fechaInicio'=>$fechaInicio, 'fechaFin'=>$fechaFin ];
+		$paramsFront = [];
 
-		// var_dump($this->getModel('Dashboard')->connector()->query('SELECT MAX(FECHA_DOC) FROM FACTF01 f INNER JOIN clie01 c ON f.CVE_CLPV =c.CLAVE '));die();
 		$paneles = [];
 		$mdlDashboard = $this->getModel( 'Dashboard' );
 		foreach ( $xml->data as $llave => $panel ) {
-			$resumen = $mdlDashboard->run( $panel[ 'resumen' ], $params );
+			$query = $panel[ 'resumen' ];
+			preg_match_all( '/:([a-zA-Z]+)/', $query, $_paramsFront[] );
+			$resumen = $mdlDashboard->run( $query, $params );
 			$paneles[] = [ 
 				'titulo'=>$panel[ 'titulo' ],
 				'liga'=>$panel[ 'liga' ],
@@ -34,10 +36,18 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 				'icono'=>$panel[ 'icono' ],
 			];
 		}
+
+		$objTmp = (object) array('aFlat' => array());
+		array_walk_recursive($_paramsFront, create_function('&$v, $k, &$t', '$t->aFlat[] = $v;'), $objTmp);
+		foreach ($objTmp->aFlat as $key => $value) {
+			if(substr(trim($value), 0,1) == ":")
+				$paramsFront[] = $value;
+		}
 		
 		$view = $this->newView( 'Dashboard' );
 		$view->paneles = $paneles;
 		$view->menus = $this->helper( 'UsersAccount' )->createMenus();
+		$view->filtros = $paramsFront;
 		$view->render();
 	}
 
