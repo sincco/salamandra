@@ -5,8 +5,44 @@
 	<div id="page-wrapper dashboard" style="min-height: 129px;">
 		<div class="row">
 		    <div class="col-lg-12">
-		        <h1 class="page-header">Dashboard</h1>
+		        <h1 class="page-header">Estadísticas</h1>
 		    </div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="row">
+					<div class='col-xs-1'>
+						Desde
+					</div>
+					<div class='col-xs-3'>
+						<div class="form-group">
+						<div class='input-group date' id='fecha-inicio'>
+						<input type='text' class="form-control" id="fechaInicio" />
+						<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+						</div>
+						</div>
+					</div>
+					<div class='col-xs-1'>
+						Hasta
+					</div>
+					<div class='col-xs-3'>
+						<div class="form-group">
+						<div class='input-group date' id='fecha-fin'>
+						<input type='text' class="form-control" id="fechaFin" />
+						<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+						</div>
+						</div>
+					</div>
+					<div class='col-xs-4'>
+						<button type="button" class="btn btn-success" onclick="filtrar()">Filtrar</button>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<div class="row">
@@ -49,6 +85,11 @@
 </div>
 
 <script type="text/javascript">
+
+function filtrar() {
+	jQuery.redirect('{{constant('BASE_URL')}}dashboard', { 'fechaInicio': $('#fechaInicio').val(), 'fechaFin': $('#fechaFin').val() });
+}
+
 function muestraDetalle( panel, titulo ) {
 	var cols = false
 	var data = false
@@ -90,6 +131,24 @@ function muestraDetalle( panel, titulo ) {
 
 	loader.hide()
 }
+
+$(function () {
+	$('#fecha-fin').datetimepicker({
+		format: 'DD/MM/YYYY'
+	});
+	$('#fecha-inicio').datetimepicker({
+		useCurrent: true,
+		format: 'DD/MM/YYYY'
+	});
+	$("#fecha-inicio").on("dp.change", function (e) {
+		$('#fecha-fin').data("DateTimePicker").minDate(e.date);
+		$('#fecha-fin').data("DateTimePicker").date(e.date);
+	});
+	$("#fecha-fin").on("dp.change", function (e) {
+		$('#fecha-inicio').data("DateTimePicker").maxDate(e.date);
+	});
+});
+
 </script>
 
 {% include 'footer_full.html' %}
