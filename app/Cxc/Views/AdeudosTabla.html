@@ -1,0 +1,96 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	<div class="row">
+		<h1>Adeudos</h1>
+		<button type="button" class="btn btn-primary"><i class="fa fa-envelope " aria-hidden="true" onclick="notificar()"><span> Notificar a clientes</span></i></button>
+		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
+			<thead>
+				<tr>
+					<th>Cliente</th><th>Nombre</th><th>Factura</th><th>Emitida</th><th>Vencimiento</th><th>Atraso</th><th>Moneda</th><th>Cargo</th><th>Abono</th><th>Saldo</th><th>Ultimo Pago</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for adeudo in adeudos %}
+				<tr>
+					<td>{{ adeudo.CVE_CLIE|e }}</td>
+					<td>{{ adeudo.NOMBRE|e }}</td>
+					<td>{{ adeudo.NO_FACTURA|e }}</td>
+					<td>{{ adeudo.EMITIDA|e }}</td>
+					<td>{{ adeudo.VENCIMIENTO|e }}</td>
+					<td>{{ adeudo.ATRASO|e }}</td>
+					{% if adeudo.MONEDA == 1 %}
+						<td>MXP</td>
+					{% else %}
+						<td>USD</td>
+					{% endif %}
+					<td>{{ adeudo.CARGO|number_format(2, '.', ',') }}</td>
+					<td>{{ adeudo.ABONO|number_format(2, '.', ',') }}</td>
+					<td>{{ adeudo.SALDO|number_format(2, '.', ',') }}</td>
+					{% if adeudo.ULTIMO_PAGO is null %}
+					<td>-</td>
+					{% else %}
+						<td>{{ adeudo.ULTIMO_PAGO|e }}</td>
+					{% endif %}
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div id="modal-envio" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<button type="button" class="btn btn-success btn-xs"><i class="fa fa-envelope " aria-hidden="true" onclick="enviar()"><span> Enviar notificaciones a los siguientes clientes</span></i></button>
+			</div>
+			<div class="modal-body">
+				<table data-toggle="table" data-search="true" data-page-size="20" data-pagination="true" data-mobile-responsive="true" data-click-to-select="true" id="notificaciones">
+					<thead>
+						<tr>
+							<th data-field="state" data-checkbox="true" ></th>
+							<th>Cliente</th><th>Nombre</th><th>Saldo</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for cliente in clientes %}
+						<tr><td></td>
+							<td>{{ cliente.CVE_CLIE|e }}</td>
+							<td>{{ cliente.NOMBRE|e }}</td>
+							<td>{{ cliente.SALDO|number_format(2, '.', ',') }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+function notificar() {
+	$( '#modal-envio' ).modal( 'show' );
+}
+function enviar() {
+	loader.show();
+	sincco.consumirAPI( 'POST', '{{constant("BASE_URL")}}cxc/adeudos/apinotificar', { clientes: $('#notificaciones').bootstrapTable('getSelections') } )
+	.done( function( data ) {
+		if( parseInt(data.avisos.primer) > 0 )
+			toastr.success( data.avisos.primer + ' primeras notificaciones enviadas', 'Éxito' )
+		if( parseInt(data.avisos.segundo) > 0 )
+			toastr.success( data.avisos.segundo + ' segundas notificaciones enviadas', 'Éxito' )
+		if( parseInt(data.avisos.tercer) > 0 )
+			toastr.success( data.avisos.tercer + ' terceras notificaciones enviadas', 'Éxito' )
+		loader.hide()
+		$( '#modal-envio' ).modal( 'hide' );
+	}).fail( function( jqXHR, textStatus, errorThrown ) {
+		toastr.error( 'Error al efectuar la operación.', 'Intenta de nuevo' )
+		loader.hide()
+	})
+}
+</script>
+
+{% include 'footer.html' %}
