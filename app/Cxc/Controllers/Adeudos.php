@@ -22,8 +22,8 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 			$emails = $mdlClientes->getContactos( $_cliente[ 1 ] );
 			if(is_null( $emails[ 0 ][ 'EMAIL' ] ) )
 				continue;
-			$emails = $emails[ 0 ][ 'EMAIL' ] . ';pedro.acevedo@suhner.com';
-			//$emails = 'ivan.miranda@sincco.com;riverojorgea@gmail.com';
+			//$emails = $emails[ 0 ][ 'EMAIL' ] . ';pedro.acevedo@suhner.com';
+			$emails = 'ivan.miranda@sincco.com;riverojorgea@gmail.com';
 			$enviar = TRUE;
 
 			$primerAviso = [];
