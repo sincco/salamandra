@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 24-05-2016 a las 09:56:44
+-- Tiempo de generación: 07-06-2016 a las 14:32:36
 -- Versión del servidor: 5.6.30-0ubuntu0.14.04.1
--- Versión de PHP: 5.5.9-1ubuntu4.16
+-- Versión de PHP: 5.5.9-1ubuntu4.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -36,14 +36,15 @@ CREATE TABLE IF NOT EXISTS `cotizaciones` (
   `userId` int(11) NOT NULL,
   PRIMARY KEY (`cotizacion`),
   UNIQUE KEY `cotizacion_cliente` (`cliente`,`fecha`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Cotizaciones a clientes' AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Cotizaciones a clientes' AUTO_INCREMENT=4 ;
 
 --
 -- Volcado de datos para la tabla `cotizaciones`
 --
 
 INSERT INTO `cotizaciones` (`cotizacion`, `fecha`, `cliente`, `razonSocial`, `email`, `estatus`, `userId`) VALUES
-(1, '2016-05-19', '1', 'ACERLAN, S.A. DE C.V.', 'pa.ivan.miranda@gmail.com', 'Enviada', 1);
+(1, '2016-05-19', '1', 'ACERLAN, S.A. DE C.V.', 'pa.ivan.miranda@gmail.com', 'Enviada', 1),
+(3, '2016-05-24', '34', 'SIEMENS, S.A. DE C.V.', 'pa.ivan.miranda@gmail.com', 'Nueva', 1);
 
 -- --------------------------------------------------------
 
@@ -67,7 +68,10 @@ CREATE TABLE IF NOT EXISTS `cotizacionesDetalle` (
 
 INSERT INTO `cotizacionesDetalle` (`cotizacion`, `producto`, `descripcion`, `unidad`, `cantidad`, `precio`) VALUES
 (1, '11108305', 'RECTIFICADOR USC 9R 1/4&#34;  (11', 'pieza', 558, 1),
-(1, '11108406', 'RECTIFICADOR USC 25R 110V OBSOLETO (11', 'pieza', 432.54, 1);
+(1, '11108406', 'RECTIFICADOR USC 25R 110V OBSOLETO (11', 'pieza', 432.54, 1),
+(1, '11109707', 'ESMERILADOR ANGULAR UWF 10 110V (11', 'pieza', 297, 1),
+(1, '5727501', 'INTERRUPTOR POS 111 S - C (11.1', 'pieza', 14.9, 1),
+(3, '5726702', 'CARBON POS 462 SERIE C   (PZA)  (11.1', 'pieza', 6.1, 1);
 
 -- --------------------------------------------------------
 
@@ -99,7 +103,7 @@ INSERT INTO `empresas` (`empresa`, `razonSocial`, `estatus`) VALUES
 CREATE TABLE IF NOT EXISTS `produccionRecetas` (
   `receta` int(11) NOT NULL AUTO_INCREMENT,
   `descripcion` varchar(75) NOT NULL,
-  `status` char(1) NOT NULL,
+  `status` enum('Activo','Bloqueado') NOT NULL,
   PRIMARY KEY (`receta`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Cabecera de recetas' AUTO_INCREMENT=1 ;
 
@@ -148,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `__menus` (
   `menuURL` varchar(150) DEFAULT NULL,
   `menuParent` int(11) NOT NULL,
   PRIMARY KEY (`menuId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='System menus' AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='System menus' AUTO_INCREMENT=15 ;
 
 --
 -- Volcado de datos para la tabla `__menus`
@@ -166,7 +170,9 @@ INSERT INTO `__menus` (`menuId`, `menuText`, `menuURL`, `menuParent`) VALUES
 (9, 'Ventas', NULL, 0),
 (10, 'Cotizaciones', 'ventas/cotizaciones', 9),
 (11, 'Seleccionar Compañía', 'selcia', 5),
-(12, 'Pedidos', 'ventas/pedidos', 9);
+(12, 'Pedidos', 'ventas/pedidos', 9),
+(13, 'Cuentas por Cobrar', NULL, 0),
+(14, 'Adeudos', 'cxc/adeudos', 13);
 
 -- --------------------------------------------------------
 
