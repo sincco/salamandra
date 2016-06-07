@@ -23,8 +23,8 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 			if(is_null( $emails[ 0 ][ 'EMAIL' ] ) )
 				continue;
 			$emails = $emails[ 0 ][ 'EMAIL' ];
-			$emails = 'ivan.miranda@sincco.com;riverojorgea@gmail.com';
-			$enviar = FALSE;
+			//$emails = 'ivan.miranda@sincco.com;riverojorgea@gmail.com';
+			$enviar = TRUE;
 
 			$primerAviso = [];
 			$segundoAviso = [];
