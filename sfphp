@@ -154,7 +154,7 @@ function dbBackup( $key ) {
  * Clean app cache
  * @return none
  */
-function cacheClean() {
+function cacheClean($file = PATH_CACHE) {
 	echo 'Limpiando cache...' . PHP_EOL;
 	$files = glob(PATH_CACHE . '/*'); 
 	foreach($files as $file){
@@ -172,7 +172,7 @@ function cacheClean() {
  * Terminate app sessions
  * @return none
  */
-function sessionClean() {
+function sessionClean($file = PATH_SESSION) {
 	echo 'Terminando sesiones...' . PHP_EOL;
 	$files = glob(PATH_SESSION . '/*'); 
 	foreach($files as $file){

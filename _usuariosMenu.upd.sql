@@ -1,18 +1,36 @@
--- phpMyAdmin SQL Dump
--- version 4.0.10deb1
--- http://www.phpmyadmin.net
---
--- Servidor: localhost
--- Tiempo de generación: 07-06-2016 a las 17:23:34
--- Versión del servidor: 5.6.30-0ubuntu0.14.04.1
--- Versión de PHP: 5.5.9-1ubuntu4.17
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
+-- --------------------------------------------------------
 
 --
--- Base de datos: `salamandra`
+-- Estructura de tabla para la tabla `perfiles`
 --
+
+DROP TABLE IF EXISTS `perfiles`;
+CREATE TABLE IF NOT EXISTS `perfiles` (
+  `perfil` int(11) NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(75) NOT NULL,
+  PRIMARY KEY (`perfil`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Grupos de usuarios' AUTO_INCREMENT=3 ;
+
+--
+-- Volcado de datos para la tabla `perfiles`
+--
+
+INSERT INTO `perfiles` (`perfil`, `descripcion`) VALUES
+(1, 'Administrador'),
+(2, 'Vendedor');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuariosExtra`
+--
+
+DROP TABLE IF EXISTS `usuariosExtra`;
+CREATE TABLE IF NOT EXISTS `usuariosExtra` (
+  `userId` int(11) NOT NULL,
+  `perfil` int(11) NOT NULL,
+  `filtroClientes` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Configuración adicional para usuarios';
 
 -- --------------------------------------------------------
 
@@ -20,6 +38,7 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `usuariosMenus`
 --
 
+DROP TABLE IF EXISTS `usuariosMenus`;
 CREATE TABLE IF NOT EXISTS `usuariosMenus` (
   `userId` int(11) NOT NULL,
   `menuId` int(11) NOT NULL

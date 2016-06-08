@@ -19,7 +19,8 @@ class UsuariosModel extends Sincco\Sfphp\Abstracts\Model {
 	}
 
 	public function usuarioAEmpresas( $userId ) {
-		$userId = array_pop($this->connector->query( 'SELECT MAX(userId) userId FROM __usersControl' ));
+		$data = $this->connector->query( 'SELECT MAX(userId) userId FROM __usersControl' );
+		$userId = array_pop( $data );
 		$query = 'INSERT INTO usuariosEmpresas ( userId, Empresa )
 		SELECT ' . $userId[ 'userId' ] . ', empresa FROM empresas';
 		return $this->connector->query( $query );
