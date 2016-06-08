@@ -5,6 +5,7 @@ use \Sincco\Sfphp\Response;
 class ProductosController extends Sincco\Sfphp\Abstracts\Controller {
 
 	public function index() {
+		$this->helper( 'UsersAccount' )->checkLogin();
 		$mdlProductos = $this->getModel( 'Catalogo\Productos' );
 		$data = $mdlProductos->getAll();
 		$view = $this->newView( 'Catalogo\ProductosTabla' );

@@ -5,6 +5,7 @@ use \Sincco\Tools\Debug;
 class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 
 	public function index() {
+		$this->helper( 'UsersAccount' )->checkLogin();
 		$mdlAdeudos = $this->getModel( 'Cxc\Adeudos' );
 		$view = $this->newView('Cxc\AdeudosTabla');
 		$view->adeudos = $mdlAdeudos->getAdeudos();;
