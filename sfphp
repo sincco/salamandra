@@ -1,5 +1,22 @@
 #!/usr/bin/env php
 <?php
+# NOTICE OF LICENSE
+#
+# This source file is subject to the Open Software License (OSL 3.0)
+# that is available through the world-wide-web at this URL:
+# http://opensource.org/licenses/osl-3.0.php
+#
+# -----------------------
+# @author: Iván Miranda (@deivanmiranda)
+# @version: 1.0.0
+# -----------------------
+# SUPPORTED COMMANDS
+# db update
+# db backup [ dbkey ]
+# cache clean
+# session clean
+# -----------------------
+
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/paths.php';
 
@@ -26,9 +43,19 @@ function main($argv) {
 				default: echo 'Accion no reconocida'.PHP_EOL; break;
 			}
 			break;
-		default:
-			# code...
+		case 'cache':
+			switch ( $params[ 0 ] ) {
+				case 'clean': cacheClean(); break;
+				default: echo 'Accion no reconocida'.PHP_EOL; break;
+			}
 			break;
+		case 'session':
+			switch ( $params[ 0 ] ) {
+				case 'clean': sessionClean(); break;
+				default: echo 'Accion no reconocida'.PHP_EOL; break;
+			}
+			break;
+		default: echo 'Comando no reconocido'.PHP_EOL; break;
 	}
 }
 
@@ -116,7 +143,45 @@ function dbBackup( $key ) {
 		$fileData.="\n\n";
 	}
 
-	$handle = fopen('./bkp/' . $key . '-backup-' . date("ymdGis") . '.sql','w+');
+	$file = $key . '-backup-' . date("ymdGis") . '.sql';
+	$handle = fopen('./bkp/' . $file ,'w+');
 	fwrite($handle,$fileData);
 	fclose($handle);
+	echo 'Archivo ' . $file . ' creado' . PHP_EOL;
+}
+
+/**
+ * Clean app cache
+ * @return none
+ */
+function cacheClean() {
+	echo 'Limpiando cache...' . PHP_EOL;
+	$files = glob(PATH_CACHE . '/*'); 
+	foreach($files as $file){
+		if (is_dir($file) and !in_array($file, array('..', '.')))  {
+			$this->clearCache($file);
+			rmdir($file);
+		} else if(is_file($file) and ($file != __FILE__)) {
+			unlink($file); 
+		}
+	}
+	echo 'Cache limpia' . PHP_EOL;
+}
+
+/**
+ * Terminate app sessions
+ * @return none
+ */
+function sessionClean() {
+	echo 'Terminando sesiones...' . PHP_EOL;
+	$files = glob(PATH_SESSION . '/*'); 
+	foreach($files as $file){
+		if (is_dir($file) and !in_array($file, array('..', '.')))  {
+			$this->clearCache($file);
+			rmdir($file);
+		} else if(is_file($file) and ($file != __FILE__)) {
+			unlink($file); 
+		}
+	}
+	echo 'Sesiones cerradas' . PHP_EOL;
 }
