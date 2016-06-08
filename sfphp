@@ -159,7 +159,7 @@ function cacheClean() {
 	$files = glob(PATH_CACHE . '/*'); 
 	foreach($files as $file){
 		if (is_dir($file) and !in_array($file, array('..', '.')))  {
-			clearCache($file);
+			cacheClean($file);
 			rmdir($file);
 		} else if(is_file($file) and ($file != __FILE__)) {
 			unlink($file); 
@@ -177,7 +177,7 @@ function sessionClean() {
 	$files = glob(PATH_SESSION . '/*'); 
 	foreach($files as $file){
 		if (is_dir($file) and !in_array($file, array('..', '.')))  {
-			clearCache($file);
+			sessionClean($file);
 			rmdir($file);
 		} else if(is_file($file) and ($file != __FILE__)) {
 			unlink($file); 
