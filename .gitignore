@@ -2,4 +2,5 @@ composer.lock
 etc/
 vendor/
 var/
+bkp/
 SAE50EMPRE01.FDB

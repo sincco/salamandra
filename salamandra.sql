@@ -197,6 +197,18 @@ INSERT INTO `__usersControl` (`userId`, `userName`, `userEmail`, `userPassword`,
 (1, 'ivan', 'ivan', '$2y$12$Z9QaOgLYR0eXqRZ72.lmkeLzXOox6rx8/LsuGzFlRXwiQY/HjAoPK', NULL),
 (2, 'rivero', 'rivero', '$2y$12$tTt9n9bdjk6uQtQieD5flebDm.rP235iazkYz7NgYZoOXbjMPpBEy', NULL);
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuariosMenus`
+--
+
+CREATE TABLE IF NOT EXISTS `usuariosMenus` (
+  `userId` int(11) NOT NULL,
+  `menuId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Excepciones de acceso a usuarios';
+
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

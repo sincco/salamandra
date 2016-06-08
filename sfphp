@@ -1,23 +1,122 @@
 #!/usr/bin/env php
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . 'paths.php';
-main();
+require_once __DIR__ . '/paths.php';
+
+use \Sincco\Sfphp\Config\Reader;
+use \Sincco\Sfphp\Crypt;
+use Sincco\Sfphp\DB\DataManager;
+
+main($argv);
 
 /**
- * Process 
- * @return [type] [description]
+ * Main function ( launcher )
+ * @param  array $argv Params from command line
+ * @return none
  */
-public function main() {	
-	$comand = array_shift($argv);
+function main($argv) {
+	array_shift($argv);
+	$command = array_shift($argv);
 	$params = $argv;
-	switch (variable) {
-		case 'value':
-			# code...
+	switch ( $command ) {
+		case 'db':
+			switch ( $params[ 0 ] ) {
+				case 'update': dbUpdate(); break;
+				case 'backup': dbBackup( $params[ 1 ] ); break;
+				default: echo 'Accion no reconocida'.PHP_EOL; break;
+			}
 			break;
-		
 		default:
 			# code...
 			break;
 	}
+}
+
+/**
+ * Updates the principal DB with updates scripts
+ * @return none
+ */
+function dbUpdate() {
+	$data = Reader::get( 'bases' );
+	$data = $data[ 'default' ];
+	$data[ 'password' ] = trim( Crypt::decrypt( $data['password'] ) );
+	$db = new DataManager( $data );
+	echo 'Buscando actualizaciones disponibles...' . PHP_EOL;
+	foreach ( glob( '*.upd.sql' ) as $update ) {
+		echo '--' . $update . PHP_EOL;
+		$lines = file( $update );
+		$query = '';
+		foreach ( $lines as $line ) {
+			if ( substr( $line, 0, 2 ) == '--' || $line == '' )
+			continue;
+			$query .= $line;
+			if ( substr( trim( $line ), -1, 1 ) == ';' ) {
+				$db->query( $query );
+				$query = '';
+			}
+		}
+		rename( $update, './bkp/' . $update );
+	}
+	echo 'Actualizaciones aplicadas' . PHP_EOL;
+}
+
+/**
+ * DUMP builder ( for a certain DB )
+ * @param  string $key DB identifier
+ * @return none
+ */
+function dbBackup( $key ) {
+	if( trim( $key ) == '' )
+		$key = 'default';
+	$data = Reader::get( 'bases' );
+	$data = $data[ $key ];
+	$data[ 'password' ] = trim( Crypt::decrypt( $data['password'] ) );
+	$db = new DataManager( $data );
+	
+	echo 'Respaldando información...' . PHP_EOL;
+
+	if( $data['type'] == 'firebird' ) {
+		$data[ 'dbname' ] = $key;
+		$query = 'select rdb$relation_name AS Tables_in_' . $data[ 'dbname' ] .
+			' from rdb$relations where rdb$view_blr is null and (rdb$system_flag is null or rdb$system_flag = 0);';
+	} else {
+		$query = 'SHOW TABLES';
+	}
+	$tables = $db->query( $query );
+
+	$fileData = NULL;
+
+	foreach($tables as $table) {
+		if( $data['type'] == 'firebird' )
+			$table = $table[ 'TABLES_IN_' . strtoupper( $data[ 'dbname' ] ) ];
+		else
+			$table = $table[ 'Tables_in_' . $data[ 'dbname' ] ];
+
+		$tableData = $db->query('SELECT * FROM '.$table);
+		
+		if( $data['type'] != 'firebird' ) {
+			$fileData.= "-- ----------------------------------------------\n" .
+				"DROP TABLE IF EXISTS `" . $table . "`;";
+			$create = $db->query( 'SHOW CREATE TABLE ' . $table );
+			$fileData.= "\n\n" . str_replace('CREATE TABLE', 'CREATE TABLE IF NOT EXISTS ', $create[ 0 ][ 'Create Table' ] ) . ";\n\n";
+		} else {
+			$fileData.= "-- ----------------------------------------------\n";
+		}
+
+		if( count( $tableData ) > 0 ) {
+			$fileData .= 'INSERT INTO `' . $table . '` (' .
+				implode( ',', array_keys( $tableData[ 0 ] ) ) . ") VALUES \n";
+			$dump = NULL;
+			foreach( $tableData as $register ) {
+				$dump[] = "('" . implode( "','", array_values( $register ) ) . "')";
+			}
+			$fileData .= implode(",\n", $dump) . ';';
+			
+		}
+		$fileData.="\n\n";
+	}
+
+	$handle = fopen('./bkp/' . $key . '-backup-' . date("ymdGis") . '.sql','w+');
+	fwrite($handle,$fileData);
+	fclose($handle);
 }

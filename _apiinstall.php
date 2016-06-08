@@ -35,8 +35,7 @@ $bases = array(
 		'type'=>'firebird'
 	),
 );
-$db = new Connector();
-$db->connectionData( $data );
+$db = new Connector( $data );
 if( !createXML( $bases, $data[ 'dominio' ] ) ) {
 	echo json_encode( [ 'respuesta' => true ] );
 	
