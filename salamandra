@@ -16,6 +16,8 @@
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/paths.php';
 
+use \Sincco\Sfphp\Cli;
+
 use Sincco\Sfphp\Config\Writer;
 use \Sincco\Sfphp\Config\Reader;
 use \Sincco\Sfphp\Crypt;
@@ -30,14 +32,23 @@ main($argv);
  */
 function main($argv) {
 	array_shift($argv);
+	$arguments = $argv;
+
+	// It's a petition for an URL registered on system
+	if( count( $arguments ) == 1 ){
+		new Cli( '/' . $arguments[ 0 ] );
+		return;
+	}
+
+	// If it's an internal function on this script
 	$command = array_shift($argv);
 	$action = array_shift($argv);
 	$params = $argv;
 
+	// Check if its an function registered on this script
+	// if not launc the cli interface of framework
 	if( is_callable( $command . '_' . $action ) )
 		call_user_func( $command . '_' . $action, $params );
-	else
-		echo 'Comando no reconocido' . PHP_EOL;
 	die();
 
 	switch ( $command ) {

@@ -15,11 +15,23 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 	}
 
 	public function apiNotificar() {
+		$request = $this->getRequest();
+		$clientes = $this->getParams( 'clientes' );
 		$mdlClientes = $this->getModel( 'Catalogo\Clientes' );
 		$mdlAdeudos = $this->getModel( 'Cxc\Adeudos' );
+
+		// Si es una peticion de linea de comando, se procesan todos los clientes
+		if( $request[ 'method' ] == 'CLI' ) {
+			$_SESSION['companiaClave'] = $this->getParams( 'empresa' );
+			$_clientes = $mdlClientes->getAll();
+			foreach ( $_clientes as $_cliente ) {
+				$clientes[] = array( "1"=>trim( $_cliente[ 'CLAVE' ] ) , "2"=>trim( $_cliente[ 'NOMBRE' ] ) );
+			}
+		}
+
 		$avisos = [ 'primer'=>0, 'segundo'=>0, 'tercer'=>0 ];
 
-		foreach ( $this->getParams( 'clientes' ) as $_cliente ) {
+		foreach ( $clientes as $_cliente ) {
 			$emails = $mdlClientes->getContactos( $_cliente[ 1 ] );
 			if(is_null( $emails[ 0 ][ 'EMAIL' ] ) )
 				continue;
@@ -47,6 +59,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				if( $enviar )
 					$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo', '', $html, 'contacto@suhner.com', APP_COMPANY );
 				$avisos[ 'primer' ] ++;
+				// die('Aviso enviado');
 			}
 			if( count( $segundoAviso ) > 0 ) {
 				$view 			= $this->newView( 'Cxc\SegundoAviso' );
@@ -56,6 +69,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				if( $enviar )
 					$this->helper( 'ElasticEmail' )->send( $emails, '2o Aviso de adeudo', '', $html, 'contacto@suhner.com', APP_COMPANY );
 				$avisos[ 'segundo' ] ++;
+				// die('Aviso enviado');
 			}
 			if( count( $tercerAviso ) > 0 ) {
 				$view 			= $this->newView( 'Cxc\TercerAviso' );
@@ -65,6 +79,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				if( $enviar )
 					$this->helper( 'ElasticEmail' )->send( $emails, '3er Aviso de adeudo', '', $html, 'contacto@suhner.com', APP_COMPANY );
 				$avisos[ 'tercer' ] ++;
+				// die('Aviso enviado');
 			}
 
 		}
