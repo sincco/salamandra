@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 #!C:\xampp\php\php.exe -q
 <?php
+#!PaAecB7mH2qSBSzT
 # NOTICE OF LICENSE
 #
 # This source file is subject to the Open Software License (OSL 3.0)
@@ -84,6 +85,8 @@ final class Main extends \stdClass {
 	 * @return none
 	 */
 	function app_init( $cia, $url, $force = '' ) {
+		$_SERVER['SERVER_NAME'] = NULL;
+		$_SERVER['REQUEST_URI'] = NULL;
 		$config = Reader::get();
 		if( count( $config ) ) {
 			if( strtolower( trim( $force ) ) == 'force')
@@ -131,18 +134,18 @@ final class Main extends \stdClass {
 	 * @param  string $password 
 	 * @return none           
 	 */
-	function app_db( $id, $type, $host, $user, $bdname, $password ){
+	function app_db( $id, $type, $host, $user, $dbname, $password ){
 		echo 'Registrando base de datos...' . PHP_EOL;
 		$config = Reader::get();
 		if( isset( $config[ 'bases' ][ $id ] ) ) 
 		$config[ 'bases' ][ $id ][ 'type' ] = $type;
-		$config[ 'bases' ][ $id ][ 'host' ] = $$host;
+		$config[ 'bases' ][ $id ][ 'host' ] = $host;
 		$config[ 'bases' ][ $id ][ 'user' ] = $user;
 		$config[ 'bases' ][ $id ][ 'dbname' ] = $dbname;
 		$config[ 'bases' ][ $id ][ 'password' ] = Crypt::encrypt( $password );
 		Writer::write( $config, 'config', 'etc/config/config.xml');
 		chmod("./etc/config/config.xml", 0775);
-		cache_clean();
+		$this->cache_clean();
 		echo 'OK' . PHP_EOL;
 	}
 
@@ -154,6 +157,7 @@ final class Main extends \stdClass {
 		echo 'Aplicando actualizaciones...' . PHP_EOL;
 		exec( 'git pull origin master' );
 		exec( 'composer update' );
+		$this->cache_clean();
 		echo 'Terminado' . PHP_EOL;
 	}
 
@@ -231,6 +235,7 @@ final class Main extends \stdClass {
 	 * @return none       
 	 */
 	function db_restore( $dbId, $file ) {
+		echo 'Recuperando base de datos...' . PHP_EOL;
 		$dbData = Reader::get( 'bases' );
 		$dbData = $dbData[ $dbId ];
 		$dbData[ 'password' ] = trim( Crypt::decrypt( $dbData['password'] ) );
@@ -247,6 +252,8 @@ final class Main extends \stdClass {
 				$query = '';
 			}
 		}
+		$this->cache_clean();
+		echo 'Terminado' . PHP_EOL;
 	}
 
 	/**
@@ -297,6 +304,26 @@ final class Main extends \stdClass {
 			}
 		}
 		echo 'Cache limpia' . PHP_EOL;
+	}
+
+	function cache_off() {
+		echo 'Apagando cache...' . PHP_EOL;
+		$config = Reader::get();
+		$config[ 'dev' ][ 'cache' ] = 0;
+		Writer::write( $config, 'config', 'etc/config/config.xml');
+		chmod("./etc/config/config.xml", 0775);
+		$this->cache_clean();
+		echo 'OK' . PHP_EOL;
+	}
+
+	function cache_on() {
+		echo 'Encendiendo cache...' . PHP_EOL;
+		$config = Reader::get();
+		$config[ 'dev' ][ 'cache' ] = 1;
+		Writer::write( $config, 'config', 'etc/config/config.xml');
+		chmod("./etc/config/config.xml", 0775);
+		$this->cache_clean();
+		echo 'OK' . PHP_EOL;
 	}
 
 	// ------------------------------

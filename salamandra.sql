@@ -38,14 +38,6 @@ CREATE TABLE IF NOT EXISTS `cotizaciones` (
   UNIQUE KEY `cotizacion_cliente` (`cliente`,`fecha`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Cotizaciones a clientes' AUTO_INCREMENT=4 ;
 
---
--- Volcado de datos para la tabla `cotizaciones`
---
-
-INSERT INTO `cotizaciones` (`cotizacion`, `fecha`, `cliente`, `razonSocial`, `email`, `estatus`, `userId`) VALUES
-(1, '2016-05-19', '1', 'ACERLAN, S.A. DE C.V.', 'pa.ivan.miranda@gmail.com', 'Enviada', 1),
-(3, '2016-05-24', '34', 'SIEMENS, S.A. DE C.V.', 'pa.ivan.miranda@gmail.com', 'Nueva', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -62,16 +54,6 @@ CREATE TABLE IF NOT EXISTS `cotizacionesDetalle` (
   UNIQUE KEY `cotizacion_producto` (`cotizacion`,`producto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Detalle de cotizacion';
 
---
--- Volcado de datos para la tabla `cotizacionesDetalle`
---
-
-INSERT INTO `cotizacionesDetalle` (`cotizacion`, `producto`, `descripcion`, `unidad`, `cantidad`, `precio`) VALUES
-(1, '11108305', 'RECTIFICADOR USC 9R 1/4&#34;  (11', 'pieza', 558, 1),
-(1, '11108406', 'RECTIFICADOR USC 25R 110V OBSOLETO (11', 'pieza', 432.54, 1),
-(1, '11109707', 'ESMERILADOR ANGULAR UWF 10 110V (11', 'pieza', 297, 1),
-(1, '5727501', 'INTERRUPTOR POS 111 S - C (11.1', 'pieza', 14.9, 1),
-(3, '5726702', 'CARBON POS 462 SERIE C   (PZA)  (11.1', 'pieza', 6.1, 1);
 
 -- --------------------------------------------------------
 
@@ -86,13 +68,6 @@ CREATE TABLE IF NOT EXISTS `empresas` (
   UNIQUE KEY `empresa` (`empresa`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Empresas registradas en SAE';
 
---
--- Volcado de datos para la tabla `empresas`
---
-
-INSERT INTO `empresas` (`empresa`, `razonSocial`, `estatus`) VALUES
-('01', 'Tricorp', 'Activa'),
-('02', 'Otra empresa', 'Activa');
 
 -- --------------------------------------------------------
 
@@ -131,14 +106,6 @@ CREATE TABLE IF NOT EXISTS `usuariosEmpresas` (
   `empresa` char(3) NOT NULL,
   UNIQUE KEY `usuario_empresa` (`userId`,`empresa`) COMMENT 'usuario_empresa'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Empresas permitidas por usuario';
-
---
--- Volcado de datos para la tabla `usuariosEmpresas`
---
-
-INSERT INTO `usuariosEmpresas` (`userId`, `empresa`) VALUES
-(1, '01'),
-(2, '01');
 
 -- --------------------------------------------------------
 
@@ -189,13 +156,50 @@ CREATE TABLE IF NOT EXISTS `__usersControl` (
   PRIMARY KEY (`userName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `__usersControl`
+-- Estructura de tabla para la tabla `usuariosMenus`
 --
 
-INSERT INTO `__usersControl` (`userId`, `userName`, `userEmail`, `userPassword`, `userStatus`) VALUES
-(1, 'ivan', 'ivan', '$2y$12$Z9QaOgLYR0eXqRZ72.lmkeLzXOox6rx8/LsuGzFlRXwiQY/HjAoPK', NULL),
-(2, 'rivero', 'rivero', '$2y$12$tTt9n9bdjk6uQtQieD5flebDm.rP235iazkYz7NgYZoOXbjMPpBEy', NULL);
+CREATE TABLE IF NOT EXISTS `usuariosMenus` (
+  `userId` int(11) NOT NULL,
+  `menuId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Excepciones de acceso a usuarios';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `perfiles`
+--
+
+DROP TABLE IF EXISTS `perfiles`;
+CREATE TABLE IF NOT EXISTS `perfiles` (
+  `perfil` int(11) NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(75) NOT NULL,
+  PRIMARY KEY (`perfil`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Grupos de usuarios' AUTO_INCREMENT=3 ;
+
+--
+-- Volcado de datos para la tabla `perfiles`
+--
+
+INSERT INTO `perfiles` (`perfil`, `descripcion`) VALUES
+(1, 'Administrador'),
+(2, 'Vendedor');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuariosExtra`
+--
+
+DROP TABLE IF EXISTS `usuariosExtra`;
+CREATE TABLE IF NOT EXISTS `usuariosExtra` (
+  `userId` int(11) NOT NULL,
+  `perfil` int(11) NOT NULL,
+  `filtroClientes` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Configuración adicional para usuarios';
 
 -- --------------------------------------------------------
 
@@ -203,6 +207,7 @@ INSERT INTO `__usersControl` (`userId`, `userName`, `userEmail`, `userPassword`,
 -- Estructura de tabla para la tabla `usuariosMenus`
 --
 
+DROP TABLE IF EXISTS `usuariosMenus`;
 CREATE TABLE IF NOT EXISTS `usuariosMenus` (
   `userId` int(11) NOT NULL,
   `menuId` int(11) NOT NULL
