@@ -1,4 +1,5 @@
 #!/usr/bin/env php
+#!C:\xampp\php\php.exe -q
 <?php
 # NOTICE OF LICENSE
 #
@@ -23,143 +24,202 @@ use \Sincco\Sfphp\Config\Reader;
 use \Sincco\Sfphp\Crypt;
 use Sincco\Sfphp\DB\DataManager;
 
-main($argv);
+$class = new Main();
+$class->execute($argv);
 
-/**
- * Main function ( launcher )
- * @param  array $argv Params from command line
- * @return none
- */
-function main($argv) {
-	array_shift($argv);
-	$arguments = $argv;
+final class Main extends \stdClass {
+	/**
+	 * Main function ( launcher )
+	 * @param  array $argv
+	 * @return none
+	 */
+	public function execute($argv) {
+		array_shift($argv);
+		$arguments = $argv;
 
-	// It's a petition for an URL registered on system
-	if( count( $arguments ) == 1 ){
-		new Cli( '/' . $arguments[ 0 ] );
-		return;
+		// It's a petition for an URL registered on system
+		if( count( $arguments ) == 1 AND strtolower( trim( $arguments[ 0 ] ) ) != 'help' ){
+			new Cli( '/' . $arguments[ 0 ] );
+			return;
+		}
+
+		// If it's an internal function on this script
+		$command = array_shift($argv);
+		$action = array_shift($argv);
+		$params = $argv;
+
+		// Check if its an function registered on this script
+		// if not launc the cli interface of framework
+		if( is_callable( array($this,$command . '_' . $action) ) )
+			call_user_func_array( array($this,$command . '_' . $action), $params );
+		else
+			echo 'No existe el comando solicitado';
 	}
 
-	// If it's an internal function on this script
-	$command = array_shift($argv);
-	$action = array_shift($argv);
-	$params = $argv;
-
-	// Check if its an function registered on this script
-	// if not launc the cli interface of framework
-	if( is_callable( $command . '_' . $action ) )
-		call_user_func( $command . '_' . $action, $params );
-	die();
-
-	switch ( $command ) {
-		case 'db':
-			switch ( $params[ 0 ] ) {
-				case 'update': dbUpdate(); break;
-				case 'backup': dbBackup( $params[ 1 ] ); break;
-				default: echo 'Accion no reconocida'.PHP_EOL; break;
+	function help_() {
+		echo 'Comandos disponibles' . PHP_EOL;
+		$commands = get_class_methods( $this );
+		foreach ($commands as $command) {
+			$command = explode( '_', $command );
+			if( count( $command ) > 1 ){
+				echo '     ' . implode( ' ', $command ) . PHP_EOL;
 			}
-			break;
-		case 'cache':
-			switch ( $params[ 0 ] ) {
-				case 'clean': cacheClean(); break;
-				default: echo 'Accion no reconocida'.PHP_EOL; break;
-			}
-			break;
-		case 'session':
-			switch ( $params[ 0 ] ) {
-				case 'clean': sessionClean(); break;
-				default: echo 'Accion no reconocida'.PHP_EOL; break;
-			}
-			break;
-		default: echo 'Comando no reconocido'.PHP_EOL; break;
-	}
-}
-
-function app_init( $data ) {
-	echo 'Reiniciando configuración de aplicación...' . PHP_EOL;
-	unlink( PATH_CACHE . '/__config.php.cache');
-	$_llave_encripcion = strtoupper(md5(microtime().rand()));
-	$bases = [];
-	$_config = [
-		'app' => [
-			'key' => $_llave_encripcion,
-			'name' => 'salamandra',
-			'company' => $data[ 0 ],
-			'timezone' => 'America/Chicago',
-		],
-		'front' => [
-			'url' => $data[ 1 ],
-		],
-		'bases' => $bases,
-		'sesion' => [
-			'type' => 'DEFAULT',
-			'name' => 'salamandra',
-			'ssl' => 0,
-			'inactivity' => 300,
-		],
-		'dev' => [
-			'showerrors' => 1,
-		],
-	];
-	Writer::write( $_config, 'config', 'etc/config/config.xml');
-	chmod("./etc/config/config.xml", 0775);
-	unlink( PATH_CACHE . '/__config.php.cache');
-	echo 'OK' . PHP_EOL;
-}
-
-function app_db( $data ){
-	echo 'Registrando base de datos...' . PHP_EOL;
-	unlink( PATH_CACHE . '/__config.php.cache');
-	$config = Reader::get();
-	if( isset( $config[ 'bases' ][ $data[ 0 ] ] ) ) 
-	$config[ 'bases' ][ $data[ 0 ] ][ 'type' ] = $data[ 1 ];
-	$config[ 'bases' ][ $data[ 0 ] ][ 'host' ] = $data[ 2 ];
-	$config[ 'bases' ][ $data[ 0 ] ][ 'user' ] = $data[ 3 ];
-	$config[ 'bases' ][ $data[ 0 ] ][ 'dbname' ] = $data[ 4 ];
-	$config[ 'bases' ][ $data[ 0 ] ][ 'password' ] = Crypt::encrypt( $data[ 5 ] );
-	Writer::write( $config, 'config', 'etc/config/config.xml');
-	chmod("./etc/config/config.xml", 0775);
-	unlink( PATH_CACHE . '/__config.php.cache');
-	echo 'OK' . PHP_EOL;
-}
-
-function db_restore( $data ) {
-	$dbData = Reader::get( 'bases' );
-	$dbData = $dbData[ $data[ 0 ] ];
-	$dbData[ 'password' ] = trim( Crypt::decrypt( $dbData['password'] ) );
-	$db = new DataManager( $dbData );
-
-	$lines = file( $data[ 1 ] );
-	$query = '';
-	foreach ( $lines as $line ) {
-		if ( substr( $line, 0, 2 ) == '--' || $line == '' )
-		continue;
-		$query .= $line;
-		if ( substr( trim( $line ), -1, 1 ) == ';' ) {
-			$db->query( $query );
-			$query = '';
 		}
 	}
-}
 
-function user_new( $data ) {
-	$config = Reader::get();
-	var_dump($config, $data);
-}
+	// ------------------------------
+	// ------------------ APP section
+	// ------------------------------
 
-/**
- * Updates the principal DB with updates scripts
- * @return none
- */
-function dbUpdate() {
-	$data = Reader::get( 'bases' );
-	$data = $data[ 'default' ];
-	$data[ 'password' ] = trim( Crypt::decrypt( $data['password'] ) );
-	$db = new DataManager( $data );
-	echo 'Buscando actualizaciones disponibles...' . PHP_EOL;
-	foreach ( glob( '*.upd.sql' ) as $update ) {
-		echo '--' . $update . PHP_EOL;
-		$lines = file( $update );
+	/**
+	 * Defines main configuration app
+	 * @param  string $cia
+	 * @param  string $url
+	 * @return none
+	 */
+	function app_init( $cia, $url, $force = '' ) {
+		$config = Reader::get();
+		if( count( $config ) ) {
+			if( strtolower( trim( $force ) ) == 'force')
+				$this->cache_clean();
+			else
+				die( 'Ya existe una configuración, si desea reiniciar la APP especifique la opción "force"'.PHP_EOL);
+		}
+		echo 'Reiniciando configuración de aplicación...' . PHP_EOL;
+		$_llave_encripcion = strtoupper(md5(microtime().rand()));
+		$bases = [];
+		$_config = [
+			'app' => [
+				'key' => $_llave_encripcion,
+				'name' => 'salamandra',
+				'company' => $cia,
+				'timezone' => 'America/Chicago',
+			],
+			'front' => [
+				'url' => $url,
+			],
+			'bases' => $bases,
+			'sesion' => [
+				'type' => 'DEFAULT',
+				'name' => 'salamandra',
+				'ssl' => 0,
+				'inactivity' => 300,
+			],
+			'dev' => [
+				'showerrors' => 1,
+			],
+		];
+		Writer::write( $_config, 'config', 'etc/config/config.xml');
+		chmod("./etc/config/config.xml", 0775);
+		$this->cache_clean();
+		echo 'Archivo de configuración inicializado' . PHP_EOL;
+	}
+
+	/**
+	 * Adds new connection data for a DB
+	 * @param  string $id       
+	 * @param  string $type     
+	 * @param  string $host     
+	 * @param  string $user     
+	 * @param  string $bdname   
+	 * @param  string $password 
+	 * @return none           
+	 */
+	function app_db( $id, $type, $host, $user, $bdname, $password ){
+		echo 'Registrando base de datos...' . PHP_EOL;
+		$config = Reader::get();
+		if( isset( $config[ 'bases' ][ $id ] ) ) 
+		$config[ 'bases' ][ $id ][ 'type' ] = $type;
+		$config[ 'bases' ][ $id ][ 'host' ] = $$host;
+		$config[ 'bases' ][ $id ][ 'user' ] = $user;
+		$config[ 'bases' ][ $id ][ 'dbname' ] = $dbname;
+		$config[ 'bases' ][ $id ][ 'password' ] = Crypt::encrypt( $password );
+		Writer::write( $config, 'config', 'etc/config/config.xml');
+		chmod("./etc/config/config.xml", 0775);
+		cache_clean();
+		echo 'OK' . PHP_EOL;
+	}
+
+	// ------------------------------
+	// ------------------- DB section
+	// ------------------------------
+
+	/**
+	 * Create an backup script for a DB
+	 * @param  string $dbId
+	 * @return none      
+	 */
+	function db_backup( $dbId ) {
+		if( trim( $dbId ) == '' )
+			$dbId = 'default';
+		$data = Reader::get( 'bases' );
+		$data = $data[ $dbId ];
+		$data[ 'password' ] = trim( Crypt::decrypt( $data['password'] ) );
+		$db = new DataManager( $data );
+		
+		echo 'Respaldando información...' . PHP_EOL;
+
+		if( $data['type'] == 'firebird' ) {
+			$data[ 'dbname' ] = $dbId;
+			$query = 'select rdb$relation_name AS Tables_in_' . $data[ 'dbname' ] .
+				' from rdb$relations where rdb$view_blr is null and (rdb$system_flag is null or rdb$system_flag = 0);';
+		} else {
+			$query = 'SHOW TABLES';
+		}
+		$tables = $db->query( $query );
+
+		$fileData = NULL;
+
+		foreach($tables as $table) {
+			if( $data['type'] == 'firebird' )
+				$table = $table[ 'TABLES_IN_' . strtoupper( $data[ 'dbname' ] ) ];
+			else
+				$table = $table[ 'Tables_in_' . $data[ 'dbname' ] ];
+
+			$tableData = $db->query('SELECT * FROM '.$table);
+			
+			if( $data['type'] != 'firebird' ) {
+				$fileData.= "-- ----------------------------------------------\n" .
+					"DROP TABLE IF EXISTS `" . $table . "`;";
+				$create = $db->query( 'SHOW CREATE TABLE ' . $table );
+				$fileData.= "\n\n" . str_replace('CREATE TABLE', 'CREATE TABLE IF NOT EXISTS ', $create[ 0 ][ 'Create Table' ] ) . ";\n\n";
+			} else {
+				$fileData.= "-- ----------------------------------------------\n";
+			}
+
+			if( count( $tableData ) > 0 ) {
+				$fileData .= 'INSERT INTO `' . $table . '` (' .
+					implode( ',', array_keys( $tableData[ 0 ] ) ) . ") VALUES \n";
+				$dump = NULL;
+				foreach( $tableData as $register ) {
+					$dump[] = "('" . implode( "','", array_values( $register ) ) . "')";
+				}
+				$fileData .= implode(",\n", $dump) . ';';
+				
+			}
+			$fileData.="\n\n";
+		}
+
+		$file = $dbId . '-backup-' . date("ymdGis") . '.sql';
+		$handle = fopen('./bkp/' . $file ,'w+');
+		fwrite($handle,$fileData);
+		fclose($handle);
+		echo 'Archivo ' . $file . ' creado' . PHP_EOL;
+	}
+
+	/**
+	 * Restores an SQL backup script on a DB
+	 * @param  string $dbId 
+	 * @param  string $file 
+	 * @return none       
+	 */
+	function db_restore( $dbId, $file ) {
+		$dbData = Reader::get( 'bases' );
+		$dbData = $dbData[ $dbId ];
+		$dbData[ 'password' ] = trim( Crypt::decrypt( $dbData['password'] ) );
+		$db = new DataManager( $dbData );
+
+		$lines = file( $file );
 		$query = '';
 		foreach ( $lines as $line ) {
 			if ( substr( $line, 0, 2 ) == '--' || $line == '' )
@@ -170,106 +230,78 @@ function dbUpdate() {
 				$query = '';
 			}
 		}
-		rename( $update, './bkp/' . $update );
 	}
-	echo 'Actualizaciones aplicadas' . PHP_EOL;
-}
 
-/**
- * DUMP builder ( for a certain DB )
- * @param  string $key DB identifier
- * @return none
- */
-function dbBackup( $key ) {
-	if( trim( $key ) == '' )
-		$key = 'default';
-	$data = Reader::get( 'bases' );
-	$data = $data[ $key ];
-	$data[ 'password' ] = trim( Crypt::decrypt( $data['password'] ) );
-	$db = new DataManager( $data );
-	
-	echo 'Respaldando información...' . PHP_EOL;
-
-	if( $data['type'] == 'firebird' ) {
-		$data[ 'dbname' ] = $key;
-		$query = 'select rdb$relation_name AS Tables_in_' . $data[ 'dbname' ] .
-			' from rdb$relations where rdb$view_blr is null and (rdb$system_flag is null or rdb$system_flag = 0);';
-	} else {
-		$query = 'SHOW TABLES';
-	}
-	$tables = $db->query( $query );
-
-	$fileData = NULL;
-
-	foreach($tables as $table) {
-		if( $data['type'] == 'firebird' )
-			$table = $table[ 'TABLES_IN_' . strtoupper( $data[ 'dbname' ] ) ];
-		else
-			$table = $table[ 'Tables_in_' . $data[ 'dbname' ] ];
-
-		$tableData = $db->query('SELECT * FROM '.$table);
-		
-		if( $data['type'] != 'firebird' ) {
-			$fileData.= "-- ----------------------------------------------\n" .
-				"DROP TABLE IF EXISTS `" . $table . "`;";
-			$create = $db->query( 'SHOW CREATE TABLE ' . $table );
-			$fileData.= "\n\n" . str_replace('CREATE TABLE', 'CREATE TABLE IF NOT EXISTS ', $create[ 0 ][ 'Create Table' ] ) . ";\n\n";
-		} else {
-			$fileData.= "-- ----------------------------------------------\n";
-		}
-
-		if( count( $tableData ) > 0 ) {
-			$fileData .= 'INSERT INTO `' . $table . '` (' .
-				implode( ',', array_keys( $tableData[ 0 ] ) ) . ") VALUES \n";
-			$dump = NULL;
-			foreach( $tableData as $register ) {
-				$dump[] = "('" . implode( "','", array_values( $register ) ) . "')";
+	/**
+	 * Updates the principal DB with updates scripts
+	 * @return none
+	 */
+	function db_update() {
+		$data = Reader::get( 'bases' );
+		$data = $data[ 'default' ];
+		$data[ 'password' ] = trim( Crypt::decrypt( $data['password'] ) );
+		$db = new DataManager( $data );
+		echo 'Buscando actualizaciones disponibles...' . PHP_EOL;
+		foreach ( glob( '*.upd.sql' ) as $update ) {
+			echo '--' . $update . PHP_EOL;
+			$lines = file( $update );
+			$query = '';
+			foreach ( $lines as $line ) {
+				if ( substr( $line, 0, 2 ) == '--' || $line == '' )
+				continue;
+				$query .= $line;
+				if ( substr( trim( $line ), -1, 1 ) == ';' ) {
+					$db->query( $query );
+					$query = '';
+				}
 			}
-			$fileData .= implode(",\n", $dump) . ';';
-			
+			rename( $update, './bkp/' . $update );
 		}
-		$fileData.="\n\n";
+		echo 'Actualizaciones aplicadas' . PHP_EOL;
 	}
 
-	$file = $key . '-backup-' . date("ymdGis") . '.sql';
-	$handle = fopen('./bkp/' . $file ,'w+');
-	fwrite($handle,$fileData);
-	fclose($handle);
-	echo 'Archivo ' . $file . ' creado' . PHP_EOL;
-}
+	// ------------------------------
+	// ---------------- CACHE section
+	// ------------------------------
 
-/**
- * Clean app cache
- * @return none
- */
-function cacheClean($file = PATH_CACHE) {
-	echo 'Limpiando cache...' . PHP_EOL;
-	$files = glob(PATH_CACHE . '/*'); 
-	foreach($files as $file){
-		if (is_dir($file) and !in_array($file, array('..', '.')))  {
-			cacheClean($file);
-			rmdir($file);
-		} else if(is_file($file) and ($file != __FILE__)) {
-			unlink($file); 
+	/**
+	 * Clean app cache
+	 * @return none
+	 */
+	function cache_clean($file = PATH_CACHE) {
+		echo 'Limpiando cache...' . PHP_EOL;
+		$files = glob($file . '/*'); 
+		foreach($files as $file){
+			if (is_dir($file) and !in_array($file, array('..', '.')))  {
+				$this->cache_clean($file);
+				rmdir($file);
+			} else if(is_file($file) and ($file != __FILE__)) {
+				unlink($file); 
+			}
 		}
+		echo 'Cache limpia' . PHP_EOL;
 	}
-	echo 'Cache limpia' . PHP_EOL;
-}
 
-/**
- * Terminate app sessions
- * @return none
- */
-function sessionClean($file = PATH_SESSION) {
-	echo 'Terminando sesiones...' . PHP_EOL;
-	$files = glob(PATH_SESSION . '/*'); 
-	foreach($files as $file){
-		if (is_dir($file) and !in_array($file, array('..', '.')))  {
-			sessionClean($file);
-			rmdir($file);
-		} else if(is_file($file) and ($file != __FILE__)) {
-			unlink($file); 
+	// ------------------------------
+	// -------------- SESSION section
+	// ------------------------------
+
+	/**
+	 * Terminate app sessions
+	 * @return none
+	 */
+	function session_clean($file = PATH_SESSION) {
+		echo 'Cerrando sesiones...' . PHP_EOL;
+		$files = glob($file . '/*'); 
+		foreach($files as $file){
+			if (is_dir($file) and !in_array($file, array('..', '.')))  {
+				$this->session_clean($file);
+				rmdir($file);
+			} else if(is_file($file) and ($file != __FILE__)) {
+				unlink($file); 
+			}
 		}
+		echo 'Sesiones cerradas' . PHP_EOL;
 	}
-	echo 'Sesiones cerradas' . PHP_EOL;
+
 }
