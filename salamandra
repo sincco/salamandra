@@ -63,6 +63,8 @@ final class Main extends \stdClass {
 			$command = explode( '_', $command );
 			if( count( $command ) > 1 ){
 				echo '     ' . implode( ' ', $command ) . PHP_EOL;
+				$ref = new ReflectionMethod($this,implode( '_', $command ));
+				var_dump($ref->getParameters());
 			}
 		}
 	}
