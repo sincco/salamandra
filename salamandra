@@ -62,9 +62,13 @@ final class Main extends \stdClass {
 		foreach ($commands as $command) {
 			$command = explode( '_', $command );
 			if( count( $command ) > 1 ){
-				echo '     ' . implode( ' ', $command ) . PHP_EOL;
+				echo '     ' . implode( ' ', $command ) ;
 				$ref = new ReflectionMethod($this,implode( '_', $command ));
-				var_dump($ref->getParameters());
+				$params = [];
+				foreach ($ref->getParameters() as $key => $value) {
+				 	$params[] = $value->name;
+				 } //$ref->getParameters());
+				echo ' [' . implode('] [', $params ) . ']' . PHP_EOL;
 			}
 		}
 	}
