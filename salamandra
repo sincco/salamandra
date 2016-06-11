@@ -146,6 +146,17 @@ final class Main extends \stdClass {
 		echo 'OK' . PHP_EOL;
 	}
 
+	/**
+	 * Apply update for app
+	 * @return none
+	 */
+	function app_update() {
+		echo 'Aplicando actualizaciones...' . PHP_EOL;
+		exec( 'git pull origin master' );
+		exec( 'composer update' );
+		echo 'Terminado' . PHP_EOL;
+	}
+
 	// ------------------------------
 	// ------------------- DB section
 	// ------------------------------
