@@ -17,6 +17,10 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 
 	public function apiNotificar() {
 		$apiElastic = Reader::get( 'elasticemail' );
+		if( file_exists( file_exists( 'html/img/logo_cliente_mail.jpg' ) ) )
+				$logo = 'html/img/logo_cliente_mail.jpg';
+			else
+				$logo = 'html/img/logo.jpg';
 
 		$request = $this->getRequest();
 		$clientes = $this->getParams( 'clientes' );
@@ -60,31 +64,37 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$view 			= $this->newView( 'Cxc\PrimerAviso' );
 				$view->general  = [ 'NOMBRE'=>$_cliente[ 2 ] ];
 				$view->adeudos 	= $primerAviso;
+				$view->logo 	= $logo;
 				$html 			= $view->getContent();
 				if( $enviar )
 					$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo', '', $html, $apiElastic[ 'from' ], APP_COMPANY );
 				$avisos[ 'primer' ] ++;
-				die('Aviso enviado');
+				if( $apiElastic[ 'test' ] == 1 )
+					die('Aviso enviado');
 			}
 			if( count( $segundoAviso ) > 0 ) {
 				$view 			= $this->newView( 'Cxc\SegundoAviso' );
 				$view->general  = [ 'NOMBRE'=>$_cliente[ 2 ] ];
 				$view->adeudos 	= $segundoAviso;
+				$view->logo 	= $logo;
 				$html 			= $view->getContent();
 				if( $enviar )
 					$this->helper( 'ElasticEmail' )->send( $emails, '2o Aviso de adeudo', '', $html, $apiElastic[ 'from' ], APP_COMPANY );
 				$avisos[ 'segundo' ] ++;
-				die('Aviso enviado');
+				if( $apiElastic[ 'test' ] == 1 )
+					die('Aviso enviado');
 			}
 			if( count( $tercerAviso ) > 0 ) {
 				$view 			= $this->newView( 'Cxc\TercerAviso' );
 				$view->general  = [ 'NOMBRE'=>$_cliente[ 2 ] ];
 				$view->adeudos 	= $tercerAviso;
+				$view->logo 	= $logo;
 				$html 			= $view->getContent();
 				if( $enviar )
 					$this->helper( 'ElasticEmail' )->send( $emails, '3er Aviso de adeudo', '', $html, $apiElastic[ 'from' ], APP_COMPANY );
 				$avisos[ 'tercer' ] ++;
-				die('Aviso enviado');
+				if( $apiElastic[ 'test' ] == 1 )
+					die('Aviso enviado');
 			}
 
 		}
