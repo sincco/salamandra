@@ -18,11 +18,11 @@
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/paths.php';
 
-use \Sincco\Sfphp\Cli;
-
+use Sincco\Sfphp\Cli;
+use Sincco\Tools\Singleton;
 use Sincco\Sfphp\Config\Writer;
-use \Sincco\Sfphp\Config\Reader;
-use \Sincco\Sfphp\Crypt;
+use Sincco\Sfphp\Config\Reader;
+use Sincco\Sfphp\Crypt;
 use Sincco\Sfphp\DB\DataManager;
 
 $class = new Main();
@@ -326,6 +326,27 @@ final class Main extends \stdClass {
 		echo 'OK' . PHP_EOL;
 	}
 
+	function app_cia( $id, $name ) {
+		$data = Reader::get( 'bases' );
+		$data = $data[ 'default' ];
+		$data[ 'password' ] = trim( Crypt::decrypt( $data['password'] ) );
+		$db = new DataManager( $data );
+		$db->query( 'INSERT INTO empresas (empresa,razonSocial, estatus) VALUES (:empresa, :razonSocial, :estatus)' , 
+			array( 'empresa'=>$id, 'razonSocial'=>$name, 'estatus'=>'Activa' ) );
+		echo 'Empresa ' . $id . ' registrada';
+	}
+
+	function app_user( $name, $email, $password ) {
+		include_once( PATH_ROOT . '/app/Helpers/UsersAccount.php' );
+		include_once( PATH_ROOT . '/app/Models/Usuarios.php' );
+		$class = 'UsersAccountHelper';
+		$helper = Singleton::get( $class );
+		$mdlUsuarios = Singleton::get('UsuariosModel');
+		$data = array( 'user'=>$name,'email'=>$email,'password'=>$password );
+		$userId = $helper->createUser( $data );
+		$mdlUsuarios->usuarioAEmpresas( $userId );
+		echo 'Usuario creado';
+	}
 	// ------------------------------
 	// -------------- SESSION section
 	// ------------------------------

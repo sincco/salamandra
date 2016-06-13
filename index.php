@@ -14,6 +14,7 @@ require_once __DIR__ . '/paths.php';
 
 use Sincco\Sfphp\Session;
 use Sincco\Sfphp\Launcher;
+use Sincco\Tools\Debug;
 
 try {
 	Session::get();
