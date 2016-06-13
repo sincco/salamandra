@@ -49,7 +49,7 @@ class AdeudosModel extends Sincco\Sfphp\Abstracts\Model {
 				GROUP BY CVE_CLIE, NOMBRE, NO_FACTURA, MONEDA
 			) saldos
 		INNER JOIN FACTF' . $_SESSION[ 'companiaClave' ] . ' factura ON ( factura.CVE_DOC = saldos.NO_FACTURA )
-		WHERE SALDO > 0.99
+		WHERE SALDO > 0.99 AND datediff (day from CAST(factura.FECHA_VEN AS DATE) to cast(current_date as date)) > 30
 		ORDER BY ATRASO DESC, CVE_CLIE ASC, NO_FACTURA ASC';
 		return $this->connector->query( $query, [ 'C_TIPO_MOV'=>'C', 'A_TIPO_MOV'=>'A' ] );
 	}
@@ -74,7 +74,7 @@ class AdeudosModel extends Sincco\Sfphp\Abstracts\Model {
 				GROUP BY CVE_CLIE, NOMBRE, NO_FACTURA, MONEDA
 			) saldos
 		INNER JOIN FACTF' . $_SESSION[ 'companiaClave' ] . ' factura ON ( factura.CVE_DOC = saldos.NO_FACTURA )
-		WHERE SALDO > 0.99
+		WHERE SALDO > 0.99 AND datediff (day from CAST(factura.FECHA_VEN AS DATE) to cast(current_date as date)) > 30
 		GROUP BY CVE_CLIE, NOMBRE
 		ORDER BY CVE_CLIE';
 		return $this->connector->query( $query, [ 'C_TIPO_MOV'=>'C', 'A_TIPO_MOV'=>'A' ] );
