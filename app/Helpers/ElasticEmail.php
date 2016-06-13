@@ -1,9 +1,13 @@
 <?php
+
+use \Sincco\Sfphp\Config\Reader;
+
 final class ElasticEmailHelper {
 	public function send($para, $asunto, $contenidoTxt, $contenidoHtml, $de, $deNombre) {
+		$apiElastic = Reader::get( 'elasticemail' );
 		$respuesta = "";
-		$_data = "username=".urlencode('cobranza.suhner@gmail.com');
-		$_data .= "&api_key=".urlencode('a16bd997-b91c-4457-937a-c7c194d39fd6');
+		$_data = "username=".urlencode( $apiElastic[ 'username' ]);
+		$_data .= "&api_key=".urlencode( $apiElastic[ 'api_key' ]);
 		$_data .= "&from=".urlencode($de);
 		$_data .= "&from_name=".urlencode($deNombre);
 		$_data .= "&to=".urlencode($para);

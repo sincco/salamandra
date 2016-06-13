@@ -13,6 +13,10 @@ class IndexController extends Sincco\Sfphp\Abstracts\Controller {
 	public function index() {
 		if(! Login::isLogged() ) {
 			$view = $this->newView( 'Login' );
+			if( file_exists( file_exists( 'html/img/logo_cliente.jpg' ) ) )
+				$view->logo = 'html/img/logo_cliente.jpg';
+			else
+				$view->logo = 'html/img/logo.jpg';
 			$view->render();
 		} else
 			Request::redirect( 'dashboard' );

@@ -137,7 +137,6 @@ final class Main extends \stdClass {
 	function app_db( $id, $type, $host, $user, $dbname, $password ){
 		echo 'Registrando base de datos...' . PHP_EOL;
 		$config = Reader::get();
-		if( isset( $config[ 'bases' ][ $id ] ) ) 
 		$config[ 'bases' ][ $id ][ 'type' ] = $type;
 		$config[ 'bases' ][ $id ][ 'host' ] = $host;
 		$config[ 'bases' ][ $id ][ 'user' ] = $user;
@@ -346,6 +345,19 @@ final class Main extends \stdClass {
 		$userId = $helper->createUser( $data );
 		$mdlUsuarios->usuarioAEmpresas( $userId );
 		echo 'Usuario creado';
+	}
+
+	function extra_elasticemail( $username, $api_key, $from, $test=0 ) {
+		echo 'Registrando elastic email...' . PHP_EOL;
+		$config = Reader::get();
+		$config[ 'elasticemail' ][ 'username' ] = $username;
+		$config[ 'elasticemail' ][ 'api_key' ] = $api_key;
+		$config[ 'elasticemail' ][ 'from' ] = $from;
+		$config[ 'elasticemail' ][ 'test' ] = $test;
+		Writer::write( $config, 'config', 'etc/config/config.xml');
+		chmod("./etc/config/config.xml", 0775);
+		$this->cache_clean();
+		echo 'OK' . PHP_EOL;
 	}
 	// ------------------------------
 	// -------------- SESSION section

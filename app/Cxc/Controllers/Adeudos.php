@@ -1,6 +1,7 @@
 <?php
 
 use \Sincco\Tools\Debug;
+use \Sincco\Sfphp\Config\Reader;
 
 class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 
@@ -15,6 +16,8 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 	}
 
 	public function apiNotificar() {
+		$apiElastic = Reader::get( 'elasticemail' );
+
 		$request = $this->getRequest();
 		$clientes = $this->getParams( 'clientes' );
 		$mdlClientes = $this->getModel( 'Catalogo\Clientes' );
@@ -35,8 +38,10 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 			$emails = $mdlClientes->getContactos( $_cliente[ 1 ] );
 			if(is_null( $emails[ 0 ][ 'EMAIL' ] ) )
 				continue;
-			//$emails = $emails[ 0 ][ 'EMAIL' ] . ';pedro.acevedo@suhner.com';
-			$emails = 'ivan.miranda@sincco.com;riverojorgea@gmail.com';
+			if( $apiElastic[ 'test' ] == 1 )
+				$emails = 'ivan.miranda@sincco.com;riverojorgea@gmail.com';
+			else
+				$emails = $emails[ 0 ][ 'EMAIL' ] . ';pedro.acevedo@suhner.com';
 			$enviar = TRUE;
 
 			$primerAviso = [];
@@ -57,9 +62,9 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$view->adeudos 	= $primerAviso;
 				$html 			= $view->getContent();
 				if( $enviar )
-					$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo', '', $html, 'contacto@suhner.com', APP_COMPANY );
+					$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo', '', $html, $apiElastic[ 'from' ], APP_COMPANY );
 				$avisos[ 'primer' ] ++;
-				// die('Aviso enviado');
+				die('Aviso enviado');
 			}
 			if( count( $segundoAviso ) > 0 ) {
 				$view 			= $this->newView( 'Cxc\SegundoAviso' );
@@ -67,9 +72,9 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$view->adeudos 	= $segundoAviso;
 				$html 			= $view->getContent();
 				if( $enviar )
-					$this->helper( 'ElasticEmail' )->send( $emails, '2o Aviso de adeudo', '', $html, 'contacto@suhner.com', APP_COMPANY );
+					$this->helper( 'ElasticEmail' )->send( $emails, '2o Aviso de adeudo', '', $html, $apiElastic[ 'from' ], APP_COMPANY );
 				$avisos[ 'segundo' ] ++;
-				// die('Aviso enviado');
+				die('Aviso enviado');
 			}
 			if( count( $tercerAviso ) > 0 ) {
 				$view 			= $this->newView( 'Cxc\TercerAviso' );
@@ -77,9 +82,9 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$view->adeudos 	= $tercerAviso;
 				$html 			= $view->getContent();
 				if( $enviar )
-					$this->helper( 'ElasticEmail' )->send( $emails, '3er Aviso de adeudo', '', $html, 'contacto@suhner.com', APP_COMPANY );
+					$this->helper( 'ElasticEmail' )->send( $emails, '3er Aviso de adeudo', '', $html, $apiElastic[ 'from' ], APP_COMPANY );
 				$avisos[ 'tercer' ] ++;
-				// die('Aviso enviado');
+				die('Aviso enviado');
 			}
 
 		}
