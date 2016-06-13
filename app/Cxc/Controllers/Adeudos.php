@@ -32,7 +32,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 			$_SESSION['companiaClave'] = $this->getParams( 'empresa' );
 			$_clientes = $mdlAdeudos->getAdeudos();
 			foreach ( $_clientes as $_cliente ) {
-				$clientes[] = array( "1"=>trim( $_cliente[ 'CVE_CLIE' ] ) , "2"=>trim( $_cliente[ 'NOMBRE' ] ) );
+				$clientes[ $_cliente[ 'CVE_CLIE' ] ] = array( "1"=>trim( $_cliente[ 'CVE_CLIE' ] ) , "2"=>trim( $_cliente[ 'NOMBRE' ] ) );
 			}
 		}
 
