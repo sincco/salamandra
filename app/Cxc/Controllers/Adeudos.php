@@ -37,8 +37,14 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 		}
 
 		$avisos = [ 'primer'=>0, 'segundo'=>0, 'tercer'=>0 ];
+		$actual = 0;
 
 		foreach ( $clientes as $_cliente ) {
+			
+			$actual++;
+			if( $request[ 'method' ] == 'CLI' )
+				echo 'Cliente ' . $actual . ' de ' . count($clientes) . PHP_EOL;
+
 			$emails = $mdlClientes->getContactos( $_cliente[ 1 ] );
 			if(is_null( $emails[ 0 ][ 'EMAIL' ] ) )
 				continue;
