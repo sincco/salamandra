@@ -21,7 +21,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$logo = 'html/img/logo_cliente_mail.jpg';
 			else
 				$logo = 'html/img/logo.jpg';
-
+		var_dump($logo);die();
 		$request = $this->getRequest();
 		$clientes = $this->getParams( 'clientes' );
 		$mdlClientes = $this->getModel( 'Catalogo\Clientes' );
