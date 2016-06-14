@@ -17,11 +17,10 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 
 	public function apiNotificar() {
 		$apiElastic = Reader::get( 'elasticemail' );
-		if( file_exists( PATH_ROOT.'html/img/logo_cliente_mail.jpg' ) )
+		if( file_exists( PATH_ROOT.'/html/img/logo_cliente_mail.jpg' ) )
 				$logo = 'html/img/logo_cliente_mail.jpg';
 			else
 				$logo = 'html/img/logo.jpg';
-		var_dump($logo);die();
 		$request = $this->getRequest();
 		$clientes = $this->getParams( 'clientes' );
 		$mdlClientes = $this->getModel( 'Catalogo\Clientes' );
