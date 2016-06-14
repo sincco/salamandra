@@ -9,7 +9,8 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 		$this->helper( 'UsersAccount' )->checkLogin();
 		$mdlAdeudos = $this->getModel( 'Cxc\Adeudos' );
 		$view = $this->newView('Cxc\AdeudosTabla');
-		$view->adeudos = $mdlAdeudos->getAdeudos();;
+		var_dump($mdlAdeudos->getAdeudos());die();
+		$view->adeudos = $mdlAdeudos->getAdeudos();
 		$view->clientes = $mdlAdeudos->getNotificaciones();;
 		$view->menus = $this->helper( 'UsersAccount' )->createMenus();
 		$view->render();
@@ -31,7 +32,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 			$_SESSION['companiaClave'] = $this->getParams( 'empresa' );
 			$_clientes = $mdlAdeudos->getAdeudos();
 			foreach ( $_clientes as $_cliente ) {
-				$clientes[ $_cliente[ 'CVE_CLIE' ] ] = array( "1"=>trim( $_cliente[ 'CVE_CLIE' ] ) , "2"=>trim( $_cliente[ 'NOMBRE' ], "3"=>trim( $_cliente[ 'CVE_VEND' ] ) ) );
+				$clientes[ $_cliente[ 'CVE_CLIE' ] ] = array( "1"=>trim( $_cliente[ 'CVE_CLIE' ] ) , "2"=>trim( $_cliente[ 'NOMBRE' ]), "3"=>trim( $_cliente[ 'CVE_VEND' ] ) );
 			}
 		}
 

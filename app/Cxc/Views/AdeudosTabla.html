@@ -8,7 +8,7 @@
 		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
 			<thead>
 				<tr>
-					<th>Cliente</th><th>Nombre</th><th>Factura</th><th>Emitida</th><th>Vencimiento</th><th>Atraso</th><th>Moneda</th><th>Cargo</th><th>Abono</th><th>Saldo</th><th>Ultimo Pago</th>
+					<th>Cliente</th><th>Nombre</th><th>Factura</th><th>Emitida</th><th>Vencimiento</th><th>Atraso</th><th>Moneda</th><th>Cargo</th><th>Abono</th><th>Saldo</th><th>Ultimo Pago</th><th>Vendedor</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -33,6 +33,7 @@
 					{% else %}
 						<td>{{ adeudo.ULTIMO_PAGO|e }}</td>
 					{% endif %}
+					<td>{{ adeudo.CVE_VEND|e }}</td>
 				</tr>
 				{% endfor %}
 			</tbody>

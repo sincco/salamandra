@@ -26,7 +26,7 @@ class AdeudosModel extends Sincco\Sfphp\Abstracts\Model {
 	}
 
 	public function getAdeudos() {
-		$query = 'SELECT CVE_CLIE, NOMBRE, NO_FACTURA, 
+		$query = 'SELECT CVE_CLIE, NOMBRE, saldos.CVE_VEND, NO_FACTURA, 
 				substring(CAST(factura.FECHA_VEN as varchar(25) character SET utf8) from 1 for 10) AS Vencimiento, 
 				MONEDA, CARGO, ABONO, SALDO, EMITIDA, 
 				CASE ABONO WHEN 0 THEN NULL ELSE ULTIMO_PAGO END ULTIMO_PAGO,
