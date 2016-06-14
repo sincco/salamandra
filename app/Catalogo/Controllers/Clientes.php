@@ -5,7 +5,7 @@ class ClientesController extends Sincco\Sfphp\Abstracts\Controller {
 		$this->helper( 'UsersAccount' )->checkLogin();
 		$mdlClientes = $this->getModel('Catalogo\Clientes');
 		$data = $mdlClientes->getAll();
-		var_dump($data);die();
+		echo "<pre>";var_dump($data);echo "</pre>";die();
 		$view = $this->newView('Catalogo\ClientesTabla');
 		$view->clientes = $data;
 		$view->menus = $this->helper( 'UsersAccount' )->createMenus();

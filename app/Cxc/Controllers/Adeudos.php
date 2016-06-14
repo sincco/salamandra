@@ -31,7 +31,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 			$_SESSION['companiaClave'] = $this->getParams( 'empresa' );
 			$_clientes = $mdlAdeudos->getAdeudos();
 			foreach ( $_clientes as $_cliente ) {
-				$clientes[ $_cliente[ 'CVE_CLIE' ] ] = array( "1"=>trim( $_cliente[ 'CVE_CLIE' ] ) , "2"=>trim( $_cliente[ 'NOMBRE' ] ) );
+				$clientes[ $_cliente[ 'CVE_CLIE' ] ] = array( "1"=>trim( $_cliente[ 'CVE_CLIE' ] ) , "2"=>trim( $_cliente[ 'NOMBRE' ], "3"=>trim( $_cliente[ 'CVE_VEND' ] ) ) );
 			}
 		}
 
@@ -73,7 +73,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$view->logo 	= $logo;
 				$html 			= $view->getContent();
 				if( $enviar )
-					$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo', '', $html, $apiElastic[ 'from' ], APP_COMPANY );
+					$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
 				$avisos[ 'primer' ] ++;
 				if( $apiElastic[ 'test' ] == "1" )
 					$enviar = FALSE;
@@ -85,7 +85,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$view->logo 	= $logo;
 				$html 			= $view->getContent();
 				if( $enviar )
-					$this->helper( 'ElasticEmail' )->send( $emails, '2o Aviso de adeudo', '', $html, $apiElastic[ 'from' ], APP_COMPANY );
+					$this->helper( 'ElasticEmail' )->send( $emails, '2o Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
 				$avisos[ 'segundo' ] ++;
 				if( $apiElastic[ 'test' ] == "1" )
 					$enviar = FALSE;
@@ -97,7 +97,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$view->logo 	= $logo;
 				$html 			= $view->getContent();
 				if( $enviar )
-					$this->helper( 'ElasticEmail' )->send( $emails, '3er Aviso de adeudo', '', $html, $apiElastic[ 'from' ], APP_COMPANY );
+					$this->helper( 'ElasticEmail' )->send( $emails, '3er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
 				$avisos[ 'tercer' ] ++;
 				if( $apiElastic[ 'test' ] == "1" )
 					$enviar = FALSE;
