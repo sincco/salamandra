@@ -9,7 +9,6 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 		$this->helper( 'UsersAccount' )->checkLogin();
 		$mdlAdeudos = $this->getModel( 'Cxc\Adeudos' );
 		$view = $this->newView('Cxc\AdeudosTabla');
-		var_dump($mdlAdeudos->getAdeudos());die();
 		$view->adeudos = $mdlAdeudos->getAdeudos();
 		$view->clientes = $mdlAdeudos->getNotificaciones();;
 		$view->menus = $this->helper( 'UsersAccount' )->createMenus();

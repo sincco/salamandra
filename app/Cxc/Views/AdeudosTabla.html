@@ -53,7 +53,7 @@
 					<thead>
 						<tr>
 							<th data-field="state" data-checkbox="true" ></th>
-							<th>Cliente</th><th>Nombre</th><th>Saldo</th>
+							<th>Cliente</th><th>Nombre</th><th>Vendedor</th><th>Saldo</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -61,6 +61,7 @@
 						<tr><td></td>
 							<td>{{ cliente.CVE_CLIE|e }}</td>
 							<td>{{ cliente.NOMBRE|e }}</td>
+							<td>{{ cliente.CVE_VEND|e }}</td>
 							<td>{{ cliente.SALDO|number_format(2, '.', ',') }}</td>
 						</tr>
 						{% endfor %}
