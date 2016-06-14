@@ -17,7 +17,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 
 	public function apiNotificar() {
 		$apiElastic = Reader::get( 'elasticemail' );
-		if( file_exists( file_exists( 'html/img/logo_cliente_mail.jpg' ) ) )
+		if( file_exists( 'html/img/logo_cliente_mail.jpg' ) )
 				$logo = 'html/img/logo_cliente_mail.jpg';
 			else
 				$logo = 'html/img/logo.jpg';
