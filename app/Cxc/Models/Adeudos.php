@@ -25,7 +25,7 @@ class AdeudosModel extends Sincco\Sfphp\Abstracts\Model {
 		return $this->connector->query( $query, [ 'A_TIPO_MOV'=>'A' ] );
 	}
 
-	public function getAdeudos() {
+	public function getAdeudos($cron = FALSE) {
 		$query = 'SELECT CVE_CLIE, saldos.NOMBRE, saldos.CVE_VEND, vendedor.CORREOE CORREO_VENDEDOR, NO_FACTURA, 
 				substring(CAST(factura.FECHA_VEN as varchar(25) character SET utf8) from 1 for 10) AS Vencimiento, 
 				MONEDA, CARGO, ABONO, SALDO, EMITIDA, 
@@ -50,7 +50,7 @@ class AdeudosModel extends Sincco\Sfphp\Abstracts\Model {
 			) saldos
 		INNER JOIN FACTF' . $_SESSION[ 'companiaClave' ] . ' factura ON ( factura.CVE_DOC = saldos.NO_FACTURA )
 		INNER JOIN VEND' . $_SESSION[ 'companiaClave' ] . ' vendedor ON ( vendedor.CVE_VEND = saldos.CVE_VEND )
-		WHERE SALDO > 0.99 AND datediff (day from CAST(factura.FECHA_VEN AS DATE) to cast(current_date as date)) > 30 ';
+		WHERE SALDO > 0.99 AND datediff (day from CAST(factura.FECHA_VEN AS DATE) to cast(current_date as date)) ' . ($cron ? ' IN ( 30,60,90 ) ' : ' > 29 ');
 		if( intval( ( isset( $_SESSION[ 'extraFiltroClientes' ] ) ? $_SESSION[ 'extraFiltroClientes' ] : 0 ) == 1 ) ) {
 			$query .= ' AND trim(saldos.CVE_VEND) = :vendedor ';
 		}
@@ -83,7 +83,7 @@ class AdeudosModel extends Sincco\Sfphp\Abstracts\Model {
 			) saldos
 		INNER JOIN FACTF' . $_SESSION[ 'companiaClave' ] . ' factura ON ( factura.CVE_DOC = saldos.NO_FACTURA )
 		INNER JOIN VEND' . $_SESSION[ 'companiaClave' ] . ' vendedor ON ( vendedor.CVE_VEND = saldos.CVE_VEND )
-		WHERE SALDO > 0.99 AND datediff (day from CAST(factura.FECHA_VEN AS DATE) to cast(current_date as date)) > 30
+		WHERE SALDO > 0.99 AND datediff (day from CAST(factura.FECHA_VEN AS DATE) to cast(current_date as date)) > 29
 		GROUP BY CVE_CLIE, saldos.NOMBRE, saldos.CVE_VEND, vendedor.CORREOE
 		ORDER BY CVE_CLIE';
 		return $this->connector->query( $query, [ 'C_TIPO_MOV'=>'C', 'A_TIPO_MOV'=>'A' ] );

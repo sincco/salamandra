@@ -28,8 +28,9 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 
 		// Si es una peticion de linea de comando, se procesan todos los clientes
 		if( $request[ 'method' ] == 'CLI' ) {
+			$clientes = [];
 			$_SESSION['companiaClave'] = $this->getParams( 'empresa' );
-			$_clientes = $mdlAdeudos->getAdeudos();
+			$_clientes = $mdlAdeudos->getAdeudos( TRUE );
 			foreach ( $_clientes as $_cliente ) {
 				$clientes[ $_cliente[ 'CVE_CLIE' ] ] = array( "1"=>trim( $_cliente[ 'CVE_CLIE' ] ) , "2"=>trim( $_cliente[ 'NOMBRE' ]), "3"=>trim( $_cliente[ 'CVE_VEND' ] ), "4"=>trim( $_cliente[ 'CORREO_VENDEDOR' ] ) );
 			}
@@ -72,8 +73,9 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$view->adeudos 	= $primerAviso;
 				$view->logo 	= $logo;
 				$html 			= $view->getContent();
-				if( $enviar )
-					$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
+				// if( $enviar )
+				// 	$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
+				var_dump( $html );
 				$avisos[ 'primer' ] ++;
 				if( $apiElastic[ 'test' ] == "1" )
 					$enviar = FALSE;
@@ -84,8 +86,9 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$view->adeudos 	= $segundoAviso;
 				$view->logo 	= $logo;
 				$html 			= $view->getContent();
-				if( $enviar )
-					$this->helper( 'ElasticEmail' )->send( $emails, '2o Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
+				// if( $enviar )
+				// 	$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
+				var_dump( $html );
 				$avisos[ 'segundo' ] ++;
 				if( $apiElastic[ 'test' ] == "1" )
 					$enviar = FALSE;
@@ -96,8 +99,9 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$view->adeudos 	= $tercerAviso;
 				$view->logo 	= $logo;
 				$html 			= $view->getContent();
-				if( $enviar )
-					$this->helper( 'ElasticEmail' )->send( $emails, '3er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
+				// if( $enviar )
+				// 	$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
+				var_dump( $html );
 				$avisos[ 'tercer' ] ++;
 				if( $apiElastic[ 'test' ] == "1" )
 					$enviar = FALSE;
