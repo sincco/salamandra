@@ -31,7 +31,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 			$_SESSION['companiaClave'] = $this->getParams( 'empresa' );
 			$_clientes = $mdlAdeudos->getAdeudos();
 			foreach ( $_clientes as $_cliente ) {
-				$clientes[ $_cliente[ 'CVE_CLIE' ] ] = array( "1"=>trim( $_cliente[ 'CVE_CLIE' ] ) , "2"=>trim( $_cliente[ 'NOMBRE' ]), "3"=>trim( $_cliente[ 'CVE_VEND' ] ) );
+				$clientes[ $_cliente[ 'CVE_CLIE' ] ] = array( "1"=>trim( $_cliente[ 'CVE_CLIE' ] ) , "2"=>trim( $_cliente[ 'NOMBRE' ]), "3"=>trim( $_cliente[ 'CVE_VEND' ] ), "4"=>trim( $_cliente[ 'CORREO_VENDEDOR' ] ) );
 			}
 		}
 
@@ -42,16 +42,16 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 		foreach ( $clientes as $_cliente ) {
 			$actual++;
 			if( $request[ 'method' ] == 'CLI' )
-				echo 'Cliente ' . $actual . ' de ' . count($clientes) . ' (enviar ' . ( $enviar ? 'si' : 'no' ) . ')' . PHP_EOL;
+				echo 'Cliente ' . $actual . ' de ' . count($clientes) . ' (enviar ' . ( $enviar ? 'si' : 'no' ) . ') vendedor ' . $_cliente[ 4 ] . PHP_EOL;
 
 			$emails = $mdlClientes->getContactos( $_cliente[ 1 ] );
 			if(is_null( $emails[ 0 ][ 'EMAIL' ] ) )
 				continue;
 
 			if( $apiElastic[ 'test' ] == "1" )
-				$emails = 'ivan.miranda@sincco.com;riverojorgea@gmail.com';
+				$emails = 'ivan.miranda@sincco.com;riverojorgea@gmail.com;';
 			else
-				$emails = $emails[ 0 ][ 'EMAIL' ] . ';pedro.acevedo@suhner.com';
+				$emails = $emails[ 0 ][ 'EMAIL' ] . ';pedro.acevedo@suhner.com;' . $_cliente[ 4 ] . ':';
 
 
 			$primerAviso = [];
@@ -73,7 +73,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$view->logo 	= $logo;
 				$html 			= $view->getContent();
 				if( $enviar )
-					$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
+					$this->helper( 'ElasticEmail' )->send( $emails, 'PRUEBA ---- 1er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
 				$avisos[ 'primer' ] ++;
 				if( $apiElastic[ 'test' ] == "1" )
 					$enviar = FALSE;
@@ -85,7 +85,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$view->logo 	= $logo;
 				$html 			= $view->getContent();
 				if( $enviar )
-					$this->helper( 'ElasticEmail' )->send( $emails, '2o Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
+					$this->helper( 'ElasticEmail' )->send( $emails, 'PRUEBA ---- 2o Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
 				$avisos[ 'segundo' ] ++;
 				if( $apiElastic[ 'test' ] == "1" )
 					$enviar = FALSE;
@@ -97,7 +97,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$view->logo 	= $logo;
 				$html 			= $view->getContent();
 				if( $enviar )
-					$this->helper( 'ElasticEmail' )->send( $emails, '3er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
+					$this->helper( 'ElasticEmail' )->send( $emails, 'PRUEBA ---- 3er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
 				$avisos[ 'tercer' ] ++;
 				if( $apiElastic[ 'test' ] == "1" )
 					$enviar = FALSE;

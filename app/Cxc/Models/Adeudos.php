@@ -26,7 +26,7 @@ class AdeudosModel extends Sincco\Sfphp\Abstracts\Model {
 	}
 
 	public function getAdeudos() {
-		$query = 'SELECT CVE_CLIE, NOMBRE, saldos.CVE_VEND, NO_FACTURA, 
+		$query = 'SELECT CVE_CLIE, saldos.NOMBRE, saldos.CVE_VEND, vendedor.CORREOE CORREO_VENDEDOR, NO_FACTURA, 
 				substring(CAST(factura.FECHA_VEN as varchar(25) character SET utf8) from 1 for 10) AS Vencimiento, 
 				MONEDA, CARGO, ABONO, SALDO, EMITIDA, 
 				CASE ABONO WHEN 0 THEN NULL ELSE ULTIMO_PAGO END ULTIMO_PAGO,
@@ -49,16 +49,21 @@ class AdeudosModel extends Sincco\Sfphp\Abstracts\Model {
 				GROUP BY CVE_CLIE, NOMBRE, CVE_VEND, NO_FACTURA, MONEDA
 			) saldos
 		INNER JOIN FACTF' . $_SESSION[ 'companiaClave' ] . ' factura ON ( factura.CVE_DOC = saldos.NO_FACTURA )
+		INNER JOIN VEND' . $_SESSION[ 'companiaClave' ] . ' vendedor ON ( vendedor.CVE_VEND = saldos.CVE_VEND )
 		WHERE SALDO > 0.99 AND datediff (day from CAST(factura.FECHA_VEN AS DATE) to cast(current_date as date)) > 30 ';
-		if( intval( $_SESSION[ 'extraFiltroClientes' ] ) == 1 ) {
+		if( intval( ( isset( $_SESSION[ 'extraFiltroClientes' ] ) ? $_SESSION[ 'extraFiltroClientes' ] : 0 ) == 1 ) ) {
 			$query .= ' AND trim(saldos.CVE_VEND) = :vendedor ';
 		}
 		$query .= 'ORDER BY ATRASO DESC, CVE_CLIE ASC, NO_FACTURA ASC';
-		return $this->connector->query( $query, [ 'C_TIPO_MOV'=>'C', 'A_TIPO_MOV'=>'A', 'vendedor'=>SESSION_USERNAME ] );
+		if(defined('SESSION_USERNAME'))
+			$vendedor = SESSION_USERNAME;
+		else
+			$vendedor = 0;
+		return $this->connector->query( $query, [ 'C_TIPO_MOV'=>'C', 'A_TIPO_MOV'=>'A', 'vendedor'=>$vendedor ] );
 	}
 
 	public function getNotificaciones() {
-		$query = 'SELECT CVE_CLIE, NOMBRE, saldos.CVE_VEND, SUM(SALDO) SALDO
+		$query = 'SELECT CVE_CLIE, saldos.NOMBRE, saldos.CVE_VEND, vendedor.CORREOE CORREO_VENDEDOR, SUM(SALDO) SALDO
 			FROM (
 				SELECT CVE_CLIE, NOMBRE, CVE_VEND, NO_FACTURA, MONEDA, SUM(CARGO) CARGO, SUM(ABONO) ABONO,  SUM(CARGO) - SUM(ABONO) SALDO, MAX(EMITIDA) EMITIDA, MAX(APLICACION) ULTIMO_PAGO
 				FROM (
@@ -77,8 +82,9 @@ class AdeudosModel extends Sincco\Sfphp\Abstracts\Model {
 				GROUP BY CVE_CLIE, NOMBRE, CVE_VEND, NO_FACTURA, MONEDA
 			) saldos
 		INNER JOIN FACTF' . $_SESSION[ 'companiaClave' ] . ' factura ON ( factura.CVE_DOC = saldos.NO_FACTURA )
+		INNER JOIN VEND' . $_SESSION[ 'companiaClave' ] . ' vendedor ON ( vendedor.CVE_VEND = saldos.CVE_VEND )
 		WHERE SALDO > 0.99 AND datediff (day from CAST(factura.FECHA_VEN AS DATE) to cast(current_date as date)) > 30
-		GROUP BY CVE_CLIE, NOMBRE, saldos.CVE_VEND
+		GROUP BY CVE_CLIE, saldos.NOMBRE, saldos.CVE_VEND, vendedor.CORREOE
 		ORDER BY CVE_CLIE';
 		return $this->connector->query( $query, [ 'C_TIPO_MOV'=>'C', 'A_TIPO_MOV'=>'A' ] );
 	}
