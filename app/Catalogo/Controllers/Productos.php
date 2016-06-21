@@ -7,7 +7,7 @@ class ProductosController extends Sincco\Sfphp\Abstracts\Controller {
 	public function index() {
 		$this->helper( 'UsersAccount' )->checkLogin();
 		$mdlProductos = $this->getModel( 'Catalogo\Productos' );
-		$data = $mdlProductos->getAll();
+		$data = $mdlProductos->getActivos();
 		$view = $this->newView( 'Catalogo\ProductosTabla' );
 		$view->productos = $data;
 		$view->menus = $this->helper( 'UsersAccount' )->createMenus();
