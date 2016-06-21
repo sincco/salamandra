@@ -15,6 +15,6 @@ class ClientesModel extends Sincco\Sfphp\Abstracts\Model {
 	}
 
 	public function getByVendedor( $vendedor ) {
-		return $this->connector->query( 'SELECT * FROM Clie' . $_SESSION[ 'companiaClave' ] . ' WHERE STATUS = :STATUS AND CVE_VEND = :VENDEDOR', [ 'STATUS'=>'A', 'VENDEDOR'=>$vendedor ] );
+		return $this->connector->query( 'SELECT * FROM Clie' . $_SESSION[ 'companiaClave' ] . ' WHERE STATUS = :STATUS AND TRIM(CVE_VEND) = :VENDEDOR', [ 'STATUS'=>'A', 'VENDEDOR'=>$vendedor ] );
 	}
 }

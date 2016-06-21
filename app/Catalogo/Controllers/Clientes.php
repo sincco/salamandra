@@ -9,6 +9,7 @@ class ClientesController extends Sincco\Sfphp\Abstracts\Controller {
 			$data = $mdlClientes->getByVendedor( $user[ 'userName' ] );
 		else
 			$data = $mdlClientes->getAll();
+		// echo "<pre>";var_dump($mdlClientes->getAll());echo "</pre>";die();
 		$view = $this->newView('Catalogo\ClientesTabla');
 		$view->clientes = $data;
 		$view->menus = $this->helper( 'UsersAccount' )->createMenus();
