@@ -5,14 +5,13 @@ class CotizacionesModel extends Sincco\Sfphp\Abstracts\Model {
 	public function getAll() {
 		$query = 'SELECT cot.cotizacion, cot.fecha, cot.razonSocial, cot.estatus
 			FROM cotizaciones cot ';
-		if( intval( ( isset( $_SESSION[ 'extraFiltroClientes' ] ) ? $_SESSION[ 'extraFiltroClientes' ] : 0 ) == 1 ) )
+		$user = unserialize( $_SESSION[ 'sincco\login\controller'] );
+		if( intval( ( isset( $_SESSION[ 'extraFiltroClientes' ] ) ? $_SESSION[ 'extraFiltroClientes' ] : 0 ) == 1 ) ) {
 			$query .= ' WHERE userId = :vendedor ';
-		if(defined('SESSION_USERID'))
-			$vendedor = SESSION_USERID;
-		else
-			$vendedor = 0;
+			$params[ 'vendedor' ] = $user[ 'userId' ];
+		}
 		$query .= 'ORDER BY cot.cotizacion';
-		return $this->connector->query( $query, [ 'vendedor'=>$vendedor ] );
+		return $this->connector->query( $query, $params );
 	}
 
 	public function getById( $data ) {

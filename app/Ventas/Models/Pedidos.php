@@ -12,13 +12,13 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 			INNER JOIN CLIE' . $_SESSION[ 'companiaClave' ] . ' c ON c.CLAVE=f.CVE_CLPV
 			INNER JOIN vend' . $_SESSION[ 'companiaClave' ] . ' v ON v.CVE_VEND=f.CVE_VEND
 			WHERE f.status= :estatus AND f.TIP_DOC_SIG IS NULL';
-		if( intval( ( isset( $_SESSION[ 'extraFiltroClientes' ] ) ? $_SESSION[ 'extraFiltroClientes' ] : 0 ) == 1 ) )
+		$params[ 'estatus' ] = 'E';
+		$user = unserialize( $_SESSION[ 'sincco\login\controller'] );
+		if( intval( ( isset( $_SESSION[ 'extraFiltroClientes' ] ) ? $_SESSION[ 'extraFiltroClientes' ] : 0 ) == 1 ) ) {
 			$query .= ' AND trim(c.CVE_VEND) = :vendedor ';
-		if(defined('SESSION_USERNAME'))
-			$vendedor = SESSION_USERNAME;
-		else
-			$vendedor = 0;
-		return $this->connector->query( $query, [ 'estatus'=>'E', 'vendedor'=>$vendedor ] );
+			$params[ 'vendedor' ] = $user[ 'userName' ];
+		}
+		return $this->connector->query( $query, $params );
 	}
 
 }
