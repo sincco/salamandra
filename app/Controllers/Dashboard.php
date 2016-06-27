@@ -55,7 +55,7 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 		$xml = new XML( 'etc/config/dashboard' . $_SESSION[ 'companiaClave' ] . '.xml' );
 		$panel = $xml->data[ $this->getParams( 'panel' ) ];
 		$mdlDashboard = $this->getModel( 'Dashboard' );
-		$detalle = $mdlDashboard->run( str_replace( "SELECT ", "SELECT FIRST 1 ", $panel[ 'detalle' ] ) );
+		$detalle = $mdlDashboard->run( preg_replace( '/SELECT /', 'SELECT FIRST 1 ', $panel[ 'detalle' ], 1) );
 		$columnas = array_keys( array_pop( $detalle ) );
 		$respuesta = [];
 		foreach ( $columnas as $_columna ) {
