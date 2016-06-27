@@ -23,7 +23,7 @@ class Google2StepHelper {
     }
     
     public function generaCodigo($secret,$time = null) {
-        include(PATH_ROOT.'/app/Helpers/FixedBitNotation.php');
+        include_once(PATH_ROOT.'/app/Helpers/FixedBitNotation.php');
         if (!$time) {
             $time = floor(time() / 30);
         }

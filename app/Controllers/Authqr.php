@@ -1,6 +1,7 @@
 <?php
 
 use \Sincco\Sfphp\Request;
+use \Sincco\Sfphp\Response;
 
 /**
  * Autorizaciones con AuthKey de Google
@@ -18,19 +19,16 @@ class AuthqrController extends Sincco\Sfphp\Abstracts\Controller {
 
 	public function apiValidar() {
 		$tiempo = floor(time() / 30);
-		$codigo = $this->getParam( 'codigo' );
-		var_dump($codigo);die();
-		if($_auth->validaCodigo($this->llave, $_codigo))
-			$this->_vista->clientes = $this->_modelo->actualiza($_POST['cliente'],$_POST['status']);
-		else
-			echo "ERROR";
+		$codigo = $this->getParams( 'codigo' );
+		$respuesta['valido'] = $this->helper( 'Google2Step' )->validaCodigo($this->llave, $codigo);
+		new Response( 'json', $respuesta );
 	}
 
 	public function apiObtenerCodigo() {
 		$tiempo = floor(time() / 30);
 		$codigo = [];
 		$codigo['codigo'] = $this->helper( 'Google2Step' )->generaCodigo( $this->llave, $tiempo);
-		echo json_encode( $codigo );
+		new Response( 'json', $codigo );
 	}
 
 	public function config() {

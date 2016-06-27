@@ -4,16 +4,16 @@
 <div class="container">
 	<div class="row">
 	    <div class="col-xs-12">
-	        <h1 class="page-header">Autorización en dos pasos</h1>
+	        <h1 class="page-header">Necesitas autorización para aplicar esta operación</h1>
 		</div>
 	</div>
 	<div class="row">
 	    <div class="col-xs-6">
 	        <label>Código de autorización</label>
-			<input type="text" class="form-control" placeholder="codigo">
+			<input type="text" class="form-control" placeholder="codigo" id="codigo">
 		</div>
 		<div class="col-xs-6">
-			<button type="button" class="btn btn-success" onclick="validar()">Validar</button>
+			<button type="button" class="btn btn-success" onclick="validarCodigo()">Validar</button>
 		</div>
 	</div>
 </div>
@@ -21,9 +21,12 @@
 <script type="text/javascript">
 
 function validarCodigo() {
-	sincco.consumirAPI('POST','{{constant('BASE_URL')}}authqr', {codigo:$("#codigo").val()} )
+	sincco.consumirAPI('POST','{{constant('BASE_URL')}}authqr/apivalidar', {codigo:$("#codigo").val()} )
 	.done(function(data) {
-		toastr.success('Verficiación aceptada.', 'Hecho')
+		if(data.valido)
+			toastr.success('Verficiación aceptada. Redirigiendo', 'Hecho')
+		else
+			toastr.error('Error al autorizar.', 'Intenta de nuevo')
 	}).fail(function(jqXHR, textStatus, errorThrown) {
 		console.log(errorThrown);
 		toastr.error('Error al autorizar.', 'Intenta de nuevo')
