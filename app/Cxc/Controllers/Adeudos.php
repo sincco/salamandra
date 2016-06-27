@@ -73,9 +73,8 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$view->adeudos 	= $primerAviso;
 				$view->logo 	= $logo;
 				$html 			= $view->getContent();
-				// if( $enviar )
-				// 	$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
-				var_dump( $html );
+				if( $enviar )
+					$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
 				$avisos[ 'primer' ] ++;
 				if( $apiElastic[ 'test' ] == "1" )
 					$enviar = FALSE;
@@ -86,9 +85,8 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$view->adeudos 	= $segundoAviso;
 				$view->logo 	= $logo;
 				$html 			= $view->getContent();
-				// if( $enviar )
-				// 	$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
-				var_dump( $html );
+				if( $enviar )
+					$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
 				$avisos[ 'segundo' ] ++;
 				if( $apiElastic[ 'test' ] == "1" )
 					$enviar = FALSE;
@@ -99,9 +97,8 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$view->adeudos 	= $tercerAviso;
 				$view->logo 	= $logo;
 				$html 			= $view->getContent();
-				// if( $enviar )
-				// 	$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
-				var_dump( $html );
+				if( $enviar )
+					$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
 				$avisos[ 'tercer' ] ++;
 				if( $apiElastic[ 'test' ] == "1" )
 					$enviar = FALSE;
