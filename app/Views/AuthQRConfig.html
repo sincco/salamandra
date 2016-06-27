@@ -1,0 +1,44 @@
+{% include 'header_full.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	<div class="row">
+	    <div class="col-xs-12">
+	        <h1 class="page-header">Autorización en dos pasos</h1>
+		</div>
+	</div>
+	<div class="row">
+	    <div class="col-xs-6">
+	        <h4>1. Escanea el siguiente código desde la aplicación <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=es_419">Google Autenthicator</a></h4>
+		</div>
+		<div class="col-xs-6">
+			<img src="{{ qrUrl }}" alt="QR de sincronización" >
+		</div>
+	</div>
+	<div class="row">
+	    <div class="col-xs-6">
+	        <h4>2. Una vez configurada tu cuenta el código generado debe ser:</a></h4>
+		</div>
+		<div class="col-xs-6">
+			<label id="codigo" style="font-size: 2.5em;">{{ codigo }}</label>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+setInterval(function() {
+	actualizaCodigo()
+}, 5000)
+
+function actualizaCodigo() {
+	sincco.consumirAPI('GET','{{constant('BASE_URL')}}authqr/apiObtenerCodigo')
+	.done(function(data) {
+		$('#codigo').html(data.codigo)
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		console.log(errorThrown);
+		toastr.error('Error al hacer la petición del código.', 'Intenta de nuevo')
+	})
+}
+
+</script>
