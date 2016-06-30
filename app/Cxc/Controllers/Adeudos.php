@@ -52,7 +52,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 			if( $apiElastic[ 'test' ] == "1" )
 				$emails = 'ivan.miranda@sincco.com;riverojorgea@gmail.com;';
 			else
-				$emails = $emails[ 0 ][ 'EMAIL' ] . ';pedro.acevedo@suhner.com;' . $_cliente[ 4 ] . ':';
+				$emails = $emails[ 0 ][ 'EMAIL' ] . ';pedro.acevedo@suhner.com;' . $_cliente[ 4 ] . ';';
 
 
 			$primerAviso = [];
