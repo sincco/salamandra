@@ -11,6 +11,7 @@ class ClientesController extends Sincco\Sfphp\Abstracts\Controller {
 			$data = $mdlClientes->getAll();
 		$view = $this->newView('Catalogo\ClientesTabla');
 		$view->clientes = $data;
+		$view->adeudos = $this->getModel( 'Cxc\Adeudos' )->getNotificaciones();
 		$view->menus = $this->helper( 'UsersAccount' )->createMenus();
 		$view->render();
 	}

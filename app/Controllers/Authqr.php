@@ -18,7 +18,6 @@ class AuthqrController extends Sincco\Sfphp\Abstracts\Controller {
 	}
 
 	public function apiValidar() {
-		$tiempo = floor(time() / 30);
 		$codigo = $this->getParams( 'codigo' );
 		$respuesta['valido'] = $this->helper( 'Google2Step' )->validaCodigo($this->llave, $codigo);
 		new Response( 'json', $respuesta );

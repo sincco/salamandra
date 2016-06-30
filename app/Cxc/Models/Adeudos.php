@@ -87,7 +87,7 @@ class AdeudosModel extends Sincco\Sfphp\Abstracts\Model {
 			) saldos
 		INNER JOIN FACTF' . $_SESSION[ 'companiaClave' ] . ' factura ON ( factura.CVE_DOC = saldos.NO_FACTURA )
 		INNER JOIN VEND' . $_SESSION[ 'companiaClave' ] . ' vendedor ON ( vendedor.CVE_VEND = saldos.CVE_VEND )
-		WHERE SALDO > 0.99 AND datediff (day from CAST(factura.FECHA_VEN AS DATE) to cast(current_date as date)) > 29 ');
+		WHERE SALDO > 0.99 AND datediff (day from CAST(factura.FECHA_VEN AS DATE) to cast(current_date as date)) > 29 ';
 		if( intval( ( isset( $_SESSION[ 'extraFiltroClientes' ] ) ? $_SESSION[ 'extraFiltroClientes' ] : 0 ) == 1 ) ) {
 			$query .= ' AND trim(saldos.CVE_VEND) = :vendedor ';
 		}
