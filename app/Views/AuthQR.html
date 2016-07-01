@@ -1,3 +1,4 @@
+{% spaceless %}
 {% include 'header_full.html' %}
 {% include 'menu.html' %}
 
@@ -24,13 +25,14 @@ function validarCodigo() {
 	sincco.consumirAPI('POST','{{constant('BASE_URL')}}authqr/apivalidar', {codigo:$("#codigo").val()} )
 	.done(function(data) {
 		if(data.valido)
-			toastr.success('Verficiación aceptada. Redirigiendo', 'Hecho')
+			toastr.success('Verficiación aceptada. Redirigiendo', 'Hecho');
 		else
-			toastr.error('Error al autorizar.', 'Intenta de nuevo')
+			toastr.error('Error al autorizar.', 'Intenta de nuevo');
 	}).fail(function(jqXHR, textStatus, errorThrown) {
 		console.log(errorThrown);
-		toastr.error('Error al autorizar.', 'Intenta de nuevo')
+		toastr.error('Error al autorizar.', 'Intenta de nuevo');
 	})
 }
 
 </script>
+{% endspaceless %}

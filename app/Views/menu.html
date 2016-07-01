@@ -26,35 +26,3 @@
 		</div>
 	</div>
 </header>
-<script type="text/javascript">
-$(function(){
-    $("#password").keypress(function(event) {
-        if(event.which == 13) {
-            accesar()
-        }
-    })
-
-    $("#usuario").keypress(function(event) {
-        if(event.which == 13) {
-            accesar()
-        }
-    })
-})
-
-function accesar() {
-    loader.show()
-    sincco.consumirAPI('POST','{{constant('BASE_URL')}}login/apilogin',{userData:$("#acceso").serializeJSON()})
-    .done(function(data) {
-		loader.hide()
-        if(data.acceso) {
-            window.location = '{{constant('BASE_URL')}}dashboard'
-        } else {
-        	toastr.warning('Verifica tu usuario y contraseña.', 'Error de acceso')
-        }
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-    	console.log(errorThrown);
-        toastr.error('Error al hacer la petición de acceso.', 'Intenta de nuevo')
-        loader.hide()
-    })
-}
-</script>

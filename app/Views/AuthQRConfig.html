@@ -1,3 +1,4 @@
+{% spaceless %}
 {% include 'header_full.html' %}
 {% include 'menu.html' %}
 
@@ -25,20 +26,7 @@
 	</div>
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript">{{_self.getTemplateName() | replace( { '.html':'' } ) | lower }}.init();</script>
 
-setInterval(function() {
-	actualizaCodigo()
-}, 5000)
-
-function actualizaCodigo() {
-	sincco.consumirAPI('GET','{{constant('BASE_URL')}}authqr/apiObtenerCodigo')
-	.done(function(data) {
-		$('#codigo').html(data.codigo)
-	}).fail(function(jqXHR, textStatus, errorThrown) {
-		console.log(errorThrown);
-		toastr.error('Error al hacer la petición del código.', 'Intenta de nuevo')
-	})
-}
-
-</script>
+{% include 'footer_full.html' %}
+{% endspaceless %}
