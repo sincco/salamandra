@@ -7,7 +7,7 @@ class ClientesModel extends Sincco\Sfphp\Abstracts\Model {
 	}
 	
 	public function getAll() {
-		return $this->connector->query( 'SELECT * FROM Clie' . $_SESSION[ 'companiaClave' ] . ' WHERE STATUS = :STATUS', [ 'STATUS'=>'A' ] );
+		return $this->connector->query( 'SELECT * FROM Clie' . $_SESSION[ 'companiaClave' ] );
 	}
 
 	public function getContactos( $cliente ) {
@@ -15,6 +15,13 @@ class ClientesModel extends Sincco\Sfphp\Abstracts\Model {
 	}
 
 	public function getByVendedor( $vendedor ) {
-		return $this->connector->query( 'SELECT * FROM Clie' . $_SESSION[ 'companiaClave' ] . ' WHERE STATUS = :STATUS AND TRIM(CVE_VEND) = :VENDEDOR', [ 'STATUS'=>'A', 'VENDEDOR'=>$vendedor ] );
+		return $this->connector->query( 'SELECT * FROM Clie' . $_SESSION[ 'companiaClave' ] . ' WHERE TRIM(CVE_VEND) = :VENDEDOR', [ 'VENDEDOR'=>$vendedor ] );
+	}
+
+	public function setStatus( $status, $cliente = FALSE ) {
+		$query = 'UPDATE CLIE' . $_SESSION[ 'companiaClave' ] . ' SET STATUS = :STATUS';
+		if( $cliente )
+			$query .= ' WHERE TRIM(CLAVE) = :CLIENTE';
+		return $this->connector->query( $query, [ 'STATUS'=>$status, 'CLIENTE'=>$cliente ] );
 	}
 }

@@ -110,8 +110,10 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 	}
 
 	public function apiBloquear() {
+		$request = $this->getRequest();
 		$codigo = $this->getParams( 'auth' );
-		if( ! $this->helper( 'Google2Step' )->validaCodigo('GEAKO2IJW4PKLBXF', $codigo) ){
+
+		if( $request[ 'method' ] != 'CLI' && ! $this->helper( 'Google2Step' )->validaCodigo('GEAKO2IJW4PKLBXF', $codigo) ){
 			new Response( 'json', [ 'status'=>FALSE, 'error'=>'El código de seguridad no es válido' ] );
 			return FALSE;
 		}
@@ -126,15 +128,13 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 				$logo = 'html/img/logo_cliente_mail.jpg';
 			else
 				$logo = 'html/img/logo.jpg';
-		$request = $this->getRequest();
 		$clientes = $this->getParams( 'clientes' );
-		$mdlClientes = $this->getModel( 'Catalogo\Clientes' );
 
 		// Si es una peticion de linea de comando, se procesan todos los clientes
 		if( $request[ 'method' ] == 'CLI' ) {
 			$clientes = [];
 			$_SESSION['companiaClave'] = $this->getParams( 'empresa' );
-			$_clientes = $mdlAdeudos->getAdeudos( TRUE );
+			$_clientes = $this->getModel( 'Cxc\Adeudos' )->getAdeudos();
 			foreach ( $_clientes as $_cliente ) {
 				$clientes[ $_cliente[ 'CVE_CLIE' ] ] = array( "1"=>trim( $_cliente[ 'CVE_CLIE' ] ) , "2"=>trim( $_cliente[ 'NOMBRE' ]), "3"=>trim( $_cliente[ 'CVE_VEND' ] ), "4"=>trim( $_cliente[ 'CORREO_VENDEDOR' ] ) );
 			}
@@ -147,24 +147,19 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 		foreach ( $clientes as $_cliente ) {
 			$actual++;
 			if( $request[ 'method' ] == 'CLI' )
-				echo 'Cliente ' . $actual . ' de ' . count($clientes) . ' (enviar ' . ( $enviar ? 'si' : 'no' ) . ') vendedor ' . $_cliente[ 4 ] . PHP_EOL;
+				echo 'Bloqueando cliente ' . $_cliente[ 1 ] . '-' . $_cliente[ 2 ] . ' - ' . $actual . ' de ' . count($clientes) . ' (enviar ' . ( $enviar ? 'si' : 'no' ) . ') vendedor ' . $_cliente[ 4 ] . PHP_EOL;
+			$this->getModel( 'Catalogo\Clientes' )->setStatus( 'S', $_cliente[ 1 ] );
 
 			if( $apiElastic[ 'test' ] == "1" )
 				$emails = 'ivan.miranda@sincco.com;riverojorgea@gmail.com;';
 			else
 				$emails = $emails[ 0 ][ 'EMAIL' ] . ';pedro.acevedo@suhner.com;' . $_cliente[ 4 ] . ';';
-
-			//[ 'NOMBRE'=>$_cliente[ 2 ] ]
-
-			//$view 			= $this->newView( 'Cxc\PrimerAviso' );
-			//$view->general  = [ 'NOMBRE'=>$_cliente[ 2 ] ];
-			//$view->adeudos 	= $primerAviso;
-			//$view->logo 	= $logo;
-			//$html 			= $view->getContent();
-			//if( $enviar )
-			//	$this->helper( 'ElasticEmail' )->send( $emails, '1er Aviso de adeudo C.' . $_cliente[ 1 ] . ' V.' . $_cliente[ 3 ], '', $html, $apiElastic[ 'from' ], APP_COMPANY );
 		}
-		new Response( 'json', [ 'status'=>TRUE, 'bloqueos'=>count($clientes) ] );
+
+		if( $request[ 'method' ] == 'CLI' )
+			echo 'Terminado';
+		else
+			new Response( 'json', [ 'status'=>TRUE, 'bloqueos'=>count($clientes) ] );
 	}
 
 }
