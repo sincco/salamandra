@@ -1,18 +1,17 @@
 <?php
 
-/**
- * Captura de petición al home
- */
+use \Sincco\Tools\Debug;
+use \Sincco\Sfphp\Response;
+
 class RecetasController extends Sincco\Sfphp\Abstracts\Controller {
-	/**
-	 * Validar si el usuario está loggeado para accesar al dashboard
-	 * @return none
-	 */
+
 	public function agregar() {
-		$mdlProductos = $this->getModel('Catalogo\Productos');
+		$this->helper( 'UsersAccount' )->checkLogin();
 		$view = $this->newView( 'Produccion\RecetasAlta' );
-		$view->productos = $mdlProductos->getAll();
+		$view->productos = $this->getModel('Catalogo\Productos')->getActivos();
 		$view->menus = $this->helper( 'UsersAccount' )->createMenus();
-		echo $view->render();
+		$view->render();
 	}
+
+	// $mdlProductos->table('Inve' . $_SESSION[ 'companiaClave' ])->where('STATUS','A')->getData()
 }

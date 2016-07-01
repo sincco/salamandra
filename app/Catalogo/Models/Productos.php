@@ -4,7 +4,6 @@ class ProductosModel extends Sincco\Sfphp\Abstracts\Model {
 
 	public function __construct() {
 		parent::__construct( 'sae' );
-		$this->setTable( 'Inve' . $_SESSION[ 'companiaClave' ] );
 	}
 	
 	public function getActivos() {

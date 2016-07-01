@@ -1,47 +1,37 @@
 {% include 'header.html' %}
 {% include 'menu.html' %}
 
-<div class="container">
+<div class="container recetas">
 	<h2>Definir proceso</h2>
 	<div class="row">
-		<div class="col-lg-6 col-md-6 col-sm-12">
-			<h5>Productos</h5>
-			<input type="text" class="form-control" name="buscar" id="buscar" placeholder="buscar">
-			<ul id="productos" class="productos ruta list-group">
-				<li class="list-group-item" data-clave="{CVE_ART}" data-costo="{COSTO}" data-descr="{DESCR}">
-				{CVE_ART} {DESCR}
-				</li>
-			</ul>
-		</div>
-		<div class="col-lg-6 col-md-6 col-sm-12">
-			<div class="row">
-				<h5>Para fabricar</h5>
-				<select class="form-control" id="claveProducto">
-					{% for producto in productos %}
-					<option value="{{ producto.CVE_ART|e }}">{{ producto.DESCR|e }}</option>
-					{% endfor %}
-				</select>
-				<select id="unidadMedida" class="form-control">
-					<option value="NA">No aplica</option>
-					<option value="PZA">Piezas</option>
-					<option value="KG">Kilogramos</option>
-					<option value="TON">Toneladas</option>
-					<option value="LT">Litros</option>
-				</select>
-			</div>
-			<div class="row">
-				<ul id="recetas" class="recetas ruta list-group"></ul>
-			</div>
-		</div>
-		<hr>
-		<p><a class="btn btn-primary btn-md" href="javascript:;" onclick="guardar()" role="button"><span class="glyphicon glyphicon-compressed" aria-hidden="true"></span> Guardar</a></p>
+		<button type="button" class="btn btn-success"><span class="glyphicon glyphicon-compressed" aria-hidden="true" onclick="guardar()"></span><span>Guardar</span></button>
 	</div>
 	<div class="row">
-		<div class="col-lg-8 col-md-8 col-sm-8">
-			<div id='map' style="width:100%; height:300px;"></div>
+		<div class="col-lg-6 col-md-6 col-sm-12">
+			<h5>Para fabricar</h5>
+			<select class="form-control" id="claveProducto">
+				{% for producto in productos %}
+				<option value="{{ producto.CVE_ART|e }}">{{ producto.DESCR|e }}</option>
+				{% endfor %}
+			</select>
+			<select id="unidadMedida" class="form-control">
+				<option value="NA">No aplica</option>
+				<option value="PZA">Piezas</option>
+				<option value="KG">Kilogramos</option>
+				<option value="TON">Toneladas</option>
+				<option value="LT">Litros</option>
+			</select>
 		</div>
-		<div class="col-lg-4 col-md-4 col-sm-4">
-			<div id='ruta'></div>
+		<div class="col-lg-6 col-md-6 col-sm-12">
+			<div class="row">
+				<h5>Se usará:</h5>
+				<ul id="recetas" class="ingredientes"></ul>
+			</div>
+			<div class="row">
+				<h5>Productos</h5>
+				<input type="text" class="form-control" name="buscar" id="buscar" placeholder="buscar">
+				<ul id="productos" class="productos-buscados"></ul>
+			</div>
 		</div>
 	</div>
 </div>
@@ -69,35 +59,35 @@ $("[name=cantidad_" + clave + "]").focus()
 })
 
 $("#buscar").keypress(function(event) {
-if(event.which == 13) {
-buscar()
-}
-})
+	if(event.which == 13) {
+		buscar()
+	}
+	})
 })
 
 function buscar() {
-sincco.consumirAPI('POST','{BASE_URL}productos/apiBuscar',{ buscar: $("#buscar").val() })
-.done(function(data) {
-if(data.respuesta)
-$("#productos").html('')
-$(data.respuesta).each(function() {
-var elemento = '<li class="list-group-item" data-clave="' + this.CVE_ART + '" data-costo="' + this.COSTO + '" data-descr="' + this.DESCR + '">' + this.CVE_ART + ' ' + this.DESCR + '</li>'
-$("#productos").html($("#productos").html() + elemento)
-})
-
-}).fail(function(jqXHR, textStatus, errorThrown) {
-console.log(errorThrown)
-})
+	sincco.consumirAPI('POST',BASE_URL + 'catalogo/productos/apiClave',{ data: $("#buscar").val(), listaPrecio:1 })
+	.done(function(data) {
+		if(data)
+			$("#productos").html('')
+		$(data).each(function() {
+			var elemento = '<li class="list-group-item" data-clave="' + this.CVE_ART + '" data-costo="' + this.COSTO + '" data-descr="' + this.DESCR + '"><span>' + this.CVE_ART + ' ' + this.DESCR + '</span></li>'
+			$("#productos").html($("#productos").html() + elemento)
+		})
+	})
+	.fail(function(jqXHR, textStatus, errorThrown) {
+		console.log(errorThrown)
+	})
 }
 
 function guardar() {
 var productos = []
 $("[name^='cantidad_']").each(function() {
-producto = new Object()
-producto.clave = $(this).attr('data-clave')
-producto.cantidad = $(this).val()
-producto.costo = parseFloat($(this).attr('data-costo'))
-productos.push(producto)
+	producto = new Object()
+	producto.clave = $(this).attr('data-clave')
+	producto.cantidad = $(this).val()
+	producto.costo = parseFloat($(this).attr('data-costo'))
+	productos.push(producto)
 })
 sincco.consumirAPI('POST','{BASE_URL}produccion/apiRecetas',{ claveProducto:$("#claveProducto").val(), descripcionProducto: $('#claveProducto').children("option:selected").text(), unidadMedida:$("#unidadMedida").val(), ingredientes:productos })
 .done(function(data) {

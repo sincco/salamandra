@@ -20,7 +20,11 @@ table { font-family: "Ubuntu", sans-serif;  font-size: 0.8em; }
 .dashboard_panel1 { border-color: #ec971f; background-color: #ec971f; color: #9E630C; }
 .dashboard_panel2 { border-color: #B4E2FF; background-color: #B4E2FF; color: #4B87AD; }
 .dashboard_panel3 { border-color: #ec971f; background-color: #ec971f; color: #9E630C; }
-
 .dashboard_more { font-size: 0.9em; padding-top: 1em; color: inherit; }
 
 .footer { font-family: "Ubuntu", sans-serif; font-size: 1em; background-color: #292c2f; box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12); box-sizing: border-box; width: 100%; text-align: center; padding: 0.5em; margin-top: 1em; }
+
+.recetas .productos-buscados li { border-color: #337ab7; border-style: dashed; background-color: #f0fcff; }
+.recetas .ingredientes { border-color: #9ecaa0; border-style: dotted; border-width: 2px; padding: 1em; background-color: #bcffbf; border-radius: 0.5em; }
+.recetas .ingredientes li { background-color: #cfe9ff; border-radius: 0.5em; }
+.recetas .ingredientes li span { color: #2196F3; font-style: italic; }
