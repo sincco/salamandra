@@ -139,7 +139,8 @@ INSERT INTO `__menus` (`menuId`, `menuText`, `menuURL`, `menuParent`) VALUES
 (11, 'Seleccionar Compañía', 'selcia', 5),
 (12, 'Pedidos', 'ventas/pedidos', 9),
 (13, 'Cuentas por Cobrar', NULL, 0),
-(14, 'Adeudos', 'cxc/adeudos', 13);
+(14, 'Adeudos', 'cxc/adeudos', 13),
+(15, 'Seguridad 2 Pasos',  'authqr/config',  5);
 
 -- --------------------------------------------------------
 
@@ -200,6 +201,8 @@ CREATE TABLE IF NOT EXISTS `usuariosExtra` (
   `perfil` int(11) NOT NULL,
   `filtroClientes` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Configuración adicional para usuarios';
+
+ALTER TABLE  `usuariosExtra` ADD UNIQUE  `usuarios_extra` (  `userId` ) COMMENT  '';
 
 -- --------------------------------------------------------
 
