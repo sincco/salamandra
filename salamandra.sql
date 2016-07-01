@@ -77,6 +77,7 @@ CREATE TABLE IF NOT EXISTS `empresas` (
 
 CREATE TABLE IF NOT EXISTS `produccionRecetas` (
   `receta` int(11) NOT NULL AUTO_INCREMENT,
+  `producto` varchar(16) NOT NULL,
   `descripcion` varchar(75) NOT NULL,
   `status` enum('Activo','Bloqueado') NOT NULL,
   PRIMARY KEY (`receta`)
@@ -91,7 +92,9 @@ CREATE TABLE IF NOT EXISTS `produccionRecetas` (
 CREATE TABLE IF NOT EXISTS `produccionRecetasDetalle` (
   `receta` int(11) NOT NULL,
   `producto` varchar(16) NOT NULL,
+  `descripcion` varchar(75) NOT NULL,
   `cantidad` float NOT NULL,
+  `costo` float NOT NULL,
   UNIQUE KEY `recetas_detalle` (`receta`,`producto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Ingredientes de recetas';
 

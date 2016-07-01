@@ -13,5 +13,9 @@ class RecetasController extends Sincco\Sfphp\Abstracts\Controller {
 		$view->render();
 	}
 
+	public function apiAlta() {
+		Debug::log($this->getParams());
+	}
+
 	// $mdlProductos->table('Inve' . $_SESSION[ 'companiaClave' ])->where('STATUS','A')->getData()
 }

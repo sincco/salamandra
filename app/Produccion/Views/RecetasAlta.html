@@ -4,7 +4,7 @@
 <div class="container recetas">
 	<h2>Definir proceso</h2>
 	<div class="row">
-		<button type="button" class="btn btn-success"><span class="glyphicon glyphicon-compressed" aria-hidden="true" onclick="guardar()"></span><span>Guardar</span></button>
+		<button type="button" class="btn btn-success" onclick="guardar()"><span class="glyphicon glyphicon-compressed" aria-hidden="true"></span><span>Guardar</span></button>
 	</div>
 	<div class="row">
 		<div class="col-lg-6 col-md-6 col-sm-12">
@@ -53,7 +53,7 @@ onAdd: function (evt) {
 var itemEl = evt.item
 var clave = $(itemEl).attr('data-clave')
 var costo = parseFloat($(itemEl).attr('data-costo'))
-$(itemEl).html($(itemEl).html() + '<input type="text" name="cantidad_' + clave + '" class="form-control cantidad" placeholder="cantidad" data-clave="' + clave + '" data-costo="' + costo + '">')
+$(itemEl).html($(itemEl).html() + '<input type="text" name="cantidad_' + clave + '" class="form-control cantidad" placeholder="cantidad" data-clave="' + clave + '" data-costo="' + costo + ' data-descr="' + $(itemEl).attr('data-descr') + '">')
 $("[name=cantidad_" + clave + "]").focus()
 }
 })
@@ -66,12 +66,12 @@ $("#buscar").keypress(function(event) {
 })
 
 function buscar() {
-	sincco.consumirAPI('POST',BASE_URL + 'catalogo/productos/apiClave',{ data: $("#buscar").val(), listaPrecio:1 })
+	sincco.consumirAPI('POST',BASE_URL + 'catalogo/productos/apibuscar',{ campo:'DESCR', valor:'%' + $('#buscar').val().toUpperCase() + '%', comparacion:'LIKE' })
 	.done(function(data) {
 		if(data)
 			$("#productos").html('')
 		$(data).each(function() {
-			var elemento = '<li class="list-group-item" data-clave="' + this.CVE_ART + '" data-costo="' + this.COSTO + '" data-descr="' + this.DESCR + '"><span>' + this.CVE_ART + ' ' + this.DESCR + '</span></li>'
+			var elemento = '<li class="list-group-item" data-clave="' + this.CVE_ART + '" data-costo="' + 0 + '" data-descr="' + this.DESCR + '"><span>' + this.CVE_ART + ' ' + this.DESCR + '</span></li>'
 			$("#productos").html($("#productos").html() + elemento)
 		})
 	})
@@ -81,24 +81,24 @@ function buscar() {
 }
 
 function guardar() {
-var productos = []
-$("[name^='cantidad_']").each(function() {
-	producto = new Object()
-	producto.clave = $(this).attr('data-clave')
-	producto.cantidad = $(this).val()
-	producto.costo = parseFloat($(this).attr('data-costo'))
-	productos.push(producto)
-})
-sincco.consumirAPI('POST','{BASE_URL}produccion/apiRecetas',{ claveProducto:$("#claveProducto").val(), descripcionProducto: $('#claveProducto').children("option:selected").text(), unidadMedida:$("#unidadMedida").val(), ingredientes:productos })
-.done(function(data) {
-if(data.respuesta > 0)
-window.location = '{BASE_URL}produccion/recetas'
-}).fail(function(jqXHR, textStatus, errorThrown) {
-console.log(errorThrown)
-})
+	var productos = []
+	$("[name^='cantidad_']").each(function() {
+		producto = new Object()
+		producto.clave = $(this).attr('data-clave')
+		producto.descripcion = $(this).attr('data-descr')
+		producto.cantidad = $(this).val()
+		producto.costo = parseFloat($(this).attr('data-costo'))
+		productos.push(producto)
+	})
+	sincco.consumirAPI('POST',BASE_URL + 'produccion/recetas/apialta',{ claveProducto:$("#claveProducto").val(), descripcionProducto: $('#claveProducto').children("option:selected").text(), unidadMedida:$("#unidadMedida").val(), ingredientes:productos })
+	.done(function(data) {
+		if(data.respuesta > 0)
+			window.location = '{BASE_URL}produccion/recetas'
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		console.log(errorThrown)
+	})
 }
 
 </script>
-
 
 {% include 'footer.html' %}
