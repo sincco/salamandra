@@ -1,5 +1,7 @@
 <?php
 
+use \Sincco\Sfphp\Response;
+
 class ClientesController extends Sincco\Sfphp\Abstracts\Controller {
 	public function index() {
 		$this->helper( 'UsersAccount' )->checkLogin();
@@ -30,7 +32,7 @@ class ClientesController extends Sincco\Sfphp\Abstracts\Controller {
 		$clientes = $this->getParams( 'clientes' );
 
 		foreach ( $clientes as $_cliente ) {
-			$this->getModel( 'Catalogo\Clientes' )->setStatus( $status, $_cliente[ 1 ] );
+			$this->getModel( 'Catalogo\Clientes' )->setStatus( $status, trim( $_cliente[ 1 ] ) );
 		}
 
 		new Response( 'json', [ 'status'=>TRUE, 'activados'=>count($clientes) ] );
