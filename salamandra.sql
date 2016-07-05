@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 07-06-2016 a las 14:32:36
+-- Tiempo de generación: 05-07-2016 a las 18:05:21
 -- Versión del servidor: 5.6.30-0ubuntu0.14.04.1
 -- Versión de PHP: 5.5.9-1ubuntu4.17
 
@@ -54,7 +54,6 @@ CREATE TABLE IF NOT EXISTS `cotizacionesDetalle` (
   UNIQUE KEY `cotizacion_producto` (`cotizacion`,`producto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Detalle de cotizacion';
 
-
 -- --------------------------------------------------------
 
 --
@@ -68,6 +67,25 @@ CREATE TABLE IF NOT EXISTS `empresas` (
   UNIQUE KEY `empresa` (`empresa`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Empresas registradas en SAE';
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `perfiles`
+--
+
+CREATE TABLE IF NOT EXISTS `perfiles` (
+  `perfil` int(11) NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(75) NOT NULL,
+  PRIMARY KEY (`perfil`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Grupos de usuarios' AUTO_INCREMENT=3 ;
+
+--
+-- Volcado de datos para la tabla `perfiles`
+--
+
+INSERT INTO `perfiles` (`perfil`, `descripcion`) VALUES
+(1, 'Administrador'),
+(2, 'Vendedor');
 
 -- --------------------------------------------------------
 
@@ -113,6 +131,31 @@ CREATE TABLE IF NOT EXISTS `usuariosEmpresas` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `usuariosExtra`
+--
+
+CREATE TABLE IF NOT EXISTS `usuariosExtra` (
+  `userId` int(11) NOT NULL,
+  `nombre` varchar(150) NOT NULL,
+  `perfil` int(11) NOT NULL,
+  `filtroClientes` int(11) NOT NULL,
+  UNIQUE KEY `usuarios_extra` (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Configuración adicional para usuarios';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuariosMenus`
+--
+
+CREATE TABLE IF NOT EXISTS `usuariosMenus` (
+  `userId` int(11) NOT NULL,
+  `menuId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Excepciones de acceso a usuarios';
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `__menus`
 --
 
@@ -122,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `__menus` (
   `menuURL` varchar(150) DEFAULT NULL,
   `menuParent` int(11) NOT NULL,
   PRIMARY KEY (`menuId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='System menus' AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='System menus' AUTO_INCREMENT=18 ;
 
 --
 -- Volcado de datos para la tabla `__menus`
@@ -143,7 +186,9 @@ INSERT INTO `__menus` (`menuId`, `menuText`, `menuURL`, `menuParent`) VALUES
 (12, 'Pedidos', 'ventas/pedidos', 9),
 (13, 'Cuentas por Cobrar', NULL, 0),
 (14, 'Adeudos', 'cxc/adeudos', 13),
-(15, 'Seguridad 2 Pasos',  'authqr/config',  5);
+(15, 'Reportes', NULL, 0),
+(16, 'Consultar', 'reportes/consultar', 15),
+(17, 'Seguridad 2 Pasos', 'authqr/config', 5);
 
 -- --------------------------------------------------------
 
@@ -159,66 +204,6 @@ CREATE TABLE IF NOT EXISTS `__usersControl` (
   `userStatus` char(1) DEFAULT NULL,
   PRIMARY KEY (`userName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuariosMenus`
---
-
-CREATE TABLE IF NOT EXISTS `usuariosMenus` (
-  `userId` int(11) NOT NULL,
-  `menuId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Excepciones de acceso a usuarios';
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `perfiles`
---
-
-DROP TABLE IF EXISTS `perfiles`;
-CREATE TABLE IF NOT EXISTS `perfiles` (
-  `perfil` int(11) NOT NULL AUTO_INCREMENT,
-  `descripcion` varchar(75) NOT NULL,
-  PRIMARY KEY (`perfil`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Grupos de usuarios' AUTO_INCREMENT=3 ;
-
---
--- Volcado de datos para la tabla `perfiles`
---
-
-INSERT INTO `perfiles` (`perfil`, `descripcion`) VALUES
-(1, 'Administrador'),
-(2, 'Vendedor');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuariosExtra`
---
-
-DROP TABLE IF EXISTS `usuariosExtra`;
-CREATE TABLE IF NOT EXISTS `usuariosExtra` (
-  `userId` int(11) NOT NULL,
-  `perfil` int(11) NOT NULL,
-  `filtroClientes` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Configuración adicional para usuarios';
-
-ALTER TABLE  `usuariosExtra` ADD UNIQUE  `usuarios_extra` (  `userId` ) COMMENT  '';
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuariosMenus`
---
-
-DROP TABLE IF EXISTS `usuariosMenus`;
-CREATE TABLE IF NOT EXISTS `usuariosMenus` (
-  `userId` int(11) NOT NULL,
-  `menuId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Excepciones de acceso a usuarios';
-
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

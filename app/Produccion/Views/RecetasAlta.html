@@ -99,6 +99,12 @@ function guardar() {
 	})
 }
 
+$('#send').click(function(){
+$.post('direccion', {valor:$('#name').val()})
+.done(function(data){
+$('#welcome').html($('#welcome').html() + data.respuesta)
+})
+})
 </script>
 
 {% include 'footer.html' %}
