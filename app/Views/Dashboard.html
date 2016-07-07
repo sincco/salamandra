@@ -40,7 +40,7 @@
 						</div>
 					</div>
 					<div class='col-xs-4'>
-						<button type="button" class="btn btn-success" onclick="filtrar()">Filtrar</button>
+						<button type="button" class="btn btn-success" onclick="{{_self.getTemplateName() | replace( { '.html':'' } ) | lower }}.filtrar()">Filtrar</button>
 					</div>
 				</div>
 			</div>
