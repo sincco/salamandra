@@ -53,7 +53,7 @@ onAdd: function (evt) {
 var itemEl = evt.item
 var clave = $(itemEl).attr('data-clave')
 var costo = parseFloat($(itemEl).attr('data-costo'))
-$(itemEl).html($(itemEl).html() + '<input type="text" name="cantidad_' + clave + '" class="form-control cantidad" placeholder="cantidad" data-clave="' + clave + '" data-costo="' + costo + ' data-descr="' + $(itemEl).attr('data-descr') + '">')
+$(itemEl).html($(itemEl).html() + '<input type="text" name="cantidad_' + clave + '" class="form-control cantidad" placeholder="cantidad" data-clave="' + clave + '" data-costo="' + costo + '" data-descr="' + $(itemEl).attr('data-descr') + '">')
 $("[name=cantidad_" + clave + "]").focus()
 }
 })
@@ -66,21 +66,25 @@ $("#buscar").keypress(function(event) {
 })
 
 function buscar() {
+	loader.show();
 	sincco.consumirAPI('POST',BASE_URL + 'catalogo/productos/apibuscar',{ campo:'DESCR', valor:'%' + $('#buscar').val().toUpperCase() + '%', comparacion:'LIKE' })
 	.done(function(data) {
 		if(data)
 			$("#productos").html('')
 		$(data).each(function() {
-			var elemento = '<li class="list-group-item" data-clave="' + this.CVE_ART + '" data-costo="' + 0 + '" data-descr="' + this.DESCR + '"><span>' + this.CVE_ART + ' ' + this.DESCR + '</span></li>'
-			$("#productos").html($("#productos").html() + elemento)
+			var elemento = '<li class="list-group-item" data-clave="' + this.CVE_ART + '" data-costo="' + 0 + '" data-descr="' + this.DESCR + '"><span>' + this.CVE_ART + ' ' + this.DESCR + '</span></li>';
+			$("#productos").html($("#productos").html() + elemento);
+			loader.hide();
 		})
 	})
 	.fail(function(jqXHR, textStatus, errorThrown) {
-		console.log(errorThrown)
+		toastr.error( 'Error al efectuar la operación.', 'Intenta de nuevo' );
+		loader.hide();
 	})
 }
 
 function guardar() {
+	loader.show();
 	var productos = []
 	$("[name^='cantidad_']").each(function() {
 		producto = new Object()
@@ -92,10 +96,18 @@ function guardar() {
 	})
 	sincco.consumirAPI('POST',BASE_URL + 'produccion/recetas/apialta',{ claveProducto:$("#claveProducto").val(), descripcionProducto: $('#claveProducto').children("option:selected").text(), unidadMedida:$("#unidadMedida").val(), ingredientes:productos })
 	.done(function(data) {
-		if(data.respuesta > 0)
+		if(data.respuesta > 0) {
+			toastr.success( 'Receta guardada', 'Éxito' );
 			window.location = '{BASE_URL}produccion/recetas'
+			loader.hide();
+		}
+		else {
+			toastr.error( 'Error al efectuar la operación.', 'Intenta de nuevo' );
+			loader.hide();
+		}
 	}).fail(function(jqXHR, textStatus, errorThrown) {
-		console.log(errorThrown)
+		toastr.error( 'Error al efectuar la operación.', 'Intenta de nuevo' );
+		loader.hide();
 	})
 }
 
