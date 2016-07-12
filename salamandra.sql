@@ -34,13 +34,6 @@ CREATE TABLE IF NOT EXISTS `almacenes` (
   UNIQUE KEY `empresa_almacen` (`empresa`,`almacen`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Almacenes para procesos de produccion';
 
---
--- Volcado de datos para la tabla `almacenes`
---
-
-INSERT INTO `almacenes` (`empresa`, `almacen`, `descripcion`, `status`) VALUES
-('01', '01', 'Proceso 1', 'Activo');
-
 -- --------------------------------------------------------
 
 --
@@ -59,14 +52,6 @@ CREATE TABLE IF NOT EXISTS `cotizaciones` (
   UNIQUE KEY `cotizacion_cliente` (`cliente`,`fecha`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Cotizaciones a clientes' AUTO_INCREMENT=4 ;
 
---
--- Volcado de datos para la tabla `cotizaciones`
---
-
-INSERT INTO `cotizaciones` (`cotizacion`, `fecha`, `cliente`, `razonSocial`, `email`, `estatus`, `userId`) VALUES
-(1, '2016-05-19', '1', 'ACERLAN, S.A. DE C.V.', 'pa.ivan.miranda@gmail.com', 'Enviada', 1),
-(3, '2016-05-24', '34', 'SIEMENS, S.A. DE C.V.', 'pa.ivan.miranda@gmail.com', 'Nueva', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -83,17 +68,6 @@ CREATE TABLE IF NOT EXISTS `cotizacionesDetalle` (
   UNIQUE KEY `cotizacion_producto` (`cotizacion`,`producto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Detalle de cotizacion';
 
---
--- Volcado de datos para la tabla `cotizacionesDetalle`
---
-
-INSERT INTO `cotizacionesDetalle` (`cotizacion`, `producto`, `descripcion`, `unidad`, `cantidad`, `precio`) VALUES
-(1, '11108305', 'RECTIFICADOR USC 9R 1/4&#34;  (11', 'pieza', 558, 1),
-(1, '11108406', 'RECTIFICADOR USC 25R 110V OBSOLETO (11', 'pieza', 432.54, 1),
-(1, '11109707', 'ESMERILADOR ANGULAR UWF 10 110V (11', 'pieza', 297, 1),
-(2, '11108305', 'INTERRUPTOR POS 111 S - C (11.1', 'pieza', 14.9, 1),
-(3, '11108305', 'CARBON POS 462 SERIE C   (PZA)  (11.1', 'pieza', 6.1, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -106,15 +80,6 @@ CREATE TABLE IF NOT EXISTS `empresas` (
   `estatus` enum('Activa','Bloqueada') NOT NULL,
   UNIQUE KEY `empresa` (`empresa`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Empresas registradas en SAE';
-
---
--- Volcado de datos para la tabla `empresas`
---
-
-INSERT INTO `empresas` (`empresa`, `razonSocial`, `estatus`) VALUES
-('01', 'Tricorp', 'Activa'),
-('02', 'Otra empresa', 'Activa'),
-('03', 'Otra empresa', 'Activa');
 
 -- --------------------------------------------------------
 
@@ -168,13 +133,6 @@ CREATE TABLE IF NOT EXISTS `produccionRecetas` (
   PRIMARY KEY (`receta`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Cabecera de recetas' AUTO_INCREMENT=2 ;
 
---
--- Volcado de datos para la tabla `produccionRecetas`
---
-
-INSERT INTO `produccionRecetas` (`receta`, `producto`, `descripcion`, `unidad`, `status`) VALUES
-(1, '11108406', 'RECTIFICADOR USC 25R 110V OBSOLETO (11', 'PZA', 'Activo');
-
 -- --------------------------------------------------------
 
 --
@@ -190,14 +148,6 @@ CREATE TABLE IF NOT EXISTS `produccionRecetasDetalle` (
   UNIQUE KEY `recetas_detalle` (`receta`,`producto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Ingredientes de recetas';
 
---
--- Volcado de datos para la tabla `produccionRecetasDetalle`
---
-
-INSERT INTO `produccionRecetasDetalle` (`receta`, `producto`, `descripcion`, `cantidad`, `costo`) VALUES
-(1, '2813401', 'TORNILLO POS 120 150 USC (11.1', 2, 0),
-(1, '5727501', 'INTERRUPTOR POS 111 S - C (11.1', 3, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -209,19 +159,6 @@ CREATE TABLE IF NOT EXISTS `usuariosEmpresas` (
   `empresa` char(3) NOT NULL,
   UNIQUE KEY `usuario_empresa` (`userId`,`empresa`) COMMENT 'usuario_empresa'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Empresas permitidas por usuario';
-
---
--- Volcado de datos para la tabla `usuariosEmpresas`
---
-
-INSERT INTO `usuariosEmpresas` (`userId`, `empresa`) VALUES
-(1, '01'),
-(2, '01'),
-(3, '01'),
-(3, '02'),
-(4, '01'),
-(4, '02'),
-(4, '03');
 
 -- --------------------------------------------------------
 
@@ -236,13 +173,6 @@ CREATE TABLE IF NOT EXISTS `usuariosExtra` (
   `filtroClientes` int(11) NOT NULL,
   UNIQUE KEY `usuarios_extra` (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Configuración adicional para usuarios';
-
---
--- Volcado de datos para la tabla `usuariosExtra`
---
-
-INSERT INTO `usuariosExtra` (`userId`, `nombre`, `perfil`, `filtroClientes`) VALUES
-(1, 'Ivan Miranda', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -308,16 +238,6 @@ CREATE TABLE IF NOT EXISTS `__usersControl` (
   `userStatus` char(1) DEFAULT NULL,
   PRIMARY KEY (`userName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `__usersControl`
---
-
-INSERT INTO `__usersControl` (`userId`, `userName`, `userEmail`, `userPassword`, `userStatus`) VALUES
-(1, '1', 'ivan', '$2y$12$Z9QaOgLYR0eXqRZ72.lmkeLzXOox6rx8/LsuGzFlRXwiQY/HjAoPK', NULL),
-(3, '9', 'usuario', '$2y$12$zEyOyXCAbciikOeDhoMVseYXKlacJNl4XdFtElVYeY.dcWBEWa5VC', NULL),
-(2, 'rivero', 'rivero', '$2y$12$tTt9n9bdjk6uQtQieD5flebDm.rP235iazkYz7NgYZoOXbjMPpBEy', NULL),
-(4, 'uno', 'ivan.miranda@sincco.com', '$2y$12$YMQArpmOLlViAPFmBWRaJeUCxtGFyv2yUCyu62yUqtDgcRwDXfVC2', NULL);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
