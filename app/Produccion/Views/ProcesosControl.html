@@ -10,7 +10,7 @@
 	<div class="row">
 		<div class="col-sm-12">
 			<h5>Que fabricar</h5>
-			<ul id="recetas" class="productos-buscados">
+			<ul id="recetas" class="ingredientes">
 				{% for receta in recetas %}
 				<li class="list-group-item" data-receta="{{ receta.receta }}" data-producto="{{ receta.producto }}" data-descripcion="{{ receta.descripcion }}"><span>{{ receta.descripcion }}</span></li>
 				{% endfor %}
@@ -21,11 +21,11 @@
 	<div class="row">
 		<div class="col-lg-6 col-md-6 col-sm-12">
 			<h5>En producción</h5>
-			<ul id="produccion" class="ingredientes"><li>eco</li></ul>
+			<ul id="produccion" class="ingredientes"></ul>
 		</div>
 		<div class="col-lg-6 col-md-6 col-sm-12">
 			<h5>Terminado</h5>
-			<ul id="terminado" class="ingredientes"><li>eco</li></ul>
+			<ul id="terminado" class="ingredientes"></ul>
 		</div>
 	</div>
 
@@ -34,9 +34,9 @@
 
 <script type="text/javascript">
 $(function () {
-	Sortable.create( $('#recetas') , { group: "flujo", sort: false })
-	Sortable.create( $('#produccion') , { group: "flujo", sort: false })
-	Sortable.create( $('#terminado') , { group: "flujo", sort: false })
+	Sortable.create( $('#recetas').get(0) , { group: "flujo", sort: false })
+	Sortable.create( $('#produccion').get(0) , { group: "flujo", sort: false })
+	Sortable.create( $('#terminado').get(0) , { group: "flujo", sort: false })
 });
 </script>
 
