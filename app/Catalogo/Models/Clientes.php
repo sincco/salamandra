@@ -7,7 +7,7 @@ class ClientesModel extends Sincco\Sfphp\Abstracts\Model {
 	}
 	
 	public function getAll() {
-		return $this->connector->query( 'SELECT * FROM CLIE' . $_SESSION[ 'companiaClave' ] );
+		return $this->connector->query( 'SELECT cli.*,ven.NOMBRE VENDEDOR FROM CLIE' . $_SESSION[ 'companiaClave' ] . ' cli INNER JOIN VEND' . $_SESSION[ 'companiaClave' ] . ' ven ON ven.CVE_VEND=cli.CVE_VEND' );
 	}
 
 	public function getContactos( $cliente ) {

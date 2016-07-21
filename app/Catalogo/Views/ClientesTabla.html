@@ -12,7 +12,7 @@
 		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true" id="clientes">
 			<thead>
 				<tr>
-					<th data-field="state" data-checkbox="true" ></th><th data-sortable="true">Clave</th><th data-sortable="true">Nombre</th><th data-sortable="true">Estatus</th>
+					<th data-field="state" data-checkbox="true" ></th><th data-sortable="true">Clave</th><th data-sortable="true">Nombre</th><th data-sortable="true">Vendedor</th><th data-sortable="true">Estatus</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -21,6 +21,7 @@
 					<td></td>
 					<td>{{ cliente.CLAVE|e }}</td>
 					<td>{{ cliente.NOMBRE|e }}</td>
+					<td>{{ cliente.VENDEDOR|e }}</td>
 					<td>{% if cliente.STATUS == 'S' %}Suspendido{% else %}Activo{% endif %}</td>
 				</tr>
 				{% endfor %}
