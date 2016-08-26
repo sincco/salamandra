@@ -16,12 +16,12 @@
 					<td>{{ producto.CVE_ART|e }}</td>
 					<td>{{ producto.DESCR|e }}</td>
 					<td>{{ producto.UNI_MED|e }}</td>
-					<td>{{ producto.EXIST|e }}</td>
-					<td>{{ producto.PEND_SURT|e }}</td>
-					<td>{{ producto.COMP_X_REC|e }}</td>
-					<td>{{ producto.DISPONIBLES|e }}</td>
+					<td>{{ producto.EXIST|number_format(2, '.', ',') }}</td>
+					<td>{{ producto.PEND_SURT|number_format(2, '.', ',') }}</td>
+					<td>{{ producto.COMP_X_REC|number_format(2, '.', ',') }}</td>
+					<td>{{ producto.DISPONIBLES|number_format(2, '.', ',') }}</td>
 					<td>{{ producto.ULTIMA_VENTA|e }}</td>
-					<td>{{ producto.PRECIO|e }}</td>
+					<td>{{ producto.PRECIO|number_format(2, '.', ',') }}</td>
 				</tr>
 				{% endfor %}
 			</tbody>
