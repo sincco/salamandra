@@ -7,7 +7,7 @@ class ProductosModel extends Sincco\Sfphp\Abstracts\Model {
 	}
 	
 	public function getActivos() {
-		$query = 'SELECT i.CVE_ART,i.DESCR,i.UNI_MED,i.EXIST,i.PEND_SURT,i.COMP_X_REC,(EXIST + comp_x_rec) - PEND_SURT AS DISPONIBLES, SUBSTRING(cast(i.fch_ultvta as varchar(50)) FROM 1 for 10) Ultima_Venta , p.PRECIO FROM INVE' . $_SESSION[ 'companiaClave' ] . ' i inner join precio_x_prod' . $_SESSION[ 'companiaClave' ] . ' p on i.cve_art = p.cve_art WHERE p.cve_precio =1'.$_producto.' AND (I.CTRL_ALM <> 'OBS' OR I.CTRL_ALM IS NULL ) ;';
+		$query = 'SELECT i.CVE_ART,i.DESCR,i.UNI_MED,i.EXIST,i.PEND_SURT,i.COMP_X_REC,(EXIST + comp_x_rec) - PEND_SURT AS DISPONIBLES, SUBSTRING(cast(i.fch_ultvta as varchar(50)) FROM 1 for 10) ULTIMA_VENTA , p.PRECIO FROM INVE' . $_SESSION[ 'companiaClave' ] . ' i inner join precio_x_prod' . $_SESSION[ 'companiaClave' ] . ' p on i.cve_art = p.cve_art WHERE p.cve_precio =1'.$_producto.' AND (I.CTRL_ALM <> \'OBS\' OR I.CTRL_ALM IS NULL ) ;';
 		return $this->connector->query($query);
 		//return $this->connector->query('SELECT * FROM Inve' . $_SESSION[ 'companiaClave' ] . ' WHERE STATUS=:estatus', [ 'estatus'=>'A' ] );
 	}
