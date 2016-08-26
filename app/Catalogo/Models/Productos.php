@@ -7,7 +7,9 @@ class ProductosModel extends Sincco\Sfphp\Abstracts\Model {
 	}
 	
 	public function getActivos() {
-		return $this->connector->query('SELECT * FROM Inve' . $_SESSION[ 'companiaClave' ] . ' WHERE STATUS=:estatus', [ 'estatus'=>'A' ] );
+		$query = 'SELECT i.cve_art,i.descr,i.uni_med,i.exist,i.pend_surt,i.COMP_X_REC,(EXIST + comp_x_rec) - PEND_SURT AS disponibles, SUBSTRING(cast(i.fch_ultvta as varchar(50)) FROM 1 for 10) Ultima_Venta , p.precio FROM INVE' . $_SESSION[ 'companiaClave' ] . ' i inner join precio_x_prod' . $_SESSION[ 'companiaClave' ] . ' p on i.cve_art = p.cve_art WHERE p.cve_precio =1'.$_producto.' AND (I.CTRL_ALM <> 'OBS' OR I.CTRL_ALM IS NULL ) ;';
+		return $this->connector->query($query);
+		//return $this->connector->query('SELECT * FROM Inve' . $_SESSION[ 'companiaClave' ] . ' WHERE STATUS=:estatus', [ 'estatus'=>'A' ] );
 	}
 
 	public function getByClave( $data, $listaPrecio = '1' ) {
