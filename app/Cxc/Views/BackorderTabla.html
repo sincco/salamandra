@@ -1,0 +1,62 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	<div class="row">
+		<h1>Backorder</h1>
+		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
+			<thead>
+				<tr>
+					<th data-sortable="true">Vendedor</th>
+					<th data-sortable="true">Pedido</th>
+					<th data-sortable="true">Fecha Elaboracion</th>
+					<th data-sortable="true">Clave Cliente</th>
+					<th data-sortable="true">Cliente</th>
+					<th data-sortable="true">Clave Articulo</th>
+					<th data-sortable="true">Articulo</th>
+					<th data-sortable="true">Remitidas</th>
+					<th data-sortable="true">Surtidas</th>
+					<th data-sortable="true">Por Facturar</th>
+					<th data-sortable="true">Existencias</th>
+					<th data-sortable="true">Precio</th>
+					<th data-sortable="true">Total</th>
+					<th data-sortable="true">Fecha Estimada Entrega</th>
+					<th data-sortable="true">Fecha Estimada Entregapp</th>
+					<th data-sortable="true">Nueva Fecha</th>
+					<th data-sortable="true">Fecha Estimada Entrega</th>
+					<th data-sortable="true">Retraso</th>
+					<th data-sortable="true">Por Recibir</th>
+					<th data-sortable="true">Por Surtir</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for registro in data %}
+				<tr>
+					<td>{{ registro.vendedor|e }}</td>
+					<td>{{ registro.pedido|e }}</td>
+					<td>{{ registro.fechaelaboracion|e }}</td>
+					<td>{{ registro.clavecliente|e }}</td>
+					<td>{{ registro.cliente|e }}</td>
+					<td>{{ registro.clavearticulo|e }}</td>
+					<td>{{ registro.articulo|e }}</td>
+					<td>{{ registro.remitidas|number_format(2, '.', ',') }}</td>
+					<td>{{ registro.surtidas|number_format(2, '.', ',') }}</td>
+					<td>{{ registro.porfacturar|number_format(2, '.', ',') }}</td>
+					<td>{{ registro.existencias|number_format(2, '.', ',') }}</td>
+					<td>{{ registro.precio|number_format(2, '.', ',') }}</td>
+					<td>{{ registro.total|number_format(2, '.', ',') }}</td>
+					<td>{{ registro.fechaestimadaentrega|e }}</td>
+					<td>{{ registro.fechaestimadaentregaPP|e }}</td>
+					<td>{{ registro.nuevaFecha|e }}</td>
+					<td>{{ registro.fechaestimadaentrega|e }}</td>
+					<td>{{ registro.retraso|number_format(2, '.', ',') }}</td>
+					<td>{{ registro.XRECIBIR|number_format(2, '.', ',') }}</td>
+					<td>{{ registro.XSURTIR|number_format(2, '.', ',') }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% include 'footer.html' %}

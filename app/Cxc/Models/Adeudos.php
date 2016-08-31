@@ -150,8 +150,44 @@ class AdeudosModel extends Sincco\Sfphp\Abstracts\Model {
 				GROUP BY CVE_CLIE, NOMBRE, NO_FACTURA, MONEDA
 			) saldos
 			INNER JOIN FACTF' . $_SESSION[ 'companiaClave' ] . ' factura ON ( factura.CVE_DOC = saldos.NO_FACTURA )
-			WHERE SALDO > 0.99 AND datediff (day from CAST(factura.FECHA_VEN AS DATE) to cast(current_date as date)) > 29
+			WHERE SALDO > 0.99 
 			ORDER BY ATRASO DESC, CVE_CLIE ASC, NO_FACTURA ASC';
 		return $this->connector->query( $query, [ 'C_TIPO_MOV'=>'C', 'A_TIPO_MOV'=>'A' ] );
+	}
+
+	public function getBackOrder($inicio = "2015-01-01", $fin = "2015-07-31") {
+		$_query = "
+		SELECT 
+		a.CVE_VEND AS vendedor
+		, a.CVE_DOC AS pedido
+		, substring(CAST(a.FECHAELAB as varchar(25)) from 1 for 10) AS fechaelaboracion
+		, a.CVE_CLPV AS clavecliente
+		, (SELECT z.NOMBRE FROM CLIE" . $_SESSION[ 'companiaClave' ] . " z WHERE z.CLAVE = a.CVE_CLPV) AS cliente
+		, b.CVE_ART AS clavearticulo
+		, (SELECT y.DESCR FROM INVE" . $_SESSION[ 'companiaClave' ] . " y WHERE y.CVE_ART = b.CVE_ART) AS articulo
+		, b.CANT AS remitidas
+		, b.CANT - b.PXS AS surtidas
+		, b.PXS AS porfacturar
+		, (SELECT y.EXIST FROM INVE" . $_SESSION[ 'companiaClave' ] . " y WHERE y.CVE_ART = b.CVE_ART) AS existencias
+		, b.PREC AS precio
+		, b.PXS * b.PREC AS total 
+		, 0 AS tiemposurtirmaterial
+		, substring(CAST(a.FECHA_ENT as varchar(25)) from 1 for 10) AS fechaestimadaentrega
+		, CAST(c.CAMPLIB1 as varchar(25)) AS fechaestimadaentregaPP
+		, '2015-01-01' AS nuevaFecha
+		, 0 AS retraso
+		, (SELECT y.COMP_X_REC FROM INVE" . $_SESSION[ 'companiaClave' ] . " y WHERE y.CVE_ART = b.CVE_ART) AS XRECIBIR
+		, (SELECT y.PEND_SURT FROM INVE" . $_SESSION[ 'companiaClave' ] . " y WHERE y.CVE_ART = b.CVE_ART) AS XSURTIR
+		FROM FACTP" . $_SESSION[ 'companiaClave' ] . " a 
+		INNER JOIN PAR_FACTP" . $_SESSION[ 'companiaClave' ] . " b ON a.CVE_DOC = b.CVE_DOC
+		INNER JOIN PAR_FACTP_CLIB" . $_SESSION[ 'companiaClave' ] . " c ON a.CVE_DOC=c.CLAVE_DOC AND b.NUM_PAR = c.NUM_PART
+		WHERE 
+		CAST(a.FECHAELAB AS DATE) >=  CAST('$inicio' AS DATE) AND CAST(a.FECHAELAB AS DATE) <=  CAST('$fin' AS DATE) AND
+		b.PXS > 0 AND a.STATUS <> 'C'";
+		if( intval( ( isset( $_SESSION[ 'extraFiltroClientes' ] ) ? $_SESSION[ 'extraFiltroClientes' ] : 0 ) == 1 ) ) {
+			$query .= ' AND trim(a.CVE_VEND) = :vendedor ';
+		}
+		$_query .= " ORDER BY a.CVE_DOC;";
+		return $this->connector->query( $query, [ 'vendedor'=>$vendedor ] );
 	}
 }

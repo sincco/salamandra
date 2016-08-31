@@ -7,7 +7,7 @@
 		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
 			<thead>
 				<tr>
-					<th>Clave</th><th>Descripción</th><th>Existencias</th>
+					<th>Clave</th><th>Descripción</th><th>UMedida</th><th>Existencias</th><th>Por Surtir</th><th>Por Recibir</th><th>Disponibles</th><th>Ultima Vta</th><th>Precio</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -15,7 +15,13 @@
 				<tr>
 					<td>{{ producto.CVE_ART|e }}</td>
 					<td>{{ producto.DESCR|e }}</td>
-					<td>{{ producto.EXIST|e }}</td>
+					<td>{{ producto.UNI_MED|e }}</td>
+					<td>{{ producto.EXIST|number_format(2, '.', ',') }}</td>
+					<td>{{ producto.PEND_SURT|number_format(2, '.', ',') }}</td>
+					<td>{{ producto.COMP_X_REC|number_format(2, '.', ',') }}</td>
+					<td>{{ producto.DISPONIBLES|number_format(2, '.', ',') }}</td>
+					<td>{{ producto.ULTIMA_VENTA|e }}</td>
+					<td>{{ producto.PRECIO|number_format(2, '.', ',') }}</td>
 				</tr>
 				{% endfor %}
 			</tbody>
