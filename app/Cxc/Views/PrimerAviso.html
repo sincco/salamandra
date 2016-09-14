@@ -105,7 +105,7 @@
 											<thead>
 											<tr>
 												<th valign="top" class="textContent">Factura</th><th valign="top" class="textContent">Emisión</th><th valign="top" class="textContent">Vencimiento</th>
-												<th valign="top" class="textContent">Días de atraso</th><th valign="top" class="textContent">Monto Inicial</th><th valign="top" class="textContent">Abono</th><th valign="top" class="textContent">Saldo</th>
+												<th valign="top" class="textContent">Días de atraso</th><th valign="top" class="textContent">Monto Inicial</th><th valign="top" class="textContent">Abono</th><th valign="top" class="textContent">Saldo</th><th valign="top" class="textContent">Moneda</th>
 											</tr> 
 											</thead>
 											<tbody>
@@ -118,6 +118,7 @@
 												<td valign="top" class="textContent">{{ adeudo.CARGO|number_format(2, '.', ',') }}</td>
 												<td valign="top" class="textContent">{{ adeudo.ABONO|number_format(2, '.', ',') }}</td>
 												<td valign="top" class="textContent">{{ adeudo.SALDO|number_format(2, '.', ',') }}</td>
+												<td valign="top" class="textContent">{{ adeudo.MONEDA|e }}</td>
 											</tr>
 											{% endfor %}
 											</tbody>
