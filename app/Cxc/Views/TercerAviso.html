@@ -118,7 +118,7 @@
 												<td valign="top" class="textContent">{{ adeudo.CARGO|number_format(2, '.', ',') }}</td>
 												<td valign="top" class="textContent">{{ adeudo.ABONO|number_format(2, '.', ',') }}</td>
 												<td valign="top" class="textContent">{{ adeudo.SALDO|number_format(2, '.', ',') }}</td>
-												<td valign="top" class="textContent">{{ adeudo.MONEDA|e }}</td>
+												<td valign="top" class="textContent">{% if adeudo.MONEDA == 1 %}MXP{% else %}USD{% endif %}</td>
 											</tr>
 											{% endfor %}
 											</tbody>
