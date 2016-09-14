@@ -59,7 +59,10 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 			$primerAviso = [];
 			$segundoAviso = [];
 			$tercerAviso = [];
+			$restoAvisos = [];
 			foreach ( $mdlAdeudos->getAdeudoCliente( $_cliente[ 1 ] ) as $_adeudo ) {
+				if( $_adeudo['ATRASO'] <30 )
+					$restoAvisos[] = $_adeudo;
 				if( $_adeudo['ATRASO'] >=30 AND $_adeudo['ATRASO'] < 60 )
 					$primerAviso[] = $_adeudo;
 				if( $_adeudo['ATRASO'] >=60 AND $_adeudo['ATRASO'] < 89 )
@@ -71,7 +74,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 			if( count( $primerAviso ) > 0 ) {
 				$view 			= $this->newView( 'Cxc\PrimerAviso' );
 				$view->general  = [ 'NOMBRE'=>$_cliente[ 2 ] ];
-				$view->adeudos 	= $primerAviso;
+				$view->adeudos 	= array_merge($restoAvisos, $primerAviso);
 				$view->logo 	= $logo;
 				$html 			= $view->getContent();
 				if( $enviar )
@@ -83,7 +86,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 			if( count( $segundoAviso ) > 0 ) {
 				$view 			= $this->newView( 'Cxc\SegundoAviso' );
 				$view->general  = [ 'NOMBRE'=>$_cliente[ 2 ] ];
-				$view->adeudos 	= $segundoAviso;
+				$view->adeudos 	= array_merge($restoAvisos, $segundoAviso);
 				$view->logo 	= $logo;
 				$html 			= $view->getContent();
 				if( $enviar )
@@ -95,7 +98,7 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 			if( count( $tercerAviso ) > 0 ) {
 				$view 			= $this->newView( 'Cxc\TercerAviso' );
 				$view->general  = [ 'NOMBRE'=>$_cliente[ 2 ] ];
-				$view->adeudos 	= $tercerAviso;
+				$view->adeudos 	= array_merge($restoAvisos, $tercerAviso);
 				$view->logo 	= $logo;
 				$html 			= $view->getContent();
 				if( $enviar )
