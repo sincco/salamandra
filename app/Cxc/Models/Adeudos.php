@@ -159,7 +159,10 @@ class AdeudosModel extends Sincco\Sfphp\Abstracts\Model {
 		$_query = "
 		SELECT 
 		a.CVE_VEND AS vendedor
-		, a.CVE_DOC AS pedido
+		, a.CVE_DOC AS pedidoif(defined('SESSION_USERNAME'))
+			$vendedor = SESSION_USERNAME;
+		else
+			$vendedor = 0;
 		, substring(CAST(a.FECHAELAB as varchar(25)) from 1 for 10) AS fechaelaboracion
 		, a.CVE_CLPV AS clavecliente
 		, (SELECT z.NOMBRE FROM CLIE" . $_SESSION[ 'companiaClave' ] . " z WHERE z.CLAVE = a.CVE_CLPV) AS cliente
@@ -188,6 +191,10 @@ class AdeudosModel extends Sincco\Sfphp\Abstracts\Model {
 			$query .= ' AND trim(a.CVE_VEND) = :vendedor ';
 		}
 		$_query .= " ORDER BY a.CVE_DOC;";
-		return $this->connector->query( $query, [ 'vendedor'=>$vendedor ] );
+		if(defined('SESSION_USERNAME'))
+			$vendedor = SESSION_USERNAME;
+		else
+			$vendedor = 0;
+		return $this->connector->query( $_query, [ 'vendedor'=>$vendedor ] );
 	}
 }
