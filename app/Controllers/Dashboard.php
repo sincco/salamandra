@@ -48,6 +48,7 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 		$view->paneles = $paneles;
 		$view->menus = $this->helper( 'UsersAccount' )->createMenus();
 		$view->filtros = $paramsFront;
+		$view->compras = $this->getModel('Dashboard')->getCompras($fechaInicio, $fechaFin);
 		$view->render();
 	}
 
