@@ -34,7 +34,7 @@ class DashboardModel extends Sincco\Sfphp\Abstracts\Model {
 				WHERE C.STATUS='E' AND C.FECHA_DOC BETWEEN '" . $inicio ."' AND '". $fin . "'
 				GROUP BY pc.CVE_ART, c.CVE_DOC, C.CVE_CLPV
 			) tmp ON tmp.cve_art = inv.cve_art
-			GROUP BY inv.CVE_ART, inv.DESCR, inv.EXIST, inv.COMP_X_REC,  inv.PEND_SURT;"
+			GROUP BY inv.CVE_ART, inv.DESCR, inv.EXIST, inv.COMP_X_REC,  inv.PEND_SURT;";
 		return $this->connector->query($query);
 	}
 
