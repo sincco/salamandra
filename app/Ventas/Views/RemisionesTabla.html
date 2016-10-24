@@ -1,0 +1,33 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	<div class="row">
+		<h1>Pedido / Remisión</h1>
+		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
+			<thead>
+				<tr>
+					<th>Folio</th><th>Cliente</th><th>Fecha</th><th>Entrega</th><th>Total</th><th>Observaciones</th><th>Remisión</th><th>Factura</th><th>Pagos</th><th>Restante</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for remision in remisiones %}
+				<tr>
+					<td>{{ remision.CVE_DOC|e }}</td>
+					<td>{{ remision.NOMBRE|e }}</td>
+					<td>{{ remision.FECHA_DOC|date("d/m/Y") }}</td>
+					<td>{{ remision.FECHA_ENT|date("d/m/Y") }}</td>
+					<td>{{ remision.CAN_TOT|number_format(2, '.', ',') }}</td>
+					<td>{{ remision.STR_OBS|e }}</td>
+					<td>{{ remision.REMISION|e }}</td>
+					<td>{{ remision.FACTURA|e }}</td>
+					<td>{{ remision.PAGO|number_format(2, '.', ',') }}</td>
+					<td>{{ remision.RESTA|number_format(2, '.', ',') }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% include 'footer.html' %}

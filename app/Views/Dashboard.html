@@ -85,10 +85,10 @@
 						<td>{{ compra.EXIST|e }}</td>
 						<td>{{ compra.COMP_X_REC|e }}</td>
 						<td>{{ compra.PEND_SURT|e }}</td>
-						<td>{{ compra.proveedor|e }}</td>
-						<td>{{ compra.venta|e }}</td>
-						<td>{{ compra.vendidos|e }}</td>
-						<td>{{ compra.comprados|e }}</td>
+						<td>{{ compra.PROVEEDOR|e }}</td>
+						<td>{{ compra.VENTA|date("d/m/Y") }}</td>
+						<td>{{ compra.VENDIDOS|e }}</td>
+						<td>{{ compra.COMPRADOS|e }}</td>
 					</tr>
 					{% endfor %}
 				</tbody>

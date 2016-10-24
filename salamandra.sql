@@ -222,7 +222,9 @@ INSERT INTO `__menus` (`menuId`, `menuText`, `menuURL`, `menuParent`) VALUES
 (16, 'Consultar', 'reportes/consultar', 15),
 (17, 'Seguridad 2 Pasos', 'authqr/config', 5),
 (18, 'Almacenes', 'catalogo/almacenes', 1),
-(19, 'Procesos', 'produccion/procesos', 7);
+(19, 'Procesos', 'produccion/procesos', 7),
+(20, 'Remisiones', 'ventas/pedidos/remisiones', 7)
+;
 
 -- --------------------------------------------------------
 
