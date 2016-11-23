@@ -1,4 +1,4 @@
-![saltamontes](https://github.com/sincco/salamandra/blob/master/html/img/logo.jpg)
+![Salamandra](https://postimg.org/image/6f1q5la8j/)
 #Salamandra
 
 ![Salamandra](https://img.shields.io/badge/version-beta-brightgreen.svg)
