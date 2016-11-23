@@ -22,19 +22,33 @@ $params[] = 'app';
 $params[] = 'init';
 if (PHP_OS == 'WINNT') {
 	echo 'Nombre: (Nuevo Sistema) ';
-	$line = stream_get_line(STDIN, 1024, PHP_EOL);
+	$input = stream_get_line(STDIN, 1024, PHP_EOL);
 } else {
-	$line = readline('Nombre: (Nuevo Sistema) ');
+	$input = readline('Nombre: (Nuevo Sistema)');
 }
-$input = readline('Nombre: (Nuevo Sistema)');
 $params[] = (trim($input) == '') ? 'Nuevo Sistema' : $input;
-$input = readline('Compañía: (Mi Cliente)');
+if (PHP_OS == 'WINNT') {
+	echo 'Compañía: (Mi Cliente) ';
+	$input = stream_get_line(STDIN, 1024, PHP_EOL);
+} else {
+	$input = readline('Compañía: (Mi Cliente)');
+}
 $params[] = (trim($input) == '') ? 'Mi Cliente' : $input;
-$input = readline('Host: (http://' . str_replace(' ', '', strtolower($params[3])) . '.net/)');
+if (PHP_OS == 'WINNT') {
+	echo 'Host: (http://' . str_replace(' ', '', strtolower($params[3])) . '.net/)';
+	$input = stream_get_line(STDIN, 1024, PHP_EOL);
+} else {
+	$input = readline('Host: (http://' . str_replace(' ', '', strtolower($params[3])) . '.net/)');
+}
 $params[] = (trim($input) == '') ? 'http://' . str_replace(' ', '', strtolower($params[3])) . '.net/' : $input;
 $params[] = 'force';
 $app->run($params);
-$input = strtoupper(readline('Habilitar Cache [Y/N]: (Y)'));
+if (PHP_OS == 'WINNT') {
+	echo 'Habilitar Cache [Y/N]: (Y)';
+	$input = stream_get_line(STDIN, 1024, PHP_EOL);
+} else {
+	$input = strtoupper(readline('Habilitar Cache [Y/N]: (Y)'));
+}
 $cache = (trim($input) == 'Y' || trim($input) == '') ? 'on' : 'off';
 $app->run(['sfphp','cache',$cache]);
 
