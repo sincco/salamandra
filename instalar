@@ -62,13 +62,33 @@ $params[] = 'app';
 $params[] = 'db';
 $params[] = 'default';
 $params[] = 'mysql';
-$input = readline('Host: (localhost)');
+if (PHP_OS == 'WINNT') {
+	echo 'Host: (localhost)';
+	$input = stream_get_line(STDIN, 1024, PHP_EOL);
+} else {
+	$input = readline('Host: (localhost)');
+}
 $params[] = (trim($input) == '') ? 'localhost' : $input;
-$input = readline('Usuario: (' . str_replace(' ', '', strtolower($params[3])) . ')');
+if (PHP_OS == 'WINNT') {
+	echo 'Usuario: (' . str_replace(' ', '', strtolower($params[3])) . ')';
+	$input = stream_get_line(STDIN, 1024, PHP_EOL);
+} else {
+	$input = readline('Usuario: (' . str_replace(' ', '', strtolower($params[3])) . ')');
+}
 $params[] = (trim($input) == '') ? '' . str_replace(' ', '', strtolower($params[3])) : $input;
-$input = readline('Base: (' . str_replace(' ', '', strtolower($params[3])) . ')');
+if (PHP_OS == 'WINNT') {
+	echo 'Base: (' . str_replace(' ', '', strtolower($params[3])) . ')';
+	$input = stream_get_line(STDIN, 1024, PHP_EOL);
+} else {
+	$input = readline('Base: (' . str_replace(' ', '', strtolower($params[3])) . ')');
+}
 $params[] = (trim($input) == '') ? '' . str_replace(' ', '', strtolower($params[3])) : $input;
-$input = readline('Host: (password)');
+if (PHP_OS == 'WINNT') {
+	echo 'Password: (password)';
+	$input = stream_get_line(STDIN, 1024, PHP_EOL);
+} else {
+	$input = readline('Password: (password)');
+}
 $params[] = (trim($input) == '') ? 'password' : $input;
 $app->run($params);
 echo ":: SAE ::".PHP_EOL;
@@ -78,21 +98,51 @@ $params[] = 'app';
 $params[] = 'db';
 $params[] = 'sae';
 $params[] = 'firebird';
-$input = readline('Host: (C:\SAE6.0\)');
-$params[] = (trim($input) == '') ? 'c:\SAE6.0\\' : $input;
-$input = readline('Usuario: (SYSDBA)');
+if (PHP_OS == 'WINNT') {
+	echo 'Host: (C:\SAE\\)';
+	$input = stream_get_line(STDIN, 1024, PHP_EOL);
+} else {
+	$input = readline('Host: (C:\SAE\)');
+}
+$params[] = (trim($input) == '') ? 'C:\SAE\\' : $input;
+if (PHP_OS == 'WINNT') {
+	echo 'Usuario: (SYSDBA)';
+	$input = stream_get_line(STDIN, 1024, PHP_EOL);
+} else {
+	$input = readline('Usuario: (SYSDBA)');
+}
 $params[] = (trim($input) == '') ? 'SYSDBA' : $input;
-$input = readline('Base: (SAE601.DBF)');
-$params[] = (trim($input) == '') ? 'SAE601.DBF' : $input;
-$input = readline('Host: (masterkey)');
+if (PHP_OS == 'WINNT') {
+	echo 'Base: (SAE601.FDB)';
+	$input = stream_get_line(STDIN, 1024, PHP_EOL);
+} else {
+	$input = readline('Base: (SAE601.FDB)');
+}
+$params[] = (trim($input) == '') ? 'SAE601.FDB' : $input;
+if (PHP_OS == 'WINNT') {
+	echo 'Password: (masterkey)';
+	$input = stream_get_line(STDIN, 1024, PHP_EOL);
+} else {
+	$input = readline('Password: (masterkey)');
+}
 $params[] = (trim($input) == '') ? 'masterkey' : $input;
 $app->run($params);
 
 echo PHP_EOL.PHP_EOL;
 echo "----- EXTRAS -----".PHP_EOL;
-$input = strtoupper(readline('Cargar datos iniciales a la base [Y/N]: (Y)'));
+if (PHP_OS == 'WINNT') {
+	echo 'Cargar datos iniciales a la base [Y/N]: (Y)';
+	$input = stream_get_line(STDIN, 1024, PHP_EOL);
+} else {
+	$input = strtoupper(readline('Cargar datos iniciales a la base [Y/N]: (Y)'));
+}
 if ((trim($input) == 'Y' || trim($input) == '') ? true : false) {
-	$input = readline('Archivo: (data.sql)');
+	if (PHP_OS == 'WINNT') {
+		echo 'Archivo: (data.sql)';
+		$input = stream_get_line(STDIN, 1024, PHP_EOL);
+	} else {
+		$input = readline('Archivo: (data.sql)');
+	}
 	$input = (trim($input) == '') ? 'data.sql' : $input;
 	$app->run(['sfphp','db','restore','default',$input]);
 }
