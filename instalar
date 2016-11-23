@@ -20,6 +20,12 @@ $params = [];
 $params[] = 'sfphp';
 $params[] = 'app';
 $params[] = 'init';
+if (PHP_OS == 'WINNT') {
+	echo 'Nombre: (Nuevo Sistema) ';
+	$line = stream_get_line(STDIN, 1024, PHP_EOL);
+} else {
+	$line = readline('Nombre: (Nuevo Sistema) ');
+}
 $input = readline('Nombre: (Nuevo Sistema)');
 $params[] = (trim($input) == '') ? 'Nuevo Sistema' : $input;
 $input = readline('Compañía: (Mi Cliente)');
