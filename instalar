@@ -1,0 +1,93 @@
+#!/usr/bin/env php
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+define('PATH_ROOT', __DIR__);
+Sincco\Sfphp\Paths::init();
+if(file_exists(PATH_CONFIG . '/config.xml')) {
+	unlink(PATH_CONFIG . '/config.xml');
+}
+$files = glob(PATH_CACHE . '/*'); 
+foreach($files as $file){
+	if(is_file($file) and ($file != __FILE__)) {
+		unlink($file); 
+	}
+}
+$app = new Sincco\Sfphp\Command;
+
+// Información general
+echo "----- APP -----".PHP_EOL;
+$params = [];
+$params[] = 'sfphp';
+$params[] = 'app';
+$params[] = 'init';
+$input = readline('Nombre: (Nuevo Sistema)');
+$params[] = (trim($input) == '') ? 'Nuevo Sistema' : $input;
+$input = readline('Compañía: (Mi Cliente)');
+$params[] = (trim($input) == '') ? 'Mi Cliente' : $input;
+$input = readline('Host: (http://' . str_replace(' ', '', strtolower($params[3])) . '.net/)');
+$params[] = (trim($input) == '') ? 'http://' . str_replace(' ', '', strtolower($params[3])) . '.net/' : $input;
+$params[] = 'force';
+$app->run($params);
+$input = strtoupper(readline('Habilitar Cache [Y/N]: (Y)'));
+$cache = (trim($input) == 'Y' || trim($input) == '') ? 'on' : 'off';
+$app->run(['sfphp','cache',$cache]);
+
+// Bases de datos
+echo PHP_EOL.PHP_EOL;
+echo "----- BASE DE DATOS -----".PHP_EOL;
+echo ":: Mysql ::".PHP_EOL;
+$params = [];
+$params[] = 'sfphp';
+$params[] = 'app';
+$params[] = 'db';
+$params[] = 'default';
+$params[] = 'mysql';
+$input = readline('Host: (localhost)');
+$params[] = (trim($input) == '') ? 'localhost' : $input;
+$input = readline('Usuario: (' . str_replace(' ', '', strtolower($params[3])) . ')');
+$params[] = (trim($input) == '') ? '' . str_replace(' ', '', strtolower($params[3])) : $input;
+$input = readline('Base: (' . str_replace(' ', '', strtolower($params[3])) . ')');
+$params[] = (trim($input) == '') ? '' . str_replace(' ', '', strtolower($params[3])) : $input;
+$input = readline('Host: (password)');
+$params[] = (trim($input) == '') ? 'password' : $input;
+$app->run($params);
+echo ":: SAE ::".PHP_EOL;
+$params = [];
+$params[] = 'sfphp';
+$params[] = 'app';
+$params[] = 'db';
+$params[] = 'sae';
+$params[] = 'firebird';
+$input = readline('Host: (C:\SAE6.0\)');
+$params[] = (trim($input) == '') ? 'c:\SAE6.0\\' : $input;
+$input = readline('Usuario: (SYSDBA)');
+$params[] = (trim($input) == '') ? 'SYSDBA' : $input;
+$input = readline('Base: (SAE601.DBF)');
+$params[] = (trim($input) == '') ? 'SAE601.DBF' : $input;
+$input = readline('Host: (masterkey)');
+$params[] = (trim($input) == '') ? 'masterkey' : $input;
+$app->run($params);
+
+echo PHP_EOL.PHP_EOL;
+echo "----- EXTRAS -----".PHP_EOL;
+$input = strtoupper(readline('Cargar datos iniciales a la base [Y/N]: (Y)'));
+if ((trim($input) == 'Y' || trim($input) == '') ? true : false) {
+	$input = readline('Archivo: (data.sql)');
+	$input = (trim($input) == '') ? 'data.sql' : $input;
+	$app->run(['sfphp','db','restore','default',$input]);
+}
+$params = [];
+$params[] = 'sfphp';
+$params[] = 'app';
+$params[] = 'user';
+$params[] = 'sincco';
+$params[] = 'contacto@sincco.com';
+$password = substr(strtoupper(md5(microtime().rand())), 0, 8);
+$params[] = $password;
+$app->run($params);
+echo PHP_EOL.PHP_EOL;
+echo "-------------------------------------" . PHP_EOL;
+echo "Feliciades! Has instalado el sistema!" . PHP_EOL;
+echo "El usuario inicial es sincco::" . $password.PHP_EOL;
+echo "-------------------------------------" . PHP_EOL;
+echo PHP_EOL.PHP_EOL.PHP_EOL.PHP_EOL;

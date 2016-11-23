@@ -1,19 +1,10 @@
 {
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:sincco/login.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:sincco/elastic-email.git"
-        }
-    ],
     "require": {
         "sincco/sfphp": "dev-master",
         "sincco/tokenizer": "~1.0",
         "sincco/login": "dev-master",
         "sincco/elastic-email": "dev-master",
+        "sincco/excell": "dev-master",
         "fbourigault/composer-mkdir": "^2.0"
     },
     "scripts": {
@@ -26,10 +17,16 @@
     },
     "extra": {
         "fbourigault-composer-mkdir": [
+            "app/Controllers",
+            "app/Models",
+            "app/Views",
+            "app/Helpers",
             "var/cache",
             "var/session",
             "var/log",
+            "var/tmp",
             "etc/config",
+            "etc/local",
             "bkp"
         ]
     }
