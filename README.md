@@ -1,4 +1,4 @@
-![Salamandra](https://postimg.org/image/6f1q5la8j/)
+![Salamandra](https://s21.postimg.org/jj7aia2af/logo.jpg)
 #Salamandra
 
 ![Salamandra](https://img.shields.io/badge/version-beta-brightgreen.svg)
