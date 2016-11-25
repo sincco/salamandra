@@ -241,6 +241,35 @@ CREATE TABLE IF NOT EXISTS `__usersControl` (
   PRIMARY KEY (`userName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `operadores`
+--
+
+CREATE TABLE `operadores` (
+  `idOperador` int(11) NOT NULL,
+  `clave` char(8) NOT NULL,
+  `nombre` varchar(150) NOT NULL,
+  `estatus` enum('Activo','Inactivo') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Operadores de camiones';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `unidades`
+--
+
+CREATE TABLE `unidades` (
+  `idUnidad` int(11) NOT NULL,
+  `noEco` char(8) NOT NULL,
+  `estatus` enum('Activo','Inactivo') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Unidades';
+
+-- --------------------------------------------------------
+
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
