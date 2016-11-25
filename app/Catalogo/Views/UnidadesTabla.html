@@ -1,0 +1,100 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	<div class="row">
+		<h1>Unidades</h1>
+		<button type="button" class="btn btn-primary"><i class="fa fa-plus-circle" aria-hidden="true" onclick="nuevaCaptura()"> <span>Nuevo</span></i></button>
+		<table id='socio' data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
+			<thead>
+				<tr>
+					<th data-sortable="true" data-field="idUnidad">Id</th><th data-sortable="true" data-field="idSocio">Socio</th><th data-sortable="true" data-field="nombre">Nombre</th><th data-sortable="true" data-field="noEco">No. Eco</th><th data-sortable="true" data-field="estatus">Estatus</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for dato in datos %}
+				<tr>
+					<td>{{ dato.idUnidad|e }}</td>
+					<td>{{ dato.idSocio|e }}</td>
+					<td>{{ dato.nombre|e }}</td>
+					<td>{{ dato.noEco|e }}</td>
+					<td>{{ dato.estatus|e }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div id="modal-nueva" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 id="modal-titulo" class="modal-title">Registrar unidad</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-xs-12">
+						<form role="form">
+	  						<div class="form-group">
+	  							<input type="hidden" class="form-control col-lg-3" name="idUnidad">
+								<label>noEco <input type="text" class="form-control col-lg-3" name="noEco"></label><br>
+								<label>Socio (dueño de unidad) <select class="form-control col-lg-3" name="idSocio">
+								{% for socio in socios %}
+									<option value="{{ socio.idSocio }}">{{ socio.nombre }}</option>
+								{% endfor %}	
+								</select></label><br>
+								<label>Estatus <select class="form-control col-lg-3" name="estatus"><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option></select></label>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" onclick="guardarCaptura($('form').serializeJSON())"><i class="fa fa-cloud" aria-hidden="true"> <span>Guardar</span></i></button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+$('table').on('dbl-click-row.bs.table', function ( row, element ) {
+	$('form input[name=idUnidad]').val(element.idUnidad);
+	$('form input[name=noEco]').val(element.noEco);
+	$('form input[name=idSocio]').val(element.idSocio);
+	$('form input[name=estatus]').val(element.estatus);
+	$('#modal-nueva').modal('show');
+});
+
+function nuevaCaptura() {
+	$('form input').val('');
+	$('form input[name=idUnidad]').val(0);
+	$('#modal-nueva').modal('show');
+}
+
+function guardarCaptura(data) {
+	loader.show();
+	var method = 'POST';
+	if(data.idUnidad > 0) {
+		method = 'PUT';
+	}
+	sincco.consumirAPI(method,BASE_URL + 'api/v1/unidades',{data:data})
+	.done(function(data) {
+		loader.hide();
+		if (data.respuesta) {
+			window.location = BASE_URL + 'catalogos/unidades';
+		} else {
+			toastr.error('Error al hacer la petición.', 'Intenta de nuevo');
+		}
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		console.log(errorThrown);
+		toastr.error('Error al hacer la petición.', 'Intenta de nuevo');
+		loader.hide();
+	})
+}
+
+</script>
+
+{% include 'footer.html' %}
