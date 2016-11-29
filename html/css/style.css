@@ -28,3 +28,6 @@ table { font-family: "Ubuntu", sans-serif;  font-size: 0.8em; }
 .recetas .ingredientes { border-color: #9ecaa0; border-style: dotted; border-width: 2px; padding: 1em; background-color: #bcffbf; border-radius: 0.5em; }
 .recetas .ingredientes li { background-color: #cfe9ff; border-radius: 0.5em; }
 .recetas .ingredientes li span { color: #2196F3; font-style: italic; }
+
+.transporte-envio-programado { background-color: #27ab00; }
+.transporte-envio-solicitado { background-color: #fffc9f; }

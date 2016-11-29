@@ -95,7 +95,7 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 	}
 
 	public function createTokenForApi() {
-		var_dump(Login::isLogged());
+		return Login::isLogged();
 	}
 
 }

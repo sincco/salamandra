@@ -1,0 +1,57 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+
+	<div class="row">
+	    <div class="col-lg-12">
+	        <h1 class="page-header">Envíos</h1>
+	    </div>
+	</div>
+	<div class="row">
+		<div id="calendario"></div>
+	</div>
+</div>
+
+
+
+<script type="application/javascript">
+var eventData = [
+	{
+	"date":"2016-11-30",
+	"badge":true,
+	"title":"Tonight",
+	"body":"<p class=\"lead\">Party<\/p><p>Like it's 1999.<\/p>",
+	"footer":"At Paisley Park",
+	"classname":"purple-event"
+	},
+];
+
+$(document).ready(function () {
+	$("#calendario").zabuto_calendar({
+		year: 2014,
+		month: 10,
+		cell_border: true,
+		today: true,
+		action: function () {
+			detalle(this.id);
+		},
+		ajax: {
+			url: "{{constant("BASE_URL")}}transporte/envios/apicalendario",
+			modal: false
+		},
+		language: "es",
+		legend: [
+			{type: "block", label: "Envío solicitado", classname:"transporte-envio-solicitado"},
+			{type: "block", label: "Envío programado", classname:"transporte-envio-programado"}
+		]
+	});
+});
+
+function detalle(id) {
+	var date = $("#" + id).data("date");
+	console.log(date);
+}
+</script>
+
+{% include 'footer.html' %}
