@@ -5,30 +5,54 @@
 
 	<div class="row">
 	    <div class="col-lg-12">
-	        <h1 class="page-header">Envíos</h1>
+	        <h1 class="page-header">Pedidos solicitados</h1>
 	    </div>
 	</div>
 	<div class="row">
-		<div id="calendario"></div>
+		<div class="col-lg-3">
+			<div id="calendario"></div>
+		</div>
+		<div class="col-lg-9">
+			<table id="entregas-detalle" style="height: 50%;"></table>
+		</div>
+	</div>
+</div>
+
+<div id="modal" class="modal fade">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 id="modal-titulo" class="modal-title">Programación de entregas</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-xs-9">
+						<p>Entregar <strong><span class="producto"></span></strong> a <strong><span class="cliente"></span></strong></p>
+					</div>
+					<div class="col-xs-3">
+						<p><strong><span class="cantidad"></span></strong> unidades por programar</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 grid">
+						<div id="grid"></div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+			</div>
+		</div>
 	</div>
 </div>
 
 
 
+
 <script type="application/javascript">
-var eventData = [
-	{
-	"date":"2016-11-30",
-	"badge":true,
-	"title":"Tonight",
-	"body":"<p class=\"lead\">Party<\/p><p>Like it's 1999.<\/p>",
-	"footer":"At Paisley Park",
-	"classname":"purple-event"
-	},
-];
 
 $(document).ready(function () {
-	$("#calendario").zabuto_calendar({
+	$('#calendario').zabuto_calendar({
 		year: 2014,
 		month: 10,
 		cell_border: true,
@@ -37,21 +61,183 @@ $(document).ready(function () {
 			detalle(this.id);
 		},
 		ajax: {
-			url: "{{constant("BASE_URL")}}transporte/envios/apicalendario",
+			url: BASE_URL + 'transporte/envios/apicalendario',
 			modal: false
 		},
-		language: "es",
+		language: 'es',
 		legend: [
-			{type: "block", label: "Envío solicitado", classname:"transporte-envio-solicitado"},
-			{type: "block", label: "Envío programado", classname:"transporte-envio-programado"}
+			{type: 'block', label: 'Envío solicitado', classname:'transporte-envio-solicitado'},
+			{type: 'block', label: 'Envío programado', classname:'transporte-envio-programado'}
 		]
 	});
+	$("#grid").shieldGrid({dataSource:{data: []}});
 });
 
 function detalle(id) {
-	var date = $("#" + id).data("date");
-	console.log(date);
+	loader.show();
+	$('#entregas-detalle').bootstrapTable('destroy');
+	var date = $('#' + id).data('date');
+	$('#entregas-detalle').bootstrapTable({
+		method: 'get',
+		url: BASE_URL + 'api/v1/pedidosdetalle/fecha/' + date,
+		columns: [{field:'CVE_DOC',title:'Clave',sortable:true},{field:'NOMBRE',title:'Cliente',sortable:true},{field:'CVE_ART',title:'Producto',sortable:true},{field:'DESCR',title:'Descripción',sortable:true},{field:'CANT',title:'Cantidad',sortable:true},{field:'CALLE',title:'Calle',sortable:false},{field:'COLONIA',title:'Colonia',sortable:true},{field:'MUNICIPIO',title:'Municipio',sortable:true},{field:'ESTADO',title:'Estado',sortable:true},{field:'CVE_ART',title:'Prd.',sortable:false}],
+		height: 600,
+		striped: true,
+		pagination: true,
+		pageSize: 25,
+		pageList: [10, 25, 50, 100, 200],
+		search: true,
+		showColumns: true,
+		showRefresh: true,
+		showExport: true,
+		mobileResponsive: true,
+		minimumCountColumns: 2
+	});
+	loader.hide();
 }
+
+$('#entregas-detalle').on('dbl-click-row.bs.table', function ( row, element ) {
+	$(".cantidad").html(Number(element.CANT).toFixed(3));
+	$(".producto").html(element.DESCR);
+	$(".cliente").html(element.NOMBRE);
+	//$("#grid").shieldGrid();
+	var options = {
+        dataSource: {
+            remote: {
+                read: BASE_URL + "api/v1/pedidoentregasprogramadas/pedido/" + element.CVE_DOC.trim() + '/producto/' + element.CVE_ART.trim(),
+                modify: {
+                    create: {
+                        url: "/orders/OrderCreate",
+                        type: "post",
+                        data: function (edited) {
+                            var items = [];
+                            for (var i = 0; i < edited.length; i++) {
+                                var date = edited[i].data.OrderDate ? edited[i].data.OrderDate.toJSON() : new Date().toJSON();
+                                items.push({
+                                    ContactName: edited[i].data.ContactName,
+                                    HasDiscount: edited[i].data.HasDiscount,
+                                    OrderDate: date,
+                                    Quantity: edited[i].data.Quantity,
+                                    UnitPrice: edited[i].data.UnitPrice,
+                                    ID: edited[i].data.ID
+                                });
+                            }
+                            return { "": items };
+                        }
+                    },
+                    update: {
+                        url: "/orders/OrderUpdate",
+                        type: "post",
+                        data: function (edited) {
+                            var items = [];
+                            for (var i = 0; i < edited.length; i++) {
+                                var date = edited[i].data.OrderDate ? edited[i].data.OrderDate.toJSON() : new Date().toJSON();
+                                var item = {
+                                    ContactName: edited[i].data.ContactName,
+                                    HasDiscount: edited[i].data.HasDiscount,
+                                    OrderDate: date,
+                                    Quantity: edited[i].data.Quantity,
+                                    UnitPrice: edited[i].data.UnitPrice,
+                                    ID: edited[i].data.ID
+                                };
+                                items.push(item);
+                            }
+                            return { "": items };
+                        }
+                    },
+                    remove: {
+                        url: "/orders/OrderRemove",
+                        type: "post",
+                        data: function (edited) {
+                            var items = [];
+                            for (var i = 0; i < edited.length; i++) {
+                                items.push({
+                                    ContactName: edited[i].data.ContactName,
+                                    HasDiscount: edited[i].data.HasDiscount,
+                                    OrderDate: edited[i].data.OrderDate.toJSON(),
+                                    Quantity: edited[i].data.Quantity,
+                                    UnitPrice: edited[i].data.UnitPrice,
+                                    ID: edited[i].data.ID
+                                });
+                            }
+                            return { "": items };
+                        }
+                    }
+                }
+            },
+            schema: {
+                fields: {
+                    cantidad: { path: "cantidad", type: Number },
+                    fechaEntrega: { path: "fechaEntrega", type: Date },
+                    operador: { path: "operador", type: String },
+                    unidad: { path: "unidad", type: String },
+                }
+            }
+        },
+        rowHover: false,
+        columns: [
+            { field: "fechaEntrega", title: "Fecha", width: "100px", format: "{0:yyyy-MM-dd}" },
+            { field: "cantidad", title: "Cantidad", width: "150px" },
+            { field: "operador", title: "Operador", width: "200px", editor: dropOperadores },
+            { field: "unidad", title: "Unidad", width: "200px", editor: dropUnidades },
+            {
+                title: " ",
+                buttons: [
+                    { cls: "deleteButton", commandName: "delete", caption: "<span><i class='fa fa-ban' aria-hidden='true'></i>Borrar</span>" }
+                ]
+            }
+        ],
+        editing: {
+            enabled: true,
+            event: "click",
+            type: "cell",
+            batch: true,
+            confirmation: {
+                "delete": {
+                    enabled: true,
+                    template: function (item) {
+                        return "Delete row with ID = " + item.ID
+                    }
+                }
+            }
+        },
+        toolbar: [
+            {
+                buttons: [
+                    { commandName: "insert", caption: "Nueva Entrega" },
+                    { commandName: "save", caption: "Guardar" },
+                    { commandName: "cancel", caption: "Cancelar" }
+                ],
+                position: "top"
+            }
+        ]
+    };	
+	var grid = $("#grid").swidget();
+    grid.refresh(options);
+
+	function dropOperadores(cell, item) {
+		$('<div id="dropdown"/>')
+		.appendTo(cell)
+		.shieldDropDown({
+			dataSource: {
+				data: ["1|Operador1", "2|Operador2", "3|Operador3"]
+			},
+			value: !item["operador"] ? null : item["operador"].toString()
+		}).swidget().focus();
+	}
+	function dropUnidades(cell, item) {
+		$('<div id="dropdown"/>')
+		.appendTo(cell)
+		.shieldDropDown({
+			dataSource: {
+				data: ["1|Unidad1", "2|Unidad2", "3|Unidad3"]
+			},
+			value: !item["unidad"] ? null : item["unidad"].toString()
+		}).swidget().focus();
+	}
+	$('#modal').modal({backdrop: 'static', keyboard: false});
+});
+
 </script>
 
 {% include 'footer.html' %}

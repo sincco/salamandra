@@ -63,7 +63,7 @@
 			FROM FACTP01 f
 			INNER JOIN CLIE01 c ON c.CLAVE=f.CVE_CLPV
 			INNER JOIN vend01 v ON v.CVE_VEND=f.CVE_VEND
-			WHERE f.status= 'E' AND f.TIP_DOC_SIG IS NULL
+			WHERE f.status= 'E' AND f.TIP_DOC_SIG IS NULL AND f.FECHA_DOC >= :fechaInicio AND f.FECHA_DOC <= :fechaFin
 			]]>
 		</resumen>
 		<detalle>
@@ -72,7 +72,7 @@
 			FROM FACTP01 f
 			INNER JOIN CLIE01 c ON c.CLAVE=f.CVE_CLPV
 			INNER JOIN vend01 v ON v.CVE_VEND=f.CVE_VEND
-			WHERE f.status= 'E' AND f.TIP_DOC_SIG IS NULL
+			WHERE f.status= 'E' AND f.TIP_DOC_SIG IS NULL AND f.FECHA_DOC >= :fechaInicio AND f.FECHA_DOC <= :fechaFin
 			]]>
 		</detalle>
 		<liga></liga>

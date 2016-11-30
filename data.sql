@@ -233,7 +233,7 @@ INSERT INTO `__menus` (`menuId`, `menuText`, `menuURL`, `menuParent`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `__usersControl` (
-  `userId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL AUTO_INCREMENT,
   `userName` varchar(150) NOT NULL,
   `userEmail` varchar(150) DEFAULT NULL,
   `userPassword` varchar(60) DEFAULT NULL,
@@ -249,10 +249,11 @@ CREATE TABLE IF NOT EXISTS `__usersControl` (
 --
 
 CREATE TABLE `operadores` (
-  `idOperador` int(11) NOT NULL,
+  `idOperador` int(11) NOT NULL AUTO_INCREMENT,
   `clave` char(8) NOT NULL,
   `nombre` varchar(150) NOT NULL,
-  `estatus` enum('Activo','Inactivo') NOT NULL
+  `estatus` enum('Activo','Inactivo') NOT NULL,
+  PRIMARY KEY (`idOperador`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Operadores de camiones';
 
 -- --------------------------------------------------------
@@ -264,11 +265,29 @@ CREATE TABLE `operadores` (
 CREATE TABLE `unidades` (
   `idUnidad` int(11) NOT NULL,
   `noEco` char(8) NOT NULL,
-  `estatus` enum('Activo','Inactivo') NOT NULL
+  `estatus` enum('Activo','Inactivo') NOT NULL,
+  PRIMARY KEY (`idUnidad`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Unidades';
 
 -- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `unidades`
+--
+
+CREATE TABLE `salamandra`.`entregas` (
+  `idEntrega` INT NOT NULL AUTO_INCREMENT,
+  `pedido` CHAR(8) NULL,
+  `producto` CHAR(16) NULL,
+  `fechaEntrega` DATE NULL,
+  `cantidad` FLOAT NULL,
+  `idUnidad` INT NULL,
+  `idOperador` INT NULL,
+  `entregado` BIT NULL,
+  `tarimasPorRecoger` INT NULL COMMENT 'Control de entregas',
+  PRIMARY KEY (`idEntrega`));
+
+-- --------------------------------------------------------
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
