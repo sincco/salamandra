@@ -107,27 +107,25 @@ $('#entregas-detalle').on('dbl-click-row.bs.table', function ( row, element ) {
                 read: BASE_URL + "api/v1/pedidoentregasprogramadas/pedido/" + element.CVE_DOC.trim() + '/producto/' + element.CVE_ART.trim(),
                 modify: {
                     create: {
-                        url: "/orders/OrderCreate",
+                        url: BASE_URL + "api/v1/pedidoentregasprogramadas/pedido/" + element.CVE_DOC.trim() + '/producto/' + element.CVE_ART.trim(),
                         type: "post",
                         data: function (edited) {
                             var items = [];
                             for (var i = 0; i < edited.length; i++) {
                                 var date = edited[i].data.OrderDate ? edited[i].data.OrderDate.toJSON() : new Date().toJSON();
                                 items.push({
-                                    ContactName: edited[i].data.ContactName,
-                                    HasDiscount: edited[i].data.HasDiscount,
-                                    OrderDate: date,
-                                    Quantity: edited[i].data.Quantity,
-                                    UnitPrice: edited[i].data.UnitPrice,
-                                    ID: edited[i].data.ID
+                                    fechaEntrega: edited[i].data.fechaEntrega,
+                                    cantidad: edited[i].data.cantidad,
+                                    idOperador: edited[i].data.operador,
+                                    idUnidad: edited[i].data.unidad
                                 });
                             }
                             return { "": items };
                         }
                     },
                     update: {
-                        url: "/orders/OrderUpdate",
-                        type: "post",
+                        url: BASE_URL + "api/v1/pedidoentregasprogramadas/pedido/" + element.CVE_DOC.trim() + '/producto/' + element.CVE_ART.trim(),
+                        type: "put",
                         data: function (edited) {
                             var items = [];
                             for (var i = 0; i < edited.length; i++) {
@@ -146,8 +144,8 @@ $('#entregas-detalle').on('dbl-click-row.bs.table', function ( row, element ) {
                         }
                     },
                     remove: {
-                        url: "/orders/OrderRemove",
-                        type: "post",
+                        url: BASE_URL + "api/v1/pedidoentregasprogramadas/pedido/" + element.CVE_DOC.trim() + '/producto/' + element.CVE_ART.trim(),
+                        type: "delete",
                         data: function (edited) {
                             var items = [];
                             for (var i = 0; i < edited.length; i++) {
