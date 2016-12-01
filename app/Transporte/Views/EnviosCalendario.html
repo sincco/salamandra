@@ -112,15 +112,15 @@ $('#entregas-detalle').on('dbl-click-row.bs.table', function ( row, element ) {
                         data: function (edited) {
                             var items = [];
                             for (var i = 0; i < edited.length; i++) {
-                                var date = edited[i].data.OrderDate ? edited[i].data.OrderDate.toJSON() : new Date().toJSON();
+                                var date = edited[i].data.fechaEntrega ? edited[i].data.fechaEntrega.toJSON() : new Date().toJSON();
                                 items.push({
-                                    fechaEntrega: edited[i].data.fechaEntrega,
+                                    fechaEntrega: date,
                                     cantidad: edited[i].data.cantidad,
                                     idOperador: edited[i].data.operador,
                                     idUnidad: edited[i].data.unidad
                                 });
                             }
-                            return { "": items };
+                            return { entrega: items };
                         }
                     },
                     update: {
