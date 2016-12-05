@@ -10,7 +10,7 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 		$query = 'SELECT f.CVE_DOC, c.NOMBRE CLIENTE ,  f.FECHA_DOC,  f.IMPORTE, COALESCE(c.CVE_VEND,0) CVE_VEND, v.NOMBRE VENDEDOR
 			FROM FACTP' . $_SESSION['companiaClave'] . ' f
 			INNER JOIN CLIE' . $_SESSION['companiaClave'] . ' c ON c.CLAVE=f.CVE_CLPV
-			INNER JOIN vend' . $_SESSION['companiaClave'] . ' v ON v.CVE_VEND=f.CVE_VEND
+			LEFT JOIN VEND' . $_SESSION['companiaClave'] . ' v ON v.CVE_VEND=f.CVE_VEND
 			WHERE f.status= :estatus AND f.TIP_DOC_SIG IS NULL';
 		$params['estatus'] = 'E';
 		$user = unserialize($_SESSION['sincco\login\controller']);
