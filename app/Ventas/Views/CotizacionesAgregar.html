@@ -3,7 +3,7 @@
 
 <div class="container">
 	<div class="row">
-		<h1>A<!--gregar Cotización--></h1>
+		<h1>Agregar Cotización</h1>
 	</div>
 
 	<div class="row">
@@ -81,37 +81,44 @@ function crearTabla () {
     rowHeaders: true,
     fixedRowsTop: 0,
     startCols: 4,
+    contextMenu: ['remove_row'],
     colHeaders: ['Clave', 'Descripcion', 'Unidad', 'Precio', 'Cantidad', 'Subtotal'],
     columns: [
       {data:'clave'},
-      {data:'descripcionCorta',readOnly: true},
-      {data:'unidad', readOnly: true},
-      {data:'precio', type: 'numeric', format: '0,0.000', language: 'en', readOnly: true},
+      {data:'descripcionCorta',readOnly: false},
+      {data:'unidad', readOnly: false},
+      {data:'precio', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
       {data:'cantidad', type: 'numeric', format: '0,0.000', language: 'en'},
       {data:'subtotal', type: 'numeric', format: '0,0.000', language: 'en', readOnly: true},
     ], 
-    contextMenu: true,
     afterChange: function (changes, source) {
       if ((source == 'edit' || source == 'paste')) {
-        if(changes[ 0 ][ 1 ] == "clave") {
-          sincco.consumirAPI( 'POST', '{{constant("BASE_URL")}}catalogo/productos/apiClave', { data: changes[ 0 ][ 3 ], listaPrecio: $( '#lista-precio' ).val() } )
-          .done( function( data ) {
-            if( data.length ) {
-              hot.setDataAtCell( changes[ 0 ][ 0 ], 1, data[ 0 ].DESCR )
-              hot.setDataAtCell( changes[ 0 ][ 0 ], 2, data[ 0 ].UNI_MED )
-              hot.setDataAtCell( changes[ 0 ][ 0 ], 3, data[ 0 ].PRECIO )
-              hot.setDataAtCell( changes[ 0 ][ 0 ], 4, 1 )
-            } else {
-              hot.setDataAtCell( changes[ 0 ][ 0 ], 1, 'NO EXISTE' )
-              toastr.error( 'El producto no existe.', 'Intenta de nuevo' )
-            }
-          }).fail( function( jqXHR, textStatus, errorThrown ) {
-            console.log( errorThrown )
-          })
+        if (changes[0][1] == "clave") {
+          if (changes[0][3] == "@@") {
+            hot.setDataAtCell(changes[0][0], 1, 'Producto personalizado')
+            hot.setDataAtCell(changes[0][0], 2, 'N/A')
+            hot.setDataAtCell(changes[0][0], 3, '1.00')
+            hot.setDataAtCell(changes[0][0], 4, 1)
+          } else {
+            sincco.consumirAPI('POST', '{{constant("BASE_URL")}}catalogo/productos/apiClave', { data: changes[0][3], listaPrecio: $('#lista-precio').val() })
+            .done(function(data) {
+              if (data.length) {
+                hot.setDataAtCell(changes[0][0], 1, data[0].DESCR)
+                hot.setDataAtCell(changes[0][0], 2, data[0].UNI_MED)
+                hot.setDataAtCell(changes[0][0], 3, data[0].PRECIO)
+                hot.setDataAtCell(changes[0][0], 4, 1)
+              } else {
+                hot.setDataAtCell(changes[0][0], 1, 'NO EXISTE')
+                toastr.error('El producto no existe.', 'Intenta de nuevo')
+              }
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+              console.log(errorThrown)
+            })
+          }
         }
-        if(changes[0][1] == "cantidad") {
-          var subtotal = parseFloat( hot.getDataAtCell( changes[ 0 ][ 0 ], 3 ) ) * parseFloat( hot.getDataAtCell( changes[ 0 ][ 0 ], 4 ) )
-          hot.setDataAtCell( changes[ 0 ][ 0 ], 5, subtotal )
+        if (changes[0][1] == "cantidad") {
+          var subtotal = parseFloat(hot.getDataAtCell(changes[0][0], 3)) * parseFloat(hot.getDataAtCell(changes[0][0], 4))
+          hot.setDataAtCell(changes[0][0], 5, subtotal)
         }
         actualizaTotal()
       }
@@ -119,18 +126,18 @@ function crearTabla () {
   })
 
   hot.updateSettings({
-    beforeKeyDown: function ( e ) {
+    beforeKeyDown: function (e) {
       var selection = hot.getSelected()
-      if( e.keyCode == 113 ) {
-        $( '#fila-actual' ).val( selection[0] )
+      if (e.keyCode == 113) {
+        $('#fila-actual').val(selection[0])
         loader.show()
         e.preventDefault()
         lastChange = null
         e.stopImmediatePropagation();
-        $( '#tabla-productos' ).bootstrapTable( {
+        $('#tabla-productos').bootstrapTable({
           method: 'get',
           url: '{{constant('BASE_URL')}}catalogo/productos/apicatalogo',
-          columns: [ { field:'CVE_ART', title:'Clave' }, { field:'DESCR', title:'Descripcion' }, { field:'UNI_MED', title:'Unidad' } ],
+          columns: [{ field:'CVE_ART', title:'Clave' }, { field:'DESCR', title:'Descripcion' }, { field:'UNI_MED', title:'Unidad' }],
           height: 600,
           striped: true,
           pagination: true,
@@ -142,8 +149,8 @@ function crearTabla () {
           showExport: true,
           mobileResponsive: true,
           minimumCountColumns: 2
-        } )
-        $( '#modal' ).modal( 'show' )
+        })
+        $('#modal').modal('show')
         loader.hide()
       }
     }
@@ -153,7 +160,7 @@ function crearTabla () {
 function actualizaTotal() {
   var totalVenta = 0
   hot.getData().forEach(function(element, index, array) {
-    if(!isNaN(parseFloat(element.subtotal))) {
+    if (!isNaN(parseFloat(element.subtotal))) {
       totalVenta = totalVenta + parseFloat(element.subtotal)
     }
   })
@@ -172,14 +179,14 @@ function notificar() {
 
 function guardar() {
   loader.show()
-  sincco.consumirAPI('POST','{{constant("BASE_URL")}}ventas/cotizaciones/apiguardar', { data: [ {cliente: $( '#lista-cliente' ).val(), razonSocial: $( '#lista-cliente option:selected' ).text(), email: $('#email-default').val(), vendedor: $( '#vendedor' ).val(), estatus: 'Nueva', productos: hot.getData() } ] } )
-  .done( function( data ) {
-    if( data.id ) {
+  sincco.consumirAPI('POST','{{constant("BASE_URL")}}ventas/cotizaciones/apiguardar', { data: [{cliente: $('#lista-cliente').val(), razonSocial: $('#lista-cliente option:selected').text(), email: $('#email-default').val(), vendedor: $('#vendedor').val(), estatus: 'Nueva', productos: hot.getData() }] })
+  .done(function(data) {
+    if (data.id) {
       hot.loadData([])
-      toastr.success( 'Cotización ' + data.id + ' generada.', 'Éxito' )
+      toastr.success('Cotización ' + data.id + ' generada.', 'Éxito')
       loader.hide()
     } else {
-       toastr.error( 'Hubo un error al guardar los datos.', 'Intenta de nuevo' )
+       toastr.error('Hubo un error al guardar los datos.', 'Intenta de nuevo')
        loader.hide()
      }
   }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -190,7 +197,7 @@ function guardar() {
 
 function enviar() {
   loader.show()
-  sincco.consumirAPI('POST','{{constant("BASE_URL")}}cotizaciones/enviar', { id: $("#venta").val(), correo: $("#correo").val() } )
+  sincco.consumirAPI('POST','{{constant("BASE_URL")}}cotizaciones/enviar', { id: $("#venta").val(), correo: $("#correo").val() })
   .done(function(data) {
     loader.hide()
     msgModal.show('info','Correo enviado')
@@ -200,9 +207,9 @@ function enviar() {
   })
 }
 
-$('#tabla-productos').on('dbl-click-row.bs.table', function ( row, element ) {
-  hot.setDataAtCell( $( '#fila-actual' ).val(), 0, element.CVE_ART )
-  $( '#modal' ).modal( 'hide' )
+$('#tabla-productos').on('dbl-click-row.bs.table', function (row, element) {
+  hot.setDataAtCell($('#fila-actual').val(), 0, element.CVE_ART)
+  $('#modal').modal('hide')
 })
 </script>
 {% include 'footer.html' %}
