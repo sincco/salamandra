@@ -3,6 +3,7 @@
 class CotizacionesModel extends Sincco\Sfphp\Abstracts\Model {
 
 	public function getAll() {
+		$params = [];
 		$query = 'SELECT cot.cotizacion, cot.fecha, cot.razonSocial, cot.estatus
 			FROM cotizaciones cot ';
 		$user = unserialize( $_SESSION[ 'sincco\login\controller'] );
