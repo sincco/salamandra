@@ -81,8 +81,8 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 		$ul_attrs = $is_sub ? 'class="dropdown-menu"' : 'class="nav navbar-nav navbar-right"';
 		$menu = "<ul $ul_attrs>";
 		foreach($menu_array as $attrs) {
-			$sub = isset($attrs['childs']) 
-			? $this->buildMenu($attrs['childs'], true) 
+			$sub = isset($attrs['nodes']) 
+			? $this->buildMenu($attrs['nodes'], true) 
 			: null;
 			$li_attrs = $sub ? 'class="dropdown-submenu"' : null;
 			$a_attrs  = $sub ? 'class="dropdown-toggle" data-toggle="dropdown"' : null;
@@ -98,17 +98,44 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 		$menus = $this->getModel('Menus')->getByParent($parent);
 		$response = [];
 		foreach ($menus as $menu) {
-			$childs = $this->menuOptions($menu['menuId']);
-			if (count($childs) > 0) {
+			$nodes = $this->menuOptions($menu['menuId']);
+			if (count($nodes) > 0) {
 				$response[$menu['menuId']] = [
 					'text'=>$menu['menuText'],
 					'url'=>$menu['menuURL'],
-					'childs'=>$childs
+					'nodes'=>$nodes
 				];
 			} else {
 				$response[$menu['menuId']] = [
 					'text'=>$menu['menuText'],
 					'url'=>$menu['menuURL']
+				];
+			}
+		}
+		return $response;
+	}
+
+	public function menuTree($parent=0) {
+		$menus = $this->getModel('Menus')->getByParent($parent);
+		$response = [];
+		foreach ($menus as $menu) {
+			$nodes = $this->menuTree($menu['menuId']);
+			if (count($nodes) > 0) {
+				$response[] = [
+					'text'=>$menu['menuText'],
+					'href'=>$menu['menuURL'],
+					'selectedIcon'=>'glyphicon glyphicon-ban-circle',
+					'selectable'=>true,
+					'state'=>['selected'=>false],
+					'nodes'=>$nodes
+				];
+			} else {
+				$response[] = [
+					'text'=>$menu['menuText'],
+					'selectable'=>true,
+					'selectedIcon'=>'glyphicon glyphicon-ban-circle',
+					'state'=>['selected'=>false],
+					'href'=>$menu['menuURL']
 				];
 			}
 		}
