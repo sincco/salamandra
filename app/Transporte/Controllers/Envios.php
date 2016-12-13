@@ -9,6 +9,8 @@ class EnviosController extends Sincco\Sfphp\Abstracts\Controller {
 		$this->helper('UsersAccount')->checkLogin();
 		$view = $this->newView('Transporte\EnviosCalendario');
 		$view->menus = $this->helper('UsersAccount')->createMenus();
+		$view->unidades = $this->getModel('Catalogo\Unidades')->getAll();
+		$view->operadores = $this->getModel('Catalogo\Operadores')->getAll();
 		$view->render();
 	}
 

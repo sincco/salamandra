@@ -218,7 +218,11 @@ $('#entregas-detalle').on('dbl-click-row.bs.table', function ( row, element ) {
 		.appendTo(cell)
 		.shieldDropDown({
 			dataSource: {
-				data: ["1|Operador1", "2|Operador2", "3|Operador3"]
+				data: [
+                    {% for dato in operadores %}
+                    "{{dato.clave}}|{{dato.nombre}}",
+                    {% endfor %}
+                ] 
 			},
 			value: !item["operador"] ? null : item["operador"].toString()
 		}).swidget().focus();
@@ -228,7 +232,11 @@ $('#entregas-detalle').on('dbl-click-row.bs.table', function ( row, element ) {
 		.appendTo(cell)
 		.shieldDropDown({
 			dataSource: {
-				data: ["1|Unidad1", "2|Unidad2", "3|Unidad3"]
+				data: [
+                    {% for dato in unidades %}
+                    "{{dato.noEco}}",
+                    {% endfor %}
+                ]
 			},
 			value: !item["unidad"] ? null : item["unidad"].toString()
 		}).swidget().focus();

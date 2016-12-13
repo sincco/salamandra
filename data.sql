@@ -243,7 +243,7 @@ CREATE TABLE `operadores` (
 --
 
 CREATE TABLE `unidades` (
-  `idUnidad` int(11) NOT NULL,
+  `idUnidad` int(11) NOT NULL AUTO_INCREMENT,
   `noEco` char(8) NOT NULL,
   `estatus` enum('Activo','Inactivo') NOT NULL,
   PRIMARY KEY (`idUnidad`)
