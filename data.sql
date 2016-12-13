@@ -188,43 +188,23 @@ CREATE TABLE IF NOT EXISTS `usuariosMenus` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `__menus`
+-- Table structure for table `__menus`
 --
 
-CREATE TABLE IF NOT EXISTS `__menus` (
+DROP TABLE IF EXISTS `__menus`;
+CREATE TABLE `__menus` (
   `menuId` int(11) NOT NULL AUTO_INCREMENT,
   `menuText` varchar(50) NOT NULL,
   `menuURL` varchar(150) DEFAULT NULL,
   `menuParent` int(11) NOT NULL,
   PRIMARY KEY (`menuId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='System menus' AUTO_INCREMENT=20 ;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1 COMMENT='System menus';
 
 --
--- Volcado de datos para la tabla `__menus`
+-- Dumping data for table `__menus`
 --
 
-INSERT INTO `__menus` (`menuId`, `menuText`, `menuURL`, `menuParent`) VALUES
-(1, 'Catálogos', NULL, 0),
-(2, 'Clientes', 'catalogo/clientes', 1),
-(3, 'Proveedores', 'catalogo/proveedores', 1),
-(4, 'Productos', 'catalogo/productos', 1),
-(5, 'Configuración', NULL, 0),
-(6, 'Usuarios', 'usuarios', 5),
-(7, 'Producción', NULL, 0),
-(8, 'Recetas', 'produccion/recetas', 7),
-(9, 'Ventas', NULL, 0),
-(10, 'Cotizaciones', 'ventas/cotizaciones', 9),
-(11, 'Seleccionar Compañía', 'selcia', 5),
-(12, 'Pedidos', 'ventas/pedidos', 9),
-(13, 'Cuentas por Cobrar', NULL, 0),
-(14, 'Adeudos', 'cxc/adeudos', 13),
-(15, 'Reportes', NULL, 0),
-(16, 'Consultar', 'reportes/consultar', 15),
-(17, 'Seguridad 2 Pasos', 'authqr/config', 5),
-(18, 'Almacenes', 'catalogo/almacenes', 1),
-(19, 'Procesos', 'produccion/procesos', 7),
-(20, 'Remisiones', 'ventas/pedidos/remisiones', 7)
-;
+INSERT INTO `__menus` VALUES (1,'Catálogos',NULL,0),(2,'Clientes','catalogo/clientes',1),(3,'Proveedores','catalogo/proveedores',1),(4,'Productos','catalogo/productos',1),(5,'Configuración',NULL,1),(6,'Usuarios','usuarios',5),(7,'Producción',NULL,0),(8,'Recetas','produccion/recetas',7),(9,'Ventas',NULL,0),(10,'Cotizaciones','ventas/cotizaciones',9),(11,'Seleccionar Compañía','selcia',5),(12,'Pedidos','ventas/pedidos',9),(13,'Cuentas por Cobrar',NULL,0),(14,'Adeudos','cxc/adeudos',13),(15,'Reportes',NULL,0),(16,'Consultar','reportes/consultar',15),(17,'Seguridad 2 Pasos','authqr/config',5),(18,'Almacenes','catalogo/almacenes',1),(19,'Procesos','produccion/procesos',7),(20,'Remisiones','ventas/pedidos/remisiones',7),(21,'Envíos','transporte/envios',9),(22,'Transporte',NULL,1),(23,'Operadores','catalogo/operadores',22),(24,'Unidades','catalogo/unidades',22);
 
 -- --------------------------------------------------------
 

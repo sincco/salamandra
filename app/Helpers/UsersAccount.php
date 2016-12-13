@@ -70,21 +70,46 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 	 */
 	public function createMenus() {
 		$this->checkLogin();
-		$mdlMenus = $this->getModel( 'Menus' );
-		$menus = $mdlMenus->getAll();
-		$response = array();
-		foreach ( $menus as $menu ) {
-			if( intval($menu[ 'menuParent' ]) > 0 ) {
-				$response[ $menu[ 'menuParent' ] ][ 'childs' ][] = array(
-					'text'=>$menu[ 'menuText' ],
-					'url'=>$menu[ 'menuURL' ]
-				);
+		$menus = $this->menuOptions(0);
+		$menus[] = ['text'=>'Salir', 'url'=>BASE_URL.'login/salir'];
+		$response = $this->buildMenu($menus);
+		return $response;
+	}
+
+	private function buildMenu(array $menu_array, $is_sub=false)
+	{
+		$ul_attrs = $is_sub ? 'class="dropdown-menu"' : 'class="nav navbar-nav navbar-right"';
+		$menu = "<ul $ul_attrs>";
+		foreach($menu_array as $attrs) {
+			$sub = isset($attrs['childs']) 
+			? $this->buildMenu($attrs['childs'], true) 
+			: null;
+			$li_attrs = $sub ? 'class="dropdown-submenu"' : null;
+			$a_attrs  = $sub ? 'class="dropdown-toggle" data-toggle="dropdown"' : null;
+			$carat    = $sub ? '<span class="caret"></span>' : null;
+			$menu .= "<li $li_attrs>";
+			$menu .= "<a href='".BASE_URL."${attrs['url']}' $a_attrs>${attrs['text']}$carat</a>$sub";
+			$menu .= "</li>";
+		}
+		return $menu . "</ul>";
+	}
+
+	private function menuOptions($parent) {
+		$menus = $this->getModel('Menus')->getByParent($parent);
+		$response = [];
+		foreach ($menus as $menu) {
+			$childs = $this->menuOptions($menu['menuId']);
+			if (count($childs) > 0) {
+				$response[$menu['menuId']] = [
+					'text'=>$menu['menuText'],
+					'url'=>$menu['menuURL'],
+					'childs'=>$childs
+				];
 			} else {
-				$response[ $menu[ 'menuId' ] ] = array(
-					'text'=>$menu[ 'menuText' ],
-					'url'=>$menu[ 'menuURL' ],
-					'childs'=>array()
-				);
+				$response[$menu['menuId']] = [
+					'text'=>$menu['menuText'],
+					'url'=>$menu['menuURL']
+				];
 			}
 		}
 		return $response;
