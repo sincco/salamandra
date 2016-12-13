@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+require_once __DIR__ . '/htmlVersions.php';
 require_once __DIR__ . '/vendor/autoload.php';
 define('PATH_ROOT', __DIR__);
 Sincco\Sfphp\Paths::init();
