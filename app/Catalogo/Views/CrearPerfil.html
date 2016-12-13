@@ -13,6 +13,8 @@
 			<form>
 				<label for="descripcion">Descripcion</label>
 				<input type="text" class="form-control col-lg-8" placeholder="descripcion" name="descripcion">
+				<br>
+				<button type="button" class="btn btn-success" onclick="guardar()">Guardar</button>
 			</form>
 		</div>
 		<div class="md-col-6">
@@ -22,11 +24,26 @@
 </div>
 
 <script type="text/javascript">
-	$('#tree').treeview({data: 
-		{% autoescape %}
-		{{ opciones|raw }}
-		{% endautoescape %}
-	, multiSelect: true, selectedBackColor: '#ca4242'});
+$('#tree').treeview({data: 
+	{% autoescape %}
+	{{ opciones|raw }}
+	{% endautoescape %}
+	, multiSelect: true, selectedBackColor: '#ca4242',
+	onNodeSelected: function(event, data) {
+		var nodes = data.nodes;
+		$(nodes).each(function(){
+			$('#tree').treeview('selectNode', [ $(this)[0].nodeId, { silent: true } ]);
+		})
+	},
+	onNodeUnselected: function(event, data) {
+		var nodes = data.parentId;
+		$('#tree').treeview('unselectNode', [ data.parentId, { silent: true } ]);
+	}
+});
+
+function guardar() {
+	console.log($('#tree').treeview('getSelected'));
+}
 </script>
 
 {% include 'footer.html' %}
