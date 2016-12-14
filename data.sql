@@ -247,7 +247,7 @@ CREATE TABLE `unidades` (
 -- Estructura de tabla para la tabla `unidades`
 --
 
-CREATE TABLE `salamandra`.`entregas` (
+CREATE TABLE `entregas` (
   `idEntrega` INT NOT NULL AUTO_INCREMENT,
   `pedido` CHAR(8) NULL,
   `producto` CHAR(16) NULL,
