@@ -75,22 +75,22 @@
 
 <script type="text/javascript">
 function notificar() {
-	$( '#modal-envio' ).modal( 'show' );
+	$('#modal-envio').modal('show');
 }
 function enviar() {
 	loader.show();
-	sincco.consumirAPI( 'POST', '{{constant("BASE_URL")}}cxc/adeudos/apinotificar', { clientes: $('#notificaciones').bootstrapTable('getSelections') } )
-	.done( function( data ) {
-		if( parseInt(data.avisos.primer) > 0 )
-			toastr.success( data.avisos.primer + ' primeras notificaciones enviadas', 'Éxito' )
-		if( parseInt(data.avisos.segundo) > 0 )
-			toastr.success( data.avisos.segundo + ' segundas notificaciones enviadas', 'Éxito' )
-		if( parseInt(data.avisos.tercer) > 0 )
-			toastr.success( data.avisos.tercer + ' terceras notificaciones enviadas', 'Éxito' )
+	sincco.consumirAPI('POST', '{{constant("BASE_URL")}}cxc/adeudos/apinotificar', { clientes: $('#notificaciones').bootstrapTable('getSelections') })
+	.done(function(data) {
+		if(parseInt(data.avisos.primer) > 0)
+			toastr.success(data.avisos.primer + ' primeras notificaciones enviadas', 'Éxito')
+		if(parseInt(data.avisos.segundo) > 0)
+			toastr.success(data.avisos.segundo + ' segundas notificaciones enviadas', 'Éxito')
+		if(parseInt(data.avisos.tercer) > 0)
+			toastr.success(data.avisos.tercer + ' terceras notificaciones enviadas', 'Éxito')
 		loader.hide()
-		$( '#modal-envio' ).modal( 'hide' );
-	}).fail( function( jqXHR, textStatus, errorThrown ) {
-		toastr.error( 'Error al efectuar la operación.', 'Intenta de nuevo' )
+		$('#modal-envio').modal('hide');
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		toastr.error('Error al efectuar la operación.', 'Intenta de nuevo')
 		loader.hide()
 	})
 }

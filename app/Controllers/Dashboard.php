@@ -14,24 +14,24 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 	 * @return none
 	 */
 	public function index() {
-		$this->helper( 'UsersAccount' )->checkLogin();
-		$xml = new XML( 'etc/config/dashboard' . $_SESSION[ 'companiaClave' ] . '.xml' );
+		$this->helper('UsersAccount')->checkLogin();
+		$xml = new XML('etc/config/dashboard' . $_SESSION[ 'companiaClave' ] . '.xml');
 		
-		$fechaInicio = ( is_null( $this->getParams( 'fechaInicio' ) ) ? date('Y-m-d') : $this->getParams( 'fechaInicio' ) );
-		$fechaFin = ( is_null( $this->getParams( 'fechaFin' ) ) ? date('Y-m-d') : $this->getParams( 'fechaFin' ) );
+		$fechaInicio = (is_null($this->getParams('fechaInicio')) ? date('Y-m-d') : $this->getParams('fechaInicio'));
+		$fechaFin = (is_null($this->getParams('fechaFin')) ? date('Y-m-d') : $this->getParams('fechaFin'));
 		$params = [ 'fechaInicio'=>$fechaInicio, 'fechaFin'=>$fechaFin ];
 		$paramsFront = [];
 
 		$paneles = [];
-		$mdlDashboard = $this->getModel( 'Dashboard' );
-		foreach ( $xml->data as $llave => $panel ) {
+		$mdlDashboard = $this->getModel('Dashboard');
+		foreach ($xml->data as $llave => $panel) {
 			$query = $panel[ 'resumen' ];
-			preg_match_all( '/:([a-zA-Z]+)/', $query, $_paramsFront[] );
-			$resumen = $mdlDashboard->run( $query, $params );
+			preg_match_all('/:([a-zA-Z]+)/', $query, $_paramsFront[]);
+			$resumen = $mdlDashboard->run($query, $params);
 			$paneles[] = [ 
 				'titulo'=>$panel[ 'titulo' ],
 				'liga'=>$panel[ 'liga' ],
-				'data'=>array_pop( $resumen ),
+				'data'=>array_pop($resumen),
 				'llave'=>$llave,
 				'icono'=>$panel[ 'icono' ],
 			];
@@ -44,32 +44,32 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 				$paramsFront[] = $value;
 		}
 		
-		$view = $this->newView( 'Dashboard' );
+		$view = $this->newView('Dashboard');
 		$view->paneles = $paneles;
-		$view->menus = $this->helper( 'UsersAccount' )->createMenus();
+		$view->menus = $this->helper('UsersAccount')->createMenus();
 		$view->filtros = $paramsFront;
 		$view->compras = $this->getModel('Dashboard')->getCompras($fechaInicio, $fechaFin);
 		$view->render();
 	}
 
 	public function apiDetallePanelCols() {
-		$xml = new XML( 'etc/config/dashboard' . $_SESSION[ 'companiaClave' ] . '.xml' );
-		$panel = $xml->data[ $this->getParams( 'panel' ) ];
-		$mdlDashboard = $this->getModel( 'Dashboard' );
-		$detalle = $mdlDashboard->run( preg_replace( '/SELECT /', 'SELECT FIRST 1 ', $panel[ 'detalle' ], 1) );
-		$columnas = array_keys( array_pop( $detalle ) );
+		$xml = new XML('etc/config/dashboard' . $_SESSION[ 'companiaClave' ] . '.xml');
+		$panel = $xml->data[ $this->getParams('panel') ];
+		$mdlDashboard = $this->getModel('Dashboard');
+		$detalle = $mdlDashboard->run(preg_replace('/SELECT /', 'SELECT FIRST 1 ', $panel[ 'detalle' ], 1));
+		$columnas = array_keys(array_pop($detalle));
 		$respuesta = [];
-		foreach ( $columnas as $_columna ) {
-			$respuesta[] = [ 'field'=>$_columna, 'title'=>ucwords( str_replace( '_', ' ', $_columna ) ), 'sortable'=>true ];
+		foreach ($columnas as $_columna) {
+			$respuesta[] = [ 'field'=>$_columna, 'title'=>ucwords(str_replace('_', ' ', $_columna)), 'sortable'=>true ];
 		}
-		new Response( 'json', $respuesta );
+		new Response('json', $respuesta);
 	}
 
 	public function apiDetallePanel() {
-		$xml = new XML( 'etc/config/dashboard' . $_SESSION[ 'companiaClave' ] . '.xml' );
-		$panel = $xml->data[ $this->getParams( 'panel' ) ];
-		$mdlDashboard = $this->getModel( 'Dashboard' );
-		new Response( 'json', $mdlDashboard->run( $panel[ 'detalle' ] ) );
+		$xml = new XML('etc/config/dashboard' . $_SESSION[ 'companiaClave' ] . '.xml');
+		$panel = $xml->data[ $this->getParams('panel') ];
+		$mdlDashboard = $this->getModel('Dashboard');
+		new Response('json', $mdlDashboard->run($panel[ 'detalle' ]));
 	}
 
 }

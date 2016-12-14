@@ -11,7 +11,7 @@ class Google2StepHelper {
     
     public function validaCodigo($secret,$code) {
         $time = floor(time() / 30);
-        for ( $i = -1; $i <= 1; $i++) {
+        for ($i = -1; $i <= 1; $i++) {
             
             if ($this->generaCodigo($secret,$time + $i) == $code) {
                 return true;
@@ -53,7 +53,7 @@ class Google2StepHelper {
         //var_dump($url);
         //https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=
         $encoderURL = "https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=".$url;
-        //$encoderURL = sprintf( "%sotpauth://totp/%s@%s&secret=%s",$encoder, $user, $hostname, $secret);
+        //$encoderURL = sprintf("%sotpauth://totp/%s@%s&secret=%s",$encoder, $user, $hostname, $secret);
         
         return $encoderURL;
         

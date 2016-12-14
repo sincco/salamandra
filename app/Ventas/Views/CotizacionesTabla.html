@@ -21,7 +21,7 @@
 					<td>
 						<button type="button" class="btn btn-xs btn-info"><i class="fa fa-eye" aria-hidden="true" onclick="jQuery.redirect('{{constant('BASE_URL')}}ventas/cotizaciones/previo', { id:'{{ cotizacion.cotizacion }}' }, 'POST', '_blank')"><span> Ver</span></i></button>
 					{% if cotizacion.estatus != 'Cancelada' %}
-						<button type="button" class="btn btn-xs btn-warning"><i class="fa fa-envelope" aria-hidden="true" onclick="$( '#modal-envio' ).modal( 'show' ); $('#id-cotizacion').val({{ cotizacion.cotizacion }});"><span> Enviar</span></i></button>
+						<button type="button" class="btn btn-xs btn-warning"><i class="fa fa-envelope" aria-hidden="true" onclick="$('#modal-envio').modal('show'); $('#id-cotizacion').val({{ cotizacion.cotizacion }});"><span> Enviar</span></i></button>
 						<button type="button" class="btn btn-xs btn-danger"><i class="fa fa-trash" aria-hidden="true" onclick="cancelar({{ cotizacion.cotizacion }})"><span> Cancelar</span></i></button>
 					{% endif %}
 					</td>
@@ -55,27 +55,27 @@
 </div>
 
 <script type="text/javascript">
-function enviar( idCotizacion ) {
-	$( '#modal-envio' ).modal( 'hide' )
+function enviar(idCotizacion) {
+	$('#modal-envio').modal('hide')
 	loader.show()
-	sincco.consumirAPI( 'POST', '{{constant("BASE_URL")}}ventas/cotizaciones/apienviar', { id: idCotizacion, email: $( '#email-cliente' ).val() } )
-	.done( function( data ) {
-		toastr.success( 'Cotización enviada.', 'Éxito' )
+	sincco.consumirAPI('POST', '{{constant("BASE_URL")}}ventas/cotizaciones/apienviar', { id: idCotizacion, email: $('#email-cliente').val() })
+	.done(function(data) {
+		toastr.success('Cotización enviada.', 'Éxito')
 		loader.hide()
-	}).fail( function( jqXHR, textStatus, errorThrown ) {
-		toastr.error( 'Error al efectuar la operación.', 'Intenta de nuevo' )
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		toastr.error('Error al efectuar la operación.', 'Intenta de nuevo')
 		loader.hide()
 	})
 }
 
-function cancelar( idCotizacion ) {
+function cancelar(idCotizacion) {
 	loader.show()
-	sincco.consumirAPI( 'POST', '{{constant("BASE_URL")}}ventas/cotizaciones/apicancelar', { id: idCotizacion } )
-	.done( function( data ) {
-		toastr.success( 'Cotización cancelada.', 'Éxito' )
+	sincco.consumirAPI('POST', '{{constant("BASE_URL")}}ventas/cotizaciones/apicancelar', { id: idCotizacion })
+	.done(function(data) {
+		toastr.success('Cotización cancelada.', 'Éxito')
 		loader.hide()
-	}).fail( function( jqXHR, textStatus, errorThrown ) {
-		toastr.error( 'Error al efectuar la operación.', 'Intenta de nuevo' )
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		toastr.error('Error al efectuar la operación.', 'Intenta de nuevo')
 		loader.hide()
 	})
 }

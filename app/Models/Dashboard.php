@@ -6,8 +6,8 @@ class DashboardModel extends Sincco\Sfphp\Abstracts\Model {
 		parent::__construct('sae');
 	}
 	
-	public function run( $query, $params = [] ) {
-		return $this->connector->query( $query, $params );
+	public function run($query, $params = []) {
+		return $this->connector->query($query, $params);
 	}
 
 	public function connector() {

@@ -78,7 +78,7 @@ function buscar() {
 		})
 	})
 	.fail(function(jqXHR, textStatus, errorThrown) {
-		toastr.error( 'Error al efectuar la operación.', 'Intenta de nuevo' );
+		toastr.error('Error al efectuar la operación.', 'Intenta de nuevo');
 		loader.hide();
 	})
 }
@@ -97,16 +97,16 @@ function guardar() {
 	sincco.consumirAPI('POST',BASE_URL + 'produccion/recetas/apialta',{ claveProducto:$("#claveProducto").val(), descripcionProducto: $('#claveProducto').children("option:selected").text(), unidadMedida:$("#unidadMedida").val(), ingredientes:productos })
 	.done(function(data) {
 		if(data.respuesta > 0) {
-			toastr.success( 'Receta guardada', 'Éxito' );
+			toastr.success('Receta guardada', 'Éxito');
 			window.location = '{BASE_URL}produccion/recetas'
 			loader.hide();
 		}
 		else {
-			toastr.error( 'Error al efectuar la operación.', 'Intenta de nuevo' );
+			toastr.error('Error al efectuar la operación.', 'Intenta de nuevo');
 			loader.hide();
 		}
 	}).fail(function(jqXHR, textStatus, errorThrown) {
-		toastr.error( 'Error al efectuar la operación.', 'Intenta de nuevo' );
+		toastr.error('Error al efectuar la operación.', 'Intenta de nuevo');
 		loader.hide();
 	})
 }

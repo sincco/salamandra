@@ -87,19 +87,11 @@ CREATE TABLE IF NOT EXISTS `empresas` (
 -- Estructura de tabla para la tabla `perfiles`
 --
 
-CREATE TABLE IF NOT EXISTS `perfiles` (
-  `perfil` int(11) NOT NULL AUTO_INCREMENT,
-  `descripcion` varchar(75) NOT NULL,
-  PRIMARY KEY (`perfil`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Grupos de usuarios' AUTO_INCREMENT=3 ;
-
---
--- Volcado de datos para la tabla `perfiles`
---
-
-INSERT INTO `perfiles` (`perfil`, `descripcion`) VALUES
-(1, 'Administrador'),
-(2, 'Vendedor');
+CREATE TABLE `perfiles` (
+  `descripcion` CHAR(10) NOT NULL,
+  `opcionesBloqueadas` MEDIUMTEXT NOT NULL,
+  `idPerfil` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`idPerfil`));
 
 -- --------------------------------------------------------
 
@@ -169,7 +161,7 @@ CREATE TABLE IF NOT EXISTS `usuariosEmpresas` (
 CREATE TABLE IF NOT EXISTS `usuariosExtra` (
   `userId` int(11) NOT NULL,
   `nombre` varchar(150) NOT NULL,
-  `perfil` int(11) NOT NULL,
+  `idPerfil` int(11) NOT NULL,
   `filtroClientes` int(11) NOT NULL,
   UNIQUE KEY `usuarios_extra` (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Configuración adicional para usuarios';
@@ -198,13 +190,13 @@ CREATE TABLE `__menus` (
   `menuURL` varchar(150) DEFAULT NULL,
   `menuParent` int(11) NOT NULL,
   PRIMARY KEY (`menuId`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1 COMMENT='System menus';
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1 COMMENT='System menus';
 
 --
 -- Dumping data for table `__menus`
 --
 
-INSERT INTO `__menus` VALUES (1,'Catálogos',NULL,0),(2,'Clientes','catalogo/clientes',1),(3,'Proveedores','catalogo/proveedores',1),(4,'Productos','catalogo/productos',1),(5,'Configuración',NULL,1),(6,'Usuarios','usuarios',5),(7,'Producción',NULL,0),(8,'Recetas','produccion/recetas',7),(9,'Ventas',NULL,0),(10,'Cotizaciones','ventas/cotizaciones',9),(11,'Seleccionar Compañía','selcia',5),(12,'Pedidos','ventas/pedidos',9),(13,'Cuentas por Cobrar',NULL,0),(14,'Adeudos','cxc/adeudos',13),(15,'Reportes',NULL,0),(16,'Consultar','reportes/consultar',15),(17,'Seguridad 2 Pasos','authqr/config',5),(18,'Almacenes','catalogo/almacenes',1),(19,'Procesos','produccion/procesos',7),(20,'Remisiones','ventas/pedidos/remisiones',7),(21,'Envíos','transporte/envios',9),(22,'Transporte',NULL,1),(23,'Operadores','catalogo/operadores',22),(24,'Unidades','catalogo/unidades',22);
+INSERT INTO `__menus` VALUES (1,'Catálogos',NULL,0),(2,'Clientes','catalogo/clientes',1),(3,'Proveedores','catalogo/proveedores',1),(4,'Productos','catalogo/productos',1),(5,'Configuración',NULL,1),(6,'Usuarios','catalogo/usuarios',5),(7,'Producción',NULL,0),(8,'Recetas','produccion/recetas',7),(9,'Ventas',NULL,0),(10,'Cotizaciones','ventas/cotizaciones',9),(11,'Seleccionar Compañía','selcia',5),(12,'Pedidos','ventas/pedidos',9),(13,'Cuentas por Cobrar',NULL,0),(14,'Adeudos','cxc/adeudos',13),(15,'Reportes',NULL,0),(16,'Consultar','reportes/consultar',15),(17,'Seguridad 2 Pasos','authqr/config',5),(18,'Almacenes','catalogo/almacenes',1),(19,'Procesos','produccion/procesos',7),(20,'Remisiones','ventas/pedidos/remisiones',7),(21,'Envíos','transporte/envios',9),(22,'Transporte',NULL,1),(23,'Operadores','catalogo/operadores',22),(24,'Unidades','catalogo/unidades',22),(25,'Perfiles','catalogo/perfiles',5);
 
 -- --------------------------------------------------------
 

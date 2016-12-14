@@ -22,7 +22,7 @@
 <script type="text/javascript">
 
 function validarCodigo() {
-	sincco.consumirAPI('POST','{{constant('BASE_URL')}}authqr/apivalidar', {codigo:$("#codigo").val()} )
+	sincco.consumirAPI('POST','{{constant('BASE_URL')}}authqr/apivalidar', {codigo:$("#codigo").val()})
 	.done(function(data) {
 		if(data.valido)
 			toastr.success('Verficiación aceptada. Redirigiendo', 'Hecho');

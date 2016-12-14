@@ -42,7 +42,20 @@ $('#tree').treeview({data:
 });
 
 function guardar() {
-	console.log($('#tree').treeview('getSelected'));
+	loader.show()
+	sincco.consumirAPI('POST','{{constant('BASE_URL')}}catalogo/perfiles/apiguardar',{data: {descripcion: $('[name=descripcion]').val(), opcionesBloqueadas:$('#tree').treeview('getSelected')}})
+	.done(function(data) {
+		loader.hide()
+		if(data.respuesta) {
+			window.location = BASE_URL + 'catalogo/almacenes'
+		} else {
+			toastr.warning('Error al guardar los datosm. Intenta de nuevo.', 'Error')
+		}
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		console.log(errorThrown);
+		toastr.error('Error al hacer la petición de acceso.', 'Intenta de nuevo')
+		loader.hide()
+	})
 }
 </script>
 

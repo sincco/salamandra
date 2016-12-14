@@ -40,7 +40,7 @@
 						</div>
 					</div>
 					<div class='col-xs-4'>
-						<button type="button" class="btn btn-success" onclick="{{_self.getTemplateName() | replace( { '.html':'' } ) | lower }}.filtrar()">Filtrar</button>
+						<button type="button" class="btn btn-success" onclick="{{_self.getTemplateName() | replace({ '.html':'' }) | lower }}.filtrar()">Filtrar</button>
 					</div>
 				</div>
 			</div>
@@ -59,7 +59,7 @@
 								<div class="huge">Registros: {{ panel.data.REGISTROS|e }} Por: ${{ panel.data.IMPORTE|number_format(2, '.', ',') }}</div>
 								<div>{{ panel.titulo|e }}</div>
 								<div class="dashboard_more">
-									<a href="#" onclick="javascript: {{_self.getTemplateName() | replace( { '.html':'' } ) | lower }}.muestraDetalle( '{{ panel.llave }}', '{{panel.titulo}}' )"><i class="fa fa-eye"></i>Ver más</a>
+									<a href="#" onclick="javascript: {{_self.getTemplateName() | replace({ '.html':'' }) | lower }}.muestraDetalle('{{ panel.llave }}', '{{panel.titulo}}')"><i class="fa fa-eye"></i>Ver más</a>
 								</div>
 							</div>
 						</div>
@@ -111,7 +111,7 @@
 	</div>
 </div>
 
-<script type="text/javascript">{{_self.getTemplateName() | replace( { '.html':'' } ) | lower }}.init();</script>
+<script type="text/javascript">{{_self.getTemplateName() | replace({ '.html':'' }) | lower }}.init();</script>
 
 {% include 'footer_full.html' %}
 {% endspaceless %}

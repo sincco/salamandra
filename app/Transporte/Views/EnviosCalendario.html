@@ -96,7 +96,7 @@ function detalle(id) {
 	loader.hide();
 }
 
-$('#entregas-detalle').on('dbl-click-row.bs.table', function ( row, element ) {
+$('#entregas-detalle').on('dbl-click-row.bs.table', function (row, element) {
 	$(".cantidad").html(Number(element.CANT).toFixed(3));
 	$(".producto").html(element.DESCR);
 	$(".cliente").html(element.NOMBRE);

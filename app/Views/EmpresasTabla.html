@@ -32,30 +32,30 @@
 </div>
 
 <script type="text/javascript">
-$('table').on('dbl-click-row.bs.table', function ( row, element ) {
+$('table').on('dbl-click-row.bs.table', function (row, element) {
     //jQuery.redirect('{{constant('BASE_URL')}}empresas/editar', { 'userName': element[0] });
 });
 
-function borrar( empresa ) {
+function borrar(empresa) {
 	loader.show()
-	sincco.consumirAPI( 'POST', '{{constant("BASE_URL")}}empresas/apiborrar', { empresa: empresa } )
-	.done( function( data ) {
-		toastr.success( 'Empresa eliminada.', 'Éxito' )
+	sincco.consumirAPI('POST', '{{constant("BASE_URL")}}empresas/apiborrar', { empresa: empresa })
+	.done(function(data) {
+		toastr.success('Empresa eliminada.', 'Éxito')
 		loader.hide()
-	}).fail( function( jqXHR, textStatus, errorThrown ) {
-		toastr.error( 'Error al efectuar la operación.', 'Intenta de nuevo' )
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		toastr.error('Error al efectuar la operación.', 'Intenta de nuevo')
 		loader.hide()
 	})
 }
 
-function actualizar( empresa, estatus ) {
+function actualizar(empresa, estatus) {
 	loader.show()
-	sincco.consumirAPI( 'POST', '{{constant("BASE_URL")}}empresas/apieditar', { where: { empresa:empresa }, set: { estatus: estatus } } )
-	.done( function( data ) {
-		toastr.success( 'Empresa actualizada.', 'Éxito' )
+	sincco.consumirAPI('POST', '{{constant("BASE_URL")}}empresas/apieditar', { where: { empresa:empresa }, set: { estatus: estatus } })
+	.done(function(data) {
+		toastr.success('Empresa actualizada.', 'Éxito')
 		loader.hide()
-	}).fail( function( jqXHR, textStatus, errorThrown ) {
-		toastr.error( 'Error al efectuar la operación.', 'Intenta de nuevo' )
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		toastr.error('Error al efectuar la operación.', 'Intenta de nuevo')
 		loader.hide()
 	})
 }

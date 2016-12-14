@@ -6,8 +6,8 @@
 	<div class="row">
 		<h1>Clientes</h1>
 		{% if perfil == 1 %}
-		<button type="button" class="btn btn-warning"><i class="fa fa-ban" aria-hidden="true" onclick="{{_self.getTemplateName() | replace( { '.html':'' } ) | lower }}.mostrarAdeudos()"> <span>Bloquear clientes con adeudos</span></i></button>
-		<button type="button" class="btn btn-success"><i class="fa fa-unlock " aria-hidden="true" onclick="{{_self.getTemplateName() | replace( { '.html':'' } ) | lower }}.mostrarActivar()"> <span>Activar clientes seleccionados</span></i></button>
+		<button type="button" class="btn btn-warning"><i class="fa fa-ban" aria-hidden="true" onclick="{{_self.getTemplateName() | replace({ '.html':'' }) | lower }}.mostrarAdeudos()"> <span>Bloquear clientes con adeudos</span></i></button>
+		<button type="button" class="btn btn-success"><i class="fa fa-unlock " aria-hidden="true" onclick="{{_self.getTemplateName() | replace({ '.html':'' }) | lower }}.mostrarActivar()"> <span>Activar clientes seleccionados</span></i></button>
 		{% endif %}
 		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true" id="clientes">
 			<thead>
@@ -45,7 +45,7 @@
 				<div class="row">
 					<div class="col-xs-4"></div>
 					<div class="col-xs-8">
-						<button type="button" class="btn btn-danger btn-xs"><i class="fa fa-ban " aria-hidden="true" onclick="{{_self.getTemplateName() | replace( { '.html':'' } ) | lower }}.bloquearAdeudos()"><span> Bloquear los clientes con adeudos</span></i></button>
+						<button type="button" class="btn btn-danger btn-xs"><i class="fa fa-ban " aria-hidden="true" onclick="{{_self.getTemplateName() | replace({ '.html':'' }) | lower }}.bloquearAdeudos()"><span> Bloquear los clientes con adeudos</span></i></button>
 					</div>
 				</div>
 			</div>
@@ -91,7 +91,7 @@
 				<div class="row">
 					<div class="col-xs-4"></div>
 					<div class="col-xs-8">
-						<button type="button" class="btn btn-danger btn-xs"><i class="fa fa-ban " aria-hidden="true" onclick="{{_self.getTemplateName() | replace( { '.html':'' } ) | lower }}.activarClientes()"><span> Activar los clientes seleccionados</span></i></button>
+						<button type="button" class="btn btn-danger btn-xs"><i class="fa fa-ban " aria-hidden="true" onclick="{{_self.getTemplateName() | replace({ '.html':'' }) | lower }}.activarClientes()"><span> Activar los clientes seleccionados</span></i></button>
 					</div>
 				</div>	
 			</div>
