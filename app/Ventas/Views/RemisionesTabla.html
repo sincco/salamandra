@@ -13,7 +13,7 @@
 			<tbody>
 				{% for remision in remisiones %}
 				<tr>
-					<td>{{ remision.CVE_DOC|e }}</td>
+					<td>{{ remision.CVE_DOC|trim }}</td>
 					<td>{{ remision.NOMBRE|e }}</td>
 					<td>{{ remision.FECHA_DOC|date("d/m/Y") }}</td>
 					<td>{{ remision.FECHA_ENT|date("d/m/Y") }}</td>
@@ -29,5 +29,55 @@
 		</table>
 	</div>
 </div>
+
+<div id="modal" class="modal fade">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="decoder.stop();">&times;</button>
+				<h4 id="modal-titulo" class="modal-title">Detalle de remisiones</h4>
+			</div>
+			<div class="modal-body">
+				<table id="pedido-detalle"></table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$('table').on('dbl-click-row.bs.table', function ( row, element ) {
+	var cols = [{"field":"CVE_ART","title":"Producto","sortable":true},
+		{"field":"REMISION","title":"Remision","sortable":true},
+		{"field":"CAT_PEDIDA","title":"Cantidad pedida","sortable":true},
+		{"field":"CANT_ENTREGADA","title":"Cantidad entregada","sortable":true}];
+	var data = false;
+	
+	loader.show();
+
+	$('#pedido-detalle').bootstrapTable( 'destroy' );
+
+	$('#pedido-detalle').bootstrapTable({
+		method: 'get',
+		url: BASE_URL + 'ventas/pedidos/apidetalleremisiones/pedido/' + element[0].trim(),
+		columns: cols,
+		height: 600,
+		striped: true,
+		pagination: true,
+		pageSize: 25,
+		pageList: [10, 25, 50, 100, 200],
+		search: true,
+		showColumns: true,
+		showRefresh: true,
+		showExport: true,
+		mobileResponsive: true,
+		minimumCountColumns: 2
+	});
+
+	$('#modal').modal('show');
+
+	loader.hide();
+});
+</script>
+
 
 {% include 'footer.html' %}
