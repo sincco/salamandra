@@ -71,7 +71,7 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 	public function createMenus() {
 		$this->checkLogin();
 		$menus = $this->menuOptions(0);
-		$menus[] = ['text'=>'Salir', 'url'=>BASE_URL.'login/salir'];
+		$menus[] = ['text'=>'Salir', 'url'=>'login/salir'];
 		$response = $this->buildMenu($menus);
 		return $response;
 	}
