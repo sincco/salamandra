@@ -8,15 +8,13 @@
 		<table id='socio' data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
 			<thead>
 				<tr>
-					<th data-sortable="true" data-field="idUnidad">Id</th><th data-sortable="true" data-field="idSocio">Socio</th><th data-sortable="true" data-field="nombre">Nombre</th><th data-sortable="true" data-field="noEco">No. Eco</th><th data-sortable="true" data-field="estatus">Estatus</th>
+					<th data-sortable="true" data-field="idUnidad">Id</th><th data-sortable="true" data-field="noEco">No. Eco</th><th data-sortable="true" data-field="estatus">Estatus</th>
 				</tr>
 			</thead>
 			<tbody>
 				{% for dato in datos %}
 				<tr>
 					<td>{{ dato.idUnidad|e }}</td>
-					<td>{{ dato.idSocio|e }}</td>
-					<td>{{ dato.nombre|e }}</td>
 					<td>{{ dato.noEco|e }}</td>
 					<td>{{ dato.estatus|e }}</td>
 				</tr>
@@ -40,11 +38,6 @@
 	  						<div class="form-group">
 	  							<input type="hidden" class="form-control col-lg-3" name="idUnidad">
 								<label>noEco <input type="text" class="form-control col-lg-3" name="noEco"></label><br>
-								<label>Socio (dueño de unidad) <select class="form-control col-lg-3" name="idSocio">
-								{% for socio in socios %}
-									<option value="{{ socio.idSocio }}">{{ socio.nombre }}</option>
-								{% endfor %}	
-								</select></label><br>
 								<label>Estatus <select class="form-control col-lg-3" name="estatus"><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option></select></label>
 							</div>
 						</form>
@@ -63,7 +56,6 @@
 $('table').on('dbl-click-row.bs.table', function (row, element) {
 	$('form input[name=idUnidad]').val(element.idUnidad);
 	$('form input[name=noEco]').val(element.noEco);
-	$('form input[name=idSocio]').val(element.idSocio);
 	$('form input[name=estatus]').val(element.estatus);
 	$('#modal-nueva').modal('show');
 });
