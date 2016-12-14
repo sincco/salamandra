@@ -79,7 +79,7 @@ function guardarCaptura(data) {
 	.done(function(data) {
 		loader.hide();
 		if (data.respuesta) {
-			window.location = BASE_URL + 'catalogos/operadores';
+			window.location = BASE_URL + 'catalogo/operadores';
 		} else {
 			toastr.error('Error al hacer la petición.', 'Intenta de nuevo');
 		}
