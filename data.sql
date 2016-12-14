@@ -210,7 +210,7 @@ CREATE TABLE IF NOT EXISTS `__usersControl` (
   `userEmail` varchar(150) DEFAULT NULL,
   `userPassword` varchar(60) DEFAULT NULL,
   `userStatus` char(1) DEFAULT NULL,
-  PRIMARY KEY (`userName`)
+  PRIMARY KEY (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
