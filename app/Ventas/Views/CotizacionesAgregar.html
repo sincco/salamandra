@@ -17,7 +17,7 @@
         <div class="col-xs-6">
           <select id="lista-cliente" class="form-control col-xs-6">
           {% for cliente in clientes %}
-            <option value="{{cliente.CLAVE}}">{{cliente.NOMBRE}}</option>
+            <option value="{{cliente.CLAVE|trim}}">{{cliente.NOMBRE|trim}}</option>
           {% endfor %}
           </select>
         </div>
@@ -30,12 +30,16 @@
   		  <div class="col-xs-6">
     			<select id="lista-precio" class="form-control col-xs-6">
     			{% for precio in precios %}
-    				<option value="{{precio.CVE_PRECIO}}">{{precio.DESCRIPCION}}</option>
+    				<option value="{{precio.CVE_PRECIO|trim}}">{{precio.DESCRIPCION|trim}}</option>
     			{% endfor %}
     			</select>
   		  </div>
       </div>
     </div>
+
+  </div>
+  
+  <div class="row">
 
     <div class="col-xs-2">
       <button type="button" class="btn btn-success"><i class="fa fa-hdd-o" aria-hidden="true" onclick="guardar()"><span> Guardar</span></i></button>
@@ -100,20 +104,23 @@ function crearTabla () {
             hot.setDataAtCell(changes[0][0], 3, '1.00')
             hot.setDataAtCell(changes[0][0], 4, 1)
           } else {
-            sincco.consumirAPI('POST', '{{constant("BASE_URL")}}catalogo/productos/apiClave', { data: changes[0][3], listaPrecio: $('#lista-precio').val() })
-            .done(function(data) {
-              if (data.length) {
-                hot.setDataAtCell(changes[0][0], 1, data[0].DESCR)
-                hot.setDataAtCell(changes[0][0], 2, data[0].UNI_MED)
-                hot.setDataAtCell(changes[0][0], 3, data[0].PRECIO)
-                hot.setDataAtCell(changes[0][0], 4, 1)
-              } else {
-                hot.setDataAtCell(changes[0][0], 1, 'NO EXISTE')
-                toastr.error('El producto no existe.', 'Intenta de nuevo')
-              }
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-              console.log(errorThrown)
-            })
+            var cve = changes[0][3];
+            if (cve.trim() != '') {
+              sincco.consumirAPI('POST', '{{constant("BASE_URL")}}catalogo/productos/apiClave', { data: cve.trim(), listaPrecio: $('#lista-precio').val() })
+              .done(function(data) {
+                if (data.length) {
+                  hot.setDataAtCell(changes[0][0], 1, data[0].DESCR)
+                  hot.setDataAtCell(changes[0][0], 2, data[0].UNI_MED)
+                  hot.setDataAtCell(changes[0][0], 3, data[0].PRECIO)
+                  hot.setDataAtCell(changes[0][0], 4, 1)
+                } else {
+                  hot.setDataAtCell(changes[0][0], 1, 'NO EXISTE')
+                  toastr.error('El producto no existe.', 'Intenta de nuevo')
+                }
+              }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.log(errorThrown)
+              })
+            }
           }
         }
         if (changes[0][1] == "cantidad") {
@@ -138,11 +145,11 @@ function crearTabla () {
           method: 'get',
           url: '{{constant('BASE_URL')}}catalogo/productos/apicatalogo',
           columns: [{ field:'CVE_ART', title:'Clave' }, { field:'DESCR', title:'Descripcion' }, { field:'UNI_MED', title:'Unidad' }],
-          height: 600,
+          height: 300,
           striped: true,
           pagination: true,
-          pageSize: 25,
-          pageList: [10, 25, 50, 100, 200],
+          pageSize: 50,
+          pageList: [50, 100, 200],
           search: true,
           showColumns: true,
           showRefresh: true,

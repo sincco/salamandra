@@ -6,15 +6,11 @@ use \Sincco\Sfphp\Response;
 class AlmacenesController extends Sincco\Sfphp\Abstracts\Controller {
 
 	public function index() {
-		$mdlSalamandra = $this->getModel('Salamandra');
-		$almacenes = $mdlSalamandra
-					->table('almacenes')
-					->where('status', 'Activo')
-					->where('empresa', $_SESSION[ 'companiaClave' ])
-					->getData();
 		$this->helper('UsersAccount')->checkLogin();
 		$view = $this->newView('Catalogo\AlmacenesTabla');
-		$view->almacenes = $almacenes;
+		$view->almacenes = $this->getModel('Firebird')
+					->table('ALMACENES' . $_SESSION[ 'companiaClave' ])
+					->getData();
 		$view->menus = $this->helper('UsersAccount')->createMenus();
 		$view->render();
 	}

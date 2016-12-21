@@ -15,7 +15,7 @@ class ProductosModel extends Sincco\Sfphp\Abstracts\Model {
 		return $this->connector->query('SELECT prd.CVE_ART, prd.DESCR, prd.EXIST, prd.STOCK_MIN, prd.UNI_MED, prd.COSTO_PROM, pre.CVE_PRECIO, pre.PRECIO
 			FROM INVE' . $_SESSION[ 'companiaClave' ] . ' prd
 			INNER JOIN PRECIO_X_PROD' . $_SESSION[ 'companiaClave' ] . ' pre USING (CVE_ART)
-			WHERE prd.CVE_ART = :DATA AND pre.CVE_PRECIO = :PRECIO', [ 'DATA'=>$data, 'PRECIO'=>$listaPrecio ]);
+			WHERE prd.CVE_ART = :CVE_ART AND pre.CVE_PRECIO = :PRECIO', [ 'CVE_ART'=>$data, 'PRECIO'=>$listaPrecio ]);
 	}
 
 	public function getListaPrecios() {

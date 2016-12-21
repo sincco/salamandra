@@ -18,6 +18,9 @@ class CotizacionesController extends Sincco\Sfphp\Abstracts\Controller {
 		$view 			= $this->newView('Ventas\CotizacionesAgregar');
 		$view->menus 	= $this->helper('UsersAccount')->createMenus();
 		$view->precios 	= $mdlProductos->getListaPrecios();
+		$view->almacenes = $this->getModel('Firebird')
+					->table('ALMACENES' . $_SESSION['companiaClave'])
+					->getData();
 		$user = unserialize($_SESSION[ 'sincco\login\controller']);
 		if (intval((isset($_SESSION[ 'extraFiltroClientes' ]) ? $_SESSION[ 'extraFiltroClientes' ] : 0) == 1)) {
 			$view->clientes = $mdlClientes->getByVendedor($user[ 'userName' ]);
