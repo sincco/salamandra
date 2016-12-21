@@ -23,20 +23,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `almacenes`
---
-
-CREATE TABLE IF NOT EXISTS `almacenes` (
-  `empresa` char(3) NOT NULL,
-  `almacen` char(3) NOT NULL,
-  `descripcion` varchar(75) NOT NULL,
-  `status` enum('Activo','Bloqueado') NOT NULL,
-  UNIQUE KEY `empresa_almacen` (`empresa`,`almacen`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Almacenes para procesos de produccion';
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `cotizaciones`
 --
 
@@ -190,13 +176,13 @@ CREATE TABLE `__menus` (
   `menuURL` varchar(150) DEFAULT NULL,
   `menuParent` int(11) NOT NULL,
   PRIMARY KEY (`menuId`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1 COMMENT='System menus';
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1 COMMENT='System menus';
 
 --
 -- Dumping data for table `__menus`
 --
 
-INSERT INTO `__menus` VALUES (1,'Catálogos',NULL,0),(2,'Clientes','catalogo/clientes',1),(3,'Proveedores','catalogo/proveedores',1),(4,'Productos','catalogo/productos',1),(5,'Configuración',NULL,1),(6,'Usuarios','catalogo/usuarios',5),(7,'Producción',NULL,0),(8,'Recetas','produccion/recetas',7),(9,'Ventas',NULL,0),(10,'Cotizaciones','ventas/cotizaciones',9),(11,'Seleccionar Compañía','selcia',5),(12,'Pedidos','ventas/pedidos',9),(13,'Cuentas por Cobrar',NULL,0),(14,'Adeudos','cxc/adeudos',13),(15,'Reportes',NULL,0),(16,'Consultar','reportes/consultar',15),(17,'Seguridad 2 Pasos','authqr/config',5),(18,'Almacenes','catalogo/almacenes',1),(19,'Procesos','produccion/procesos',7),(20,'Remisiones','ventas/pedidos/remisiones',7),(21,'Envíos','transporte/envios',9),(22,'Transporte',NULL,1),(23,'Operadores','catalogo/operadores',22),(24,'Unidades','catalogo/unidades',22),(25,'Perfiles','catalogo/perfiles',5);
+INSERT INTO `__menus` VALUES (1,'Catálogos',NULL,0),(2,'Clientes','catalogo/clientes',1),(3,'Proveedores','catalogo/proveedores',1),(4,'Productos','catalogo/productos',1),(5,'Configuración',NULL,1),(6,'Usuarios','catalogo/usuarios',5),(7,'Producción',NULL,0),(8,'Recetas','produccion/recetas',7),(9,'Ventas',NULL,0),(10,'Cotizaciones','ventas/cotizaciones',9),(11,'Seleccionar Compañía','selcia',5),(12,'Pedidos','ventas/pedidos',9),(13,'Cuentas por Cobrar',NULL,0),(14,'Adeudos','cxc/adeudos',13),(15,'Reportes',NULL,0),(16,'Consultar','reportes/consultar',15),(17,'Seguridad 2 Pasos','authqr/config',5),(18,'Almacenes','catalogo/almacenes',1),(19,'Procesos','produccion/procesos',7),(20,'Remisiones','ventas/pedidos/remisiones',7),(21,'Envíos','transporte/envios',9),(22,'Transporte',NULL,1),(23,'Operadores','catalogo/operadores',22),(24,'Unidades','catalogo/unidades',22),(25,'Perfiles','catalogo/perfiles',5),(26,'Control de Proyectos','',0),(27,'Proyectos','proyectos/proyectos',26);
 
 -- --------------------------------------------------------
 
@@ -244,7 +230,7 @@ CREATE TABLE `unidades` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `unidades`
+-- Estructura de tabla para la tabla `entregas`
 --
 
 CREATE TABLE `entregas` (
@@ -258,6 +244,38 @@ CREATE TABLE `entregas` (
   `entregado` BIT NULL,
   `tarimasPorRecoger` INT NULL COMMENT 'Control de entregas',
   PRIMARY KEY (`idEntrega`));
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `proyectos`
+--
+
+CREATE TABLE `salamandra`.`proyectos` (
+  `idProyecto` INT NOT NULL AUTO_INCREMENT,
+  `clave` CHAR(10) NOT NULL,
+  `titulo` VARCHAR(150) NOT NULL,
+  `resumen` MEDIUMTEXT NULL,
+  `estatus` ENUM('En proceso', 'Cancelado', 'Pendiente', 'Terminado', 'Pausado', 'Cotizado', 'Aprobado') NOT NULL,
+  PRIMARY KEY (`idProyecto`));
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `proyectosTareas`
+--
+
+CREATE TABLE `salamandra`.`proyectosTareas` (
+  `idTarea` INT NOT NULL AUTO_INCREMENT,
+  `idProyecto` INT NOT NULL COMMENT 'Control de tareas asignadas al proyecto',
+  `titulo` VARCHAR(150) NOT NULL,
+  `resumen` MEDIUMTEXT NULL,
+  `fechaInicioProyectado` DATE NULL,
+  `fechaInicioReal` DATE NULL,
+  `fechaFinProyectado` DATE NULL,
+  `fechaFinReal` DATE NULL,
+  `estatus` ENUM('En proceso', 'Pendiente', 'Terminado') NOT NULL COMMENT 'Control de tareas asignadas a un proyecto',
+  PRIMARY KEY (`idTarea`));
 
 -- --------------------------------------------------------
 
