@@ -2,22 +2,35 @@
 {% include 'menu.html' %}
 
 <div class="container">
+	{% for proyecto in proyectos %}
+	<div class="page-header">
+		<div class="col-xs-6">
+			<h2>{{ proyecto.clave|trim }}<small>{{ proyecto.titulo|trim }}</small></h2>
+			<h4>{{ proyecto.estatus|trim }}</h4>
+		</div>
+		<div class="col-xs-6">
+			<h6>{{ proyecto.resumen|trim }}</h6>
+		</div>
+	</div>
+	{% endfor %}
+
 	<div class="row">
-		<h1>Proyectos</h1>
-		<button type="button" class="btn btn-success" onclick="nuevaCaptura();"><i class="fa fa-plus-circle" aria-hidden="true"> <span>Nuevo</span></i></button>
+		<button type="button" class="btn btn-success" onclick="nuevaCaptura();"><i class="fa fa-plus-circle" aria-hidden="true"> <span>Nueva tarea</span></i></button>
 		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
 			<thead>
 				<tr>
-					<th data-field="clave">Clave</th><th data-field="titulo">Título</th><th data-field="estatus">Estatus</th><th></th>
+					<th data-field="clave">Id</th><th data-field="titulo">Tirulo</th><th data-field="estatus">Estatus</th><th>Inicio Planeado</th><th>Fin Planeado</th>
 				</tr>
 			</thead>
 			<tbody>
-				{% for proyecto in proyectos %}
+				{% for tarea in tareas %}
 				<tr>
-					<td>{{ proyecto.clave|trim }}</td>
-					<td>{{ proyecto.titulo|trim }}</td>
-					<td>{{ proyecto.estatus|trim }}</td>
-					<td><button type="button" class="btn btn-primary btn-xs" onclick="jQuery.redirect(BASE_URL + 'proyectos/proyectos/tareas', { 'idProyecto': {{ proyecto.idProyecto|trim }} });"><i class="fa fa-tasks" aria-hidden="true"> <span>Tareas</span></i></button></td>
+					<td>{{ tarea.idTarea|trim }}</td>
+					<td>{{ tarea.titulo|trim }}</td>
+					<td>{{ tarea.estatus|trim }}</td>
+					<td>{{ tarea.fechaInicioProyectado|trim }}</td>
+					<td>{{ tarea.fechaFinProyectado|trim }}</td>
+					<td><button type="button" class="btn btn-primary btn-xs" onclick="jQuery.redirect(BASE_URL + 'tareas/tareas/tareas', { 'idProyecto': {{ tarea.idProyecto|trim }} });"><i class="fa fa-tasks" aria-hidden="true"> <span>Tareas</span></i></button></td>
 				</tr>
 				{% endfor %}
 			</tbody>
@@ -30,14 +43,16 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 id="modal-titulo" class="modal-title">Registrar nuevo proyecto</h4>
+				<h4 id="modal-titulo" class="modal-title">Control de tareas</h4>
 			</div>
 			<div class="modal-body">
 				<div class="row">
 					<div class="col-xs-12">
 						<form role="form">
 	  						<div class="form-group">
-	  							<input type="hidden" class="form-control col-xs-12" name="idProyecto">
+	  						{% for proyecto in proyectos %}
+	  							<input type="hidden" class="form-control col-xs-12" name="idProyecto" value="{{ proyecto.idProyecto|trim }}">
+	  						{% endfor %}
 	  							<label>Clave</label> <input type="text" class="form-control col-xs-12" name="clave"><br>
 								<label>Título</label> <input type="text" class="form-control col-xs-12" name="titulo"><br>
 								<label>Resumen</label> <textarea class="form-control" rows="3" name="resumen"></textarea><br>

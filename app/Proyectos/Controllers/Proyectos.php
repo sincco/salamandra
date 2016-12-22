@@ -8,23 +8,26 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 	public function index() {
 		$this->helper('UsersAccount')->checkLogin();
 		$view = $this->newView('Proyectos\ProyectosTabla');
-		$view->almacenes = $this->getModel('Salamandra')
+		$view->proyectos = $this->getModel('Salamandra')
 					->table('proyectos')
 					->getData();
 		$view->menus = $this->helper('UsersAccount')->createMenus();
 		$view->render();
 	}
 
-	public function agregar() {
+	public function nuevo() {
 		$this->helper('UsersAccount')->checkLogin();
-		$view = $this->newView('Catalogo\AlmacenesAlta');
+		$view = $this->newView('Proyectos\ProyectoNuevo');
 		$view->menus = $this->helper('UsersAccount')->createMenus();
 		$view->render();
 	}
 
-	public function apiAlta() {
-		$id = $this->getModel('Catalogo\Almacenes')->insert($this->getParams());
-		new Response('json', [ 'respuesta'=>$id ]);
+	public function tareas() {
+		$this->helper('UsersAccount')->checkLogin();
+		$view = $this->newView('Proyectos\ProyectoTareas');
+		$view->menus = $this->helper('UsersAccount')->createMenus();
+		$view->proyectos = $this->getModel('Proyectos\Proyectos')->getById($this->getParams('idProyecto'));
+		$view->render();
 	}
 
 }
