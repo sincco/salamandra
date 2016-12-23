@@ -27,6 +27,8 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		$view = $this->newView('Proyectos\ProyectoTareas');
 		$view->menus = $this->helper('UsersAccount')->createMenus();
 		$view->proyectos = $this->getModel('Proyectos\Proyectos')->getById($this->getParams('idProyecto'));
+		$view->tareas = $this->getModel('Proyectos\Tareas')->getByIdProyecto($this->getParams('idProyecto'));
+		$view->idProyecto = $this->getParams('idProyecto');
 		$view->render();
 	}
 

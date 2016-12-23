@@ -30,7 +30,6 @@
 					<td>{{ tarea.estatus|trim }}</td>
 					<td>{{ tarea.fechaInicioProyectado|trim }}</td>
 					<td>{{ tarea.fechaFinProyectado|trim }}</td>
-					<td><button type="button" class="btn btn-primary btn-xs" onclick="jQuery.redirect(BASE_URL + 'tareas/tareas/tareas', { 'idProyecto': {{ tarea.idProyecto|trim }} });"><i class="fa fa-tasks" aria-hidden="true"> <span>Tareas</span></i></button></td>
 				</tr>
 				{% endfor %}
 			</tbody>
@@ -50,13 +49,22 @@
 					<div class="col-xs-12">
 						<form role="form">
 	  						<div class="form-group">
-	  						{% for proyecto in proyectos %}
-	  							<input type="hidden" class="form-control col-xs-12" name="idProyecto" value="{{ proyecto.idProyecto|trim }}">
-	  						{% endfor %}
-	  							<label>Clave</label> <input type="text" class="form-control col-xs-12" name="clave"><br>
+	  							<input type="text" class="form-control col-xs-12" name="idProyecto">
 								<label>Título</label> <input type="text" class="form-control col-xs-12" name="titulo"><br>
 								<label>Resumen</label> <textarea class="form-control" rows="3" name="resumen"></textarea><br>
-								<label>Estatus</label> <select class="form-control col-xs-12" name="estatus"><option value="Pendiente">Pendiente</option><option value="Cotizado">Cotizado</option><option value="Aprobado">Aprobado</option><option value="En proceso">En proceso</option><option value="Cancelado">Cancelado</option><option value="Terminado">Terminado</option><option value="Pausado">Pausado</option></select></label>
+								<label>Fecha de Inicio Proyectado</label>
+								<div class="form-group">
+									<div class='input-group date' id='fecha-inicio'>
+										<input type='text' class="form-control" name="fechaInicioProyectado" /><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+									</div>
+								</div><br>
+								<label>Fecha de Finalización Proyectada</label>
+								<div class="form-group">
+									<div class='input-group date' id='fecha-fin'>
+										<input type='text' class="form-control" name="fechaFinProyectado" /><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+									</div>
+								</div><br>
+								<label>Estatus</label> <select class="form-control col-xs-12" name="estatus"><option value="Pendiente">Pendiente</option><option value="En proceso">En proceso</option><option value="Terminado">Terminado</option></select></label>
 							</div>
 						</form>
 					</div>
@@ -71,12 +79,21 @@
 
 
 <script type="text/javascript">
+$('#fecha-inicio').datetimepicker({
+	useCurrent: true,
+	format: 'YYYY-MM-DD'
+});
+$('#fecha-fin').datetimepicker({
+	useCurrent: true,
+	format: 'YYYY-MM-DD'
+});
+
 $('table').on('dbl-click-row.bs.table', function (row, element) {
 	sincco.consumirAPI('GET',BASE_URL + 'api/v1/proyectos/clave/' + element.clave)
 	.done(function(data) {
 		loader.hide();
 		var proyecto = data.respuesta[0];
-		$('form input[name=idProyecto]').val(proyecto.idProyecto);
+		$('form input[name=idTarea]').val(proyecto.idTarea);
 		$('form input[name=clave]').val(proyecto.clave);
 		$('form input[name=titulo]').val(proyecto.titulo);
 		$('form textarea[name=resumen]').val(proyecto.resumen);
@@ -91,21 +108,26 @@ $('table').on('dbl-click-row.bs.table', function (row, element) {
 
 function nuevaCaptura() {
 	$('form input').val('');
-	$('form input[name=idProyecto]').val(0);
+	$('form input[name=idProyecto]').val({{ idProyecto }});
+	$('form input[name=titulo]').val('');
+	$('form input[name=fechaInicioProyectado]').val('');
+	$('form input[name=fechaInicioProyectado]').val('');
+	$('form textarea[name=resumen]').val('');
 	$('#modal-nueva').modal('show');
 }
 
 function guardarCaptura(data) {
 	loader.show();
 	var method = 'POST';
-	if(data.idProyecto > 0) {
+	if(data.idTarea > 0) {
 		method = 'PUT';
 	}
-	sincco.consumirAPI(method,BASE_URL + 'api/v1/proyectos',{data:data})
+	sincco.consumirAPI(method,BASE_URL + 'api/v1/proyectostareas',{data:data})
 	.done(function(data) {
 		loader.hide();
 		if (data.respuesta) {
 			window.location = BASE_URL + 'proyectos/proyectos';
+			toastr.success('Tarea guardada.', 'Éxito!');
 		} else {
 			toastr.error('Error al hacer la petición.', 'Intenta de nuevo');
 		}

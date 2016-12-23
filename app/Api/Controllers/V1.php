@@ -91,4 +91,28 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 				break;
 		}
 	}
+
+	public function proyectosTareas() {
+		$model = $this->getModel('Proyectos\Tareas');
+		$data = $this->getParams('data');
+		switch ($this->getRequest()['method']) {
+			case 'GET':
+				new Response('json', ['respuesta'=>$model->getByClave($this->getParams('idProyecto'))]);
+				break;
+			case 'POST':
+				unset($data['idTarea']);
+				$id = $model->insert($data);
+				new Response('json', ['respuesta'=>$id]);
+				break;
+			case 'PUT':
+				$where = ['idTarea'=>$data['idTarea']];
+				unset($data['idTarea']);
+				$model->update($data, $where);
+				new Response('json', ['respuesta'=>true]);
+				break;
+			default:
+				new Response('htmlstatuscode', 'Operacion no soportada');
+				break;
+		}
+	}
 }
