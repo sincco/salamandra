@@ -2,6 +2,7 @@
 
 use \Sincco\Tools\Debug;
 use \Sincco\Sfphp\Response;
+use \Sincco\Tools\Gantt;
 
 class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 
@@ -32,4 +33,35 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		$view->render();
 	}
 
+	public function gantt() {
+		$data = array();
+		$data[] = array(
+		'label' => 'Project 1',
+		'start' => '2012-04-20', 
+		'end'   => '2012-05-12',
+		'class' => ''
+		);
+
+		$data[] = array(
+		'label' => 'Project 2',
+		'start' => '2012-04-22', 
+		'end'   => '2012-05-22', 
+		'class' => 'important',
+		);
+
+		$data[] = array(
+		'label' => 'Project 3',
+		'start' => '2012-05-25', 
+		'end'   => '2012-06-20',
+		'class' => 'urgent',
+		);
+
+		$gantti = new Gantt($data, array(
+		'title'      => 'Demo',
+		'cellwidth'  => 25,
+		'cellheight' => 35,
+		'class' => ''
+		));
+		var_dump($gantti);
+	}
 }

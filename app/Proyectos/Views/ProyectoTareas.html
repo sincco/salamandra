@@ -16,10 +16,11 @@
 
 	<div class="row">
 		<button type="button" class="btn btn-success" onclick="nuevaCaptura();"><i class="fa fa-plus-circle" aria-hidden="true"> <span>Nueva tarea</span></i></button>
+		<button type="button" class="btn btn-warning" onclick="jQuery.redirect(BASE_URL + 'proyectos/proyectos/gantt', { 'idProyecto': {{ idProyecto|trim }} });"><i class="fa fa-line-chart" aria-hidden="true"> <span>Ver diagrama</span></i></button>
 		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
 			<thead>
 				<tr>
-					<th data-field="clave">Id</th><th data-field="titulo">Tirulo</th><th data-field="estatus">Estatus</th><th>Inicio Planeado</th><th>Fin Planeado</th>
+					<th data-field="clave">Id</th><th data-field="titulo">Título</th><th data-field="estatus">Estatus</th><th>Inicio Planeado</th><th>Fin Planeado</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -49,7 +50,7 @@
 					<div class="col-xs-12">
 						<form role="form">
 	  						<div class="form-group">
-	  							<input type="text" class="form-control col-xs-12" name="idProyecto">
+	  							<input type="hidden" class="form-control col-xs-12" name="idProyecto">
 								<label>Título</label> <input type="text" class="form-control col-xs-12" name="titulo"><br>
 								<label>Resumen</label> <textarea class="form-control" rows="3" name="resumen"></textarea><br>
 								<label>Fecha de Inicio Proyectado</label>
@@ -126,7 +127,8 @@ function guardarCaptura(data) {
 	.done(function(data) {
 		loader.hide();
 		if (data.respuesta) {
-			window.location = BASE_URL + 'proyectos/proyectos';
+			//window.location = BASE_URL + 'proyectos/proyectos';
+			window.location.reload();
 			toastr.success('Tarea guardada.', 'Éxito!');
 		} else {
 			toastr.error('Error al hacer la petición.', 'Intenta de nuevo');

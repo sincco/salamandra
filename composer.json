@@ -5,6 +5,7 @@
         "sincco/login": "dev-master",
         "sincco/elastic-email": ">=1.0",
         "sincco/excell": ">=1.0",
+        "sincco/gantt": "dev-master",
         "fbourigault/composer-mkdir": "^2.0"
     },
     "scripts": {
