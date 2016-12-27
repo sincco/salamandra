@@ -1,0 +1,10 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+{% spaceless %}
+	{% autoescape %}
+	{{ gantt|raw }}
+	{% endautoescape %}
+{% endspaceless %}
+
+{% include 'footer.html' %}

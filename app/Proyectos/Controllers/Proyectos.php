@@ -62,6 +62,11 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		'cellheight' => 35,
 		'class' => ''
 		));
-		var_dump($gantti);
+
+		$this->helper('UsersAccount')->checkLogin();
+		$view = $this->newView('Proyectos\ProyectoGantt');
+		$view->gantt = $gantti->render();
+		$view->menus = $this->helper('UsersAccount')->createMenus();
+		$view->render();
 	}
 }
