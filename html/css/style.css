@@ -49,4 +49,4 @@ table { font-family: "Ubuntu", sans-serif;  font-size: 0.8em; }
 .gantt-block.urgent { background: #ff0000 !important; }
 .gantt-block { background-color: #268bd2 !important; }
 .gantt-item .gantt-days .gantt-day { background-color: #fff !important; }
-.gantt time { width: 4px !important; background: #209e23 !important; }
+.gantt time { width: 4px !important; background: #ffd900 !important; }
