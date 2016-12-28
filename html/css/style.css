@@ -38,3 +38,15 @@ table { font-family: "Ubuntu", sans-serif;  font-size: 0.8em; }
 @media (max-width: 770px) {
   .nav > .dropdown-submenu > .dropdown-menu { background-color: #f8f8f8; top:0px; left: 70px; margin-top: -6px; margin-left: -1px; -webkit-border-radius: 0 6px 6px 6px; -moz-border-radius: 0 6px 6px; border-radius: 0 6px 6px 6px; }
 }
+
+.gantt { color: #fff !important; background: #777 !important; }
+.gantt li { color: #fff !important; }
+.gantt aside .gantt-label strong { color: #fff !important; text-transform: uppercase; font-weight: bolder; }
+.gantt-months { background-color: #555; }
+.gantt-items { background: #ccc !important; }
+.gantt-day.weekend span { background-color: #8fb3b2 !important; }
+.gantt-block.important { background: #ff9500 !important; }
+.gantt-block.urgent { background: #ff0000 !important; }
+.gantt-block { background-color: #268bd2 !important; }
+.gantt-item .gantt-days .gantt-day { background-color: #fff !important; }
+.gantt time { width: 4px !important; background: #209e23 !important; }

@@ -1,10 +1,34 @@
 {% include 'header.html' %}
 {% include 'menu.html' %}
 
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+		<button type="button" class="btn btn-primary btn-lg" onclick="ganttToImage();"><i class="fa fa-download" aria-hidden="true"> <span>Descargar</span></i></button>
+		<button type="button" class="btn btn-default btn-lg" onclick="jQuery.redirect(BASE_URL + 'proyectos/proyectos');"><i class="fa fa-arrow-circle-o-left " aria-hidden="true"> <span>Regresar</span></i></button>
+		</div>
+	</div>
+</div>
+<br>
 {% spaceless %}
 	{% autoescape %}
 	{{ gantt|raw }}
 	{% endautoescape %}
 {% endspaceless %}
+
+<script type="text/javascript">
+function ganttToImage() {
+	$('.gantt').css('width', '2500');
+	domtoimage.toBlob($('.gantt')[0])
+	.then(function (blob) {
+		window.saveAs(blob, 'gantt.png');
+		$('.gantt').removeAttr('style');
+	})
+	.catch(function (error) {
+		toastr.error('Error al preparar la imagen.', 'Intenta de nuevo');
+		$('.gantt').removeAttr('style');
+	});
+}
+</script>
 
 {% include 'footer.html' %}

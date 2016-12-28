@@ -34,38 +34,27 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 	}
 
 	public function gantt() {
-		$data = array();
-		$data[] = array(
-		'label' => 'Project 1',
-		'start' => '2012-04-20', 
-		'end'   => '2012-05-12',
-		'class' => ''
-		);
+		$data = [];
+		$tareas = $this->getModel('Proyectos\Tareas')->getByIdProyecto($this->getParams('idProyecto'));
+		foreach ($tareas as $tarea) {
+			$data[] = [
+					'label'	=> $tarea['titulo'],
+					'start'	=> $tarea['fechaInicioProyectado'],
+					'end'	=> $tarea['fechaFinProyectado'],
+					'class'	=> ''
+				];
+		}
 
-		$data[] = array(
-		'label' => 'Project 2',
-		'start' => '2012-04-22', 
-		'end'   => '2012-05-22', 
-		'class' => 'important',
-		);
-
-		$data[] = array(
-		'label' => 'Project 3',
-		'start' => '2012-05-25', 
-		'end'   => '2012-06-20',
-		'class' => 'urgent',
-		);
-
-		$gantti = new Gantt($data, array(
-		'title'      => 'Demo',
-		'cellwidth'  => 25,
-		'cellheight' => 35,
-		'class' => ''
+		$gantt = new Gantt($data, array(
+			'title'      => 'Demo',
+			'cellwidth'  => 25,
+			'cellheight' => 35,
+			'class' => ''
 		));
 
 		$this->helper('UsersAccount')->checkLogin();
 		$view = $this->newView('Proyectos\ProyectoGantt');
-		$view->gantt = $gantti->render();
+		$view->gantt = $gantt->render();
 		$view->menus = $this->helper('UsersAccount')->createMenus();
 		$view->render();
 	}
