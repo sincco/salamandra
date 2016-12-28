@@ -41,7 +41,7 @@ table { font-family: "Ubuntu", sans-serif;  font-size: 0.8em; }
 
 .gantt { color: #fff !important; background: #777 !important; }
 .gantt li { color: #fff !important; }
-.gantt aside .gantt-label strong { color: #fff !important; text-transform: uppercase; font-weight: bolder; }
+.gantt aside .gantt-label strong { color: #fff !important; text-transform: capitalize; font-weight: 500; }
 .gantt-months { background-color: #555; }
 .gantt-items { background: #ccc !important; }
 .gantt-day.weekend span { background-color: #8fb3b2 !important; }
@@ -50,3 +50,4 @@ table { font-family: "Ubuntu", sans-serif;  font-size: 0.8em; }
 .gantt-block { background-color: #268bd2 !important; }
 .gantt-item .gantt-days .gantt-day { background-color: #fff !important; }
 .gantt time { width: 4px !important; background: #ffd900 !important; }
+.gantt figcaption { top:5px !important; font-size: 16px !important; letter-spacing: 0px !important; font-weight: bolder; }

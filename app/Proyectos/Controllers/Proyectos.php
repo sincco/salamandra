@@ -35,10 +35,11 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 
 	public function gantt() {
 		$data = [];
+		$proyecto = $this->getModel('Proyectos\Proyectos')->getById($this->getParams('idProyecto'));
 		$tareas = $this->getModel('Proyectos\Tareas')->getByIdProyecto($this->getParams('idProyecto'));
 		foreach ($tareas as $tarea) {
 			$data[] = [
-					'label'	=> $tarea['titulo'],
+					'label'	=> wordwrap($tarea['titulo'], 20, '<br>'),
 					'start'	=> $tarea['fechaInicioProyectado'],
 					'end'	=> $tarea['fechaFinProyectado'],
 					'class'	=> ''
@@ -46,7 +47,7 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		}
 
 		$gantt = new Gantt($data, array(
-			'title'      => 'Demo',
+			'title'      => wordwrap($proyecto[0]['titulo'], 15, '<br>'),
 			'cellwidth'  => 25,
 			'cellheight' => 35,
 			'class' => ''
