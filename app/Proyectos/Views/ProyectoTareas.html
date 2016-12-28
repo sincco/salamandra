@@ -20,7 +20,7 @@
 		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
 			<thead>
 				<tr>
-					<th data-field="clave">Id</th><th data-field="titulo">Título</th><th data-field="estatus">Estatus</th><th>Inicio Planeado</th><th>Fin Planeado</th>
+					<th data-field="clave">Id</th><th data-field="titulo">Título</th><th data-field="estatus">Estatus</th><th>Inicio Planeado</th><th>Fin Planeado</th><th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -31,6 +31,7 @@
 					<td>{{ tarea.estatus|trim }}</td>
 					<td>{{ tarea.fechaInicioProyectado|trim }}</td>
 					<td>{{ tarea.fechaFinProyectado|trim }}</td>
+					<td><button type="button" class="btn btn-primary btn-xs" onclick="jQuery.redirect(BASE_URL + 'proyectos/proyectos/loggeo', { 'idTarea': {{ tarea.idTarea|trim }} });"><i class="fa fa-clock-o" aria-hidden="true"> <span>Tiempo</span></i></button></td>
 				</tr>
 				{% endfor %}
 			</tbody>

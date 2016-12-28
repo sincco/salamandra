@@ -17,6 +17,11 @@ class TareasModel extends Sincco\Sfphp\Abstracts\Model {
 			ORDER BY fechaInicioProyectado', ['idTarea'=>$data]);
 	}
 
+	public function getActualLog($data) {
+		return $this->connector->query('SELECT  * FROM proyectosTareasTiempos WHERE idUsuario = :idUsuario
+			ORDER BY inicio', ['idUsuario'=>$data]);
+	}
+
 	public function insert($data) {
 		$campos = [];
 		foreach ($data as $campo => $valor)

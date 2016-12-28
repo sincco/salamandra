@@ -33,6 +33,16 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		$view->render();
 	}
 
+	public function loggeo() {
+		$this->helper('UsersAccount')->checkLogin();
+		$userData = $this->helper('UsersAccount')->getUserData();
+		$view = $this->newView('Proyectos\ProyectoTareasLoggeo');
+		$view->menus = $this->helper('UsersAccount')->createMenus();
+		$view->tareas = $this->getModel('Proyectos\Tareas')->getById($this->getParams('idTarea'));
+		$view->actualLog = $this->getModel('Proyectos\Tareas')->getActualLog($userData['userId']);
+		$view->render();
+	}
+
 	public function gantt() {
 		$data = [];
 		$proyecto = $this->getModel('Proyectos\Proyectos')->getById($this->getParams('idProyecto'));
@@ -56,6 +66,7 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		$this->helper('UsersAccount')->checkLogin();
 		$view = $this->newView('Proyectos\ProyectoGantt');
 		$view->gantt = $gantt->render();
+		$view->idProyecto = $this->getParams('idProyecto');
 		$view->menus = $this->helper('UsersAccount')->createMenus();
 		$view->render();
 	}

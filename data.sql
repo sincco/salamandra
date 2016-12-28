@@ -251,7 +251,7 @@ CREATE TABLE `entregas` (
 -- Estructura de tabla para la tabla `proyectos`
 --
 
-CREATE TABLE `salamandra`.`proyectos` (
+CREATE TABLE `proyectos` (
   `idProyecto` INT NOT NULL AUTO_INCREMENT,
   `clave` CHAR(10) NOT NULL,
   `titulo` VARCHAR(150) NOT NULL,
@@ -265,7 +265,7 @@ CREATE TABLE `salamandra`.`proyectos` (
 -- Estructura de tabla para la tabla `proyectosTareas`
 --
 
-CREATE TABLE `salamandra`.`proyectosTareas` (
+CREATE TABLE `proyectosTareas` (
   `idTarea` INT NOT NULL AUTO_INCREMENT,
   `idProyecto` INT NOT NULL COMMENT 'Control de tareas asignadas al proyecto',
   `titulo` VARCHAR(150) NOT NULL,
@@ -276,6 +276,20 @@ CREATE TABLE `salamandra`.`proyectosTareas` (
   `fechaFinReal` DATE NULL,
   `estatus` ENUM('En proceso', 'Pendiente', 'Terminado') NOT NULL COMMENT 'Control de tareas asignadas a un proyecto',
   PRIMARY KEY (`idTarea`));
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `proyectosTareas`
+--
+DROP TABLE IF EXISTS `proyectosTareasTiempos`;
+CREATE TABLE `proyectosTareasTiempos` (
+  `idLoggeo` INT NOT NULL AUTO_INCREMENT,
+  `idTarea` INT NOT NULL,
+  `idUsuario` INT NOT NULL,
+  `inicio` DATETIME NOT NULL,
+  `fin` DATETIME NULL COMMENT 'Track de tiempos por usuario en tareas',
+  PRIMARY KEY (`idLoggeo`));
 
 -- --------------------------------------------------------
 
