@@ -31,7 +31,7 @@
 					<td>{{ tarea.estatus|trim }}</td>
 					<td>{{ tarea.fechaInicioProyectado|trim }}</td>
 					<td>{{ tarea.fechaFinProyectado|trim }}</td>
-					<td><button type="button" class="btn btn-primary btn-xs" onclick="jQuery.redirect(BASE_URL + 'proyectos/proyectos/loggeo', { 'idTarea': {{ tarea.idTarea|trim }} });"><i class="fa fa-clock-o" aria-hidden="true"> <span>Tiempo</span></i></button></td>
+					<td><button type="button" class="btn btn-primary btn-xs" onclick="jQuery.redirect(BASE_URL + 'proyectos/proyectos/loggeo', { 'idTarea': {{ tarea.idTarea|trim }}, 'idProyecto': {{ idProyecto|trim }} });"><i class="fa fa-clock-o" aria-hidden="true"> <span>Tiempo</span></i></button></td>
 				</tr>
 				{% endfor %}
 			</tbody>

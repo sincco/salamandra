@@ -39,7 +39,8 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		$view = $this->newView('Proyectos\ProyectoTareasLoggeo');
 		$view->menus = $this->helper('UsersAccount')->createMenus();
 		$view->tareas = $this->getModel('Proyectos\Tareas')->getById($this->getParams('idTarea'));
-		$view->actualLog = $this->getModel('Proyectos\Tareas')->getActualLog($userData['userId']);
+		$view->logs = $this->getModel('Proyectos\Tareas')->getActualLog(['idUsuario'=>$userData['userId'], 'idTarea'=>intval($this->getParams('idTarea'))]);
+		$view->idProyecto = $this->getParams('idProyecto');
 		$view->render();
 	}
 

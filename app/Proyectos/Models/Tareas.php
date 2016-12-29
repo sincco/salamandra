@@ -18,8 +18,8 @@ class TareasModel extends Sincco\Sfphp\Abstracts\Model {
 	}
 
 	public function getActualLog($data) {
-		return $this->connector->query('SELECT  * FROM proyectosTareasTiempos WHERE idUsuario = :idUsuario
-			ORDER BY inicio', ['idUsuario'=>$data]);
+		return $this->connector->query('SELECT idLoggeo, idTarea, idUsuario, UNIX_TIMESTAMP(inicio)*1000 inicio, UNIX_TIMESTAMP(fin)*1000 fin FROM proyectosTareasTiempos WHERE idUsuario = :idUsuario AND idTarea = :idTarea
+			ORDER BY inicio', $data);
 	}
 
 	public function insert($data) {
