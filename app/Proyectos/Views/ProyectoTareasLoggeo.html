@@ -1,0 +1,79 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	{% for tarea in tareas %}
+	<div class="page-header">
+		<div class="col-xs-6">
+			<h2>{{ tarea.clave|trim }}<small>{{ tarea.titulo|trim }}</small></h2>
+			<h4>{{ tarea.estatus|trim }}</h4>
+		</div>
+		<div class="col-xs-6">
+			<h6>{{ tarea.resumen|trim }}</h6>
+		</div>
+	</div>
+	{% endfor %}
+
+	
+	<div class="row">
+		<div class="col-xs-6">
+			<div class="row">
+				<div class="col-xs-10">
+					<div id="timebox"></div>
+				</div>
+				<div class="col-xs-2">
+					<button type="button" class="btn btn-success btn-xs btn-play" onclick="play();"><i class="fa fa-play" aria-hidden="true"></i></button>
+					<button type="button" class="btn btn-danger btn-xs btn-stop" onclick="stop();"><i class="fa fa-stop" aria-hidden="true"></i></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<br>
+	<div class="row">
+		<button type="button" class="btn btn-default btn-lg" onclick="jQuery.redirect(BASE_URL + 'proyectos/proyectos/tareas', { 'idProyecto': {{ idProyecto|trim }} });"><i class="fa fa-arrow-circle-o-left " aria-hidden="true"> <span>Regresar</span></i></button>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+	var interval = 0;
+{% for logActual in logs %}
+	$('.btn-play').hide();
+	$('.btn-stop').show();
+	$(document).ready(function() {
+		interval = setInterval(function(){
+			var thisTime = new Date();
+			document.querySelector("#timebox").innerHTML = convertSeconds((thisTime.getTime() - {{ logActual.inicio }}) / 1000);
+		},1000);
+	});
+{% endfor %}
+	function stop() {
+		$('.btn-play').show();
+		$('.btn-stop').hide();
+		clearInterval(interval);
+	}
+
+	function play() {
+		$('.btn-play').hide();
+		$('.btn-stop').show();
+		var prevTime = new Date();
+		interval = setInterval(function(){
+			var thisTime = new Date();
+			document.querySelector("#timebox").innerHTML = convertSeconds((thisTime.getTime() - prevTime.getTime()) / 1000);
+		},1000);
+	}
+
+	function convertSeconds(seconds) {
+		var days = Math.floor(seconds / 86400);
+		seconds -= days * 86400;
+		var hours = Math.floor(seconds / 3600) % 24;
+		seconds -= hours * 3600;
+		var minutes = Math.floor(seconds / 60) % 60;
+		seconds -= minutes * 60;
+		var seconds = parseInt(seconds % 60);
+		return days + ' días ' + hours + ' horas ' + minutes + ' minutos ' + seconds + ' segundos';
+	}
+</script>
+
+{% include 'footer.html' %}
