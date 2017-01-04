@@ -100,7 +100,6 @@ $('#entregas-detalle').on('dbl-click-row.bs.table', function (row, element) {
 	$(".cantidad").html(Number(element.CANT).toFixed(3));
 	$(".producto").html(element.DESCR);
 	$(".cliente").html(element.NOMBRE);
-	//$("#grid").shieldGrid();
 	var options = {
         dataSource: {
             remote: {
@@ -129,16 +128,13 @@ $('#entregas-detalle').on('dbl-click-row.bs.table', function (row, element) {
                         data: function (edited) {
                             var items = [];
                             for (var i = 0; i < edited.length; i++) {
-                                var date = edited[i].data.OrderDate ? edited[i].data.OrderDate.toJSON() : new Date().toJSON();
-                                var item = {
-                                    ContactName: edited[i].data.ContactName,
-                                    HasDiscount: edited[i].data.HasDiscount,
-                                    OrderDate: date,
-                                    Quantity: edited[i].data.Quantity,
-                                    UnitPrice: edited[i].data.UnitPrice,
-                                    ID: edited[i].data.ID
-                                };
-                                items.push(item);
+                                var date = edited[i].data.fechaEntrega ? edited[i].data.fechaEntrega.toJSON() : new Date().toJSON();
+                                items.push({
+                                    fechaEntrega: date,
+                                    cantidad: edited[i].data.cantidad,
+                                    idOperador: edited[i].data.operador,
+                                    idUnidad: edited[i].data.unidad
+                                });
                             }
                             return { "": items };
                         }
@@ -149,13 +145,12 @@ $('#entregas-detalle').on('dbl-click-row.bs.table', function (row, element) {
                         data: function (edited) {
                             var items = [];
                             for (var i = 0; i < edited.length; i++) {
+                                var date = edited[i].data.fechaEntrega ? edited[i].data.fechaEntrega.toJSON() : new Date().toJSON();
                                 items.push({
-                                    ContactName: edited[i].data.ContactName,
-                                    HasDiscount: edited[i].data.HasDiscount,
-                                    OrderDate: edited[i].data.OrderDate.toJSON(),
-                                    Quantity: edited[i].data.Quantity,
-                                    UnitPrice: edited[i].data.UnitPrice,
-                                    ID: edited[i].data.ID
+                                    fechaEntrega: date,
+                                    cantidad: edited[i].data.cantidad,
+                                    idOperador: edited[i].data.operador,
+                                    idUnidad: edited[i].data.unidad
                                 });
                             }
                             return { "": items };
@@ -173,6 +168,12 @@ $('#entregas-detalle').on('dbl-click-row.bs.table', function (row, element) {
             }
         },
         rowHover: false,
+        events: {
+            command: function(e) {
+                console.log('EVENTO');
+                console.log(e);
+            }    
+        },
         columns: [
             { field: "fechaEntrega", title: "Fecha", width: "100px", format: "{0:yyyy-MM-dd}" },
             { field: "cantidad", title: "Cantidad", width: "150px" },
@@ -194,7 +195,7 @@ $('#entregas-detalle').on('dbl-click-row.bs.table', function (row, element) {
                 "delete": {
                     enabled: true,
                     template: function (item) {
-                        return "Delete row with ID = " + item.ID
+                        return "Borrar entrega " + item.ID
                     }
                 }
             }
@@ -208,7 +209,7 @@ $('#entregas-detalle').on('dbl-click-row.bs.table', function (row, element) {
                 ],
                 position: "top"
             }
-        ]
+        ],
     };	
 	var grid = $("#grid").swidget();
     grid.refresh(options);
