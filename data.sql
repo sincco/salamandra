@@ -19,13 +19,77 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `salamandra`
 --
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `__usersControl`
+--
+DROP TABLE IF EXISTS `__usersControl`;
+CREATE TABLE IF NOT EXISTS `__usersControl` (
+  `userId` int(11) NOT NULL AUTO_INCREMENT,
+  `userName` varchar(150) NOT NULL,
+  `userEmail` varchar(150) DEFAULT NULL,
+  `userPassword` varchar(60) DEFAULT NULL,
+  `userStatus` char(1) DEFAULT NULL,
+  PRIMARY KEY (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `empresas`
+--
+DROP TABLE IF EXISTS `empresas`;
+CREATE TABLE IF NOT EXISTS `empresas` (
+  `empresa` char(3) NOT NULL,
+  `razonSocial` varchar(150) NOT NULL,
+  `estatus` enum('Activa','Bloqueada') NOT NULL,
+  UNIQUE KEY `empresa` (`empresa`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Empresas registradas en SAE';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuariosExtra`
+--
+DROP TABLE IF EXISTS `usuariosExtra`;
+CREATE TABLE IF NOT EXISTS `usuariosExtra` (
+  `userId` int(11) NOT NULL,
+  `nombre` varchar(150) NOT NULL,
+  `idPerfil` int(11) NOT NULL,
+  `filtroClientes` int(11) NOT NULL,
+  UNIQUE KEY `usuarios_extra` (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Configuración adicional para usuarios';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuariosEmpresas`
+--
+DROP TABLE IF EXISTS `usuariosEmpresas`;
+CREATE TABLE IF NOT EXISTS `usuariosEmpresas` (
+  `userId` int(11) NOT NULL,
+  `empresa` char(3) NOT NULL,
+  UNIQUE KEY `usuario_empresa` (`userId`,`empresa`) COMMENT 'usuario_empresa'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Empresas permitidas por usuario';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `perfiles`
+--
+DROP TABLE IF EXISTS `perfiles`;
+CREATE TABLE `perfiles` (
+  `descripcion` CHAR(10) NOT NULL,
+  `opcionesBloqueadas` MEDIUMTEXT NOT NULL,
+  `idPerfil` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`idPerfil`));
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `cotizaciones`
 --
-
+DROP TABLE IF EXISTS `cotizaciones`;
 CREATE TABLE IF NOT EXISTS `cotizaciones` (
   `cotizacion` int(11) NOT NULL AUTO_INCREMENT,
   `fecha` date NOT NULL,
@@ -43,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `cotizaciones` (
 --
 -- Estructura de tabla para la tabla `cotizacionesDetalle`
 --
-
+DROP TABLE IF EXISTS `cotizacionesDetalle`;
 CREATE TABLE IF NOT EXISTS `cotizacionesDetalle` (
   `cotizacion` int(11) NOT NULL,
   `producto` varchar(16) NOT NULL,
@@ -57,34 +121,9 @@ CREATE TABLE IF NOT EXISTS `cotizacionesDetalle` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `empresas`
---
-
-CREATE TABLE IF NOT EXISTS `empresas` (
-  `empresa` char(3) NOT NULL,
-  `razonSocial` varchar(150) NOT NULL,
-  `estatus` enum('Activa','Bloqueada') NOT NULL,
-  UNIQUE KEY `empresa` (`empresa`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Empresas registradas en SAE';
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `perfiles`
---
-
-CREATE TABLE `perfiles` (
-  `descripcion` CHAR(10) NOT NULL,
-  `opcionesBloqueadas` MEDIUMTEXT NOT NULL,
-  `idPerfil` INT NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`idPerfil`));
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `procesos`
 --
-
+DROP TABLE IF EXISTS `procesos`;
 CREATE TABLE IF NOT EXISTS `procesos` (
   `proceso` int(11) NOT NULL AUTO_INCREMENT,
   `empresa` char(3) NOT NULL,
@@ -101,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `procesos` (
 --
 -- Estructura de tabla para la tabla `produccionRecetas`
 --
-
+DROP TABLE IF EXISTS `produccionRecetas`;
 CREATE TABLE IF NOT EXISTS `produccionRecetas` (
   `receta` int(11) NOT NULL AUTO_INCREMENT,
   `producto` varchar(16) NOT NULL,
@@ -116,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `produccionRecetas` (
 --
 -- Estructura de tabla para la tabla `produccionRecetasDetalle`
 --
-
+DROP TABLE IF EXISTS `produccionRecetasDetalle`;
 CREATE TABLE IF NOT EXISTS `produccionRecetasDetalle` (
   `receta` int(11) NOT NULL,
   `producto` varchar(16) NOT NULL,
@@ -129,35 +168,9 @@ CREATE TABLE IF NOT EXISTS `produccionRecetasDetalle` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuariosEmpresas`
---
-
-CREATE TABLE IF NOT EXISTS `usuariosEmpresas` (
-  `userId` int(11) NOT NULL,
-  `empresa` char(3) NOT NULL,
-  UNIQUE KEY `usuario_empresa` (`userId`,`empresa`) COMMENT 'usuario_empresa'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Empresas permitidas por usuario';
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuariosExtra`
---
-
-CREATE TABLE IF NOT EXISTS `usuariosExtra` (
-  `userId` int(11) NOT NULL,
-  `nombre` varchar(150) NOT NULL,
-  `idPerfil` int(11) NOT NULL,
-  `filtroClientes` int(11) NOT NULL,
-  UNIQUE KEY `usuarios_extra` (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Configuración adicional para usuarios';
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `usuariosMenus`
 --
-
+DROP TABLE IF EXISTS `usuariosMenus`;
 CREATE TABLE IF NOT EXISTS `usuariosMenus` (
   `userId` int(11) NOT NULL,
   `menuId` int(11) NOT NULL
@@ -187,25 +200,9 @@ INSERT INTO `__menus` VALUES (1,'Catálogos',NULL,0),(2,'Clientes','catalogo/cli
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `__usersControl`
---
-
-CREATE TABLE IF NOT EXISTS `__usersControl` (
-  `userId` int(11) NOT NULL AUTO_INCREMENT,
-  `userName` varchar(150) NOT NULL,
-  `userEmail` varchar(150) DEFAULT NULL,
-  `userPassword` varchar(60) DEFAULT NULL,
-  `userStatus` char(1) DEFAULT NULL,
-  PRIMARY KEY (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `operadores`
 --
-
+DROP TABLE IF EXISTS `operadores`;
 CREATE TABLE `operadores` (
   `idOperador` int(11) NOT NULL AUTO_INCREMENT,
   `clave` char(8) NOT NULL,
@@ -219,7 +216,7 @@ CREATE TABLE `operadores` (
 --
 -- Estructura de tabla para la tabla `unidades`
 --
-
+DROP TABLE IF EXISTS `unidades`;
 CREATE TABLE `unidades` (
   `idUnidad` int(11) NOT NULL AUTO_INCREMENT,
   `noEco` char(8) NOT NULL,
@@ -232,7 +229,7 @@ CREATE TABLE `unidades` (
 --
 -- Estructura de tabla para la tabla `entregas`
 --
-
+DROP TABLE IF EXISTS `entregas`;
 CREATE TABLE `entregas` (
   `idEntrega` INT NOT NULL AUTO_INCREMENT,
   `pedido` CHAR(8) NULL,
@@ -250,7 +247,7 @@ CREATE TABLE `entregas` (
 --
 -- Estructura de tabla para la tabla `proyectos`
 --
-
+DROP TABLE IF EXISTS `proyectos`;
 CREATE TABLE `proyectos` (
   `idProyecto` INT NOT NULL AUTO_INCREMENT,
   `clave` CHAR(10) NOT NULL,
@@ -264,7 +261,7 @@ CREATE TABLE `proyectos` (
 --
 -- Estructura de tabla para la tabla `proyectosTareas`
 --
-
+DROP TABLE IF EXISTS `proyectosTareas`;
 CREATE TABLE `proyectosTareas` (
   `idTarea` INT NOT NULL AUTO_INCREMENT,
   `idProyecto` INT NOT NULL COMMENT 'Control de tareas asignadas al proyecto',

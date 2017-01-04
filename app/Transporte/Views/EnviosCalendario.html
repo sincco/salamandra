@@ -28,6 +28,7 @@
 			<div class="modal-body">
 				<div class="row">
 					<div class="col-xs-9">
+                        <p>Pedido <strong><span class="pedido"></span></strong></p>
 						<p>Entregar <strong><span class="producto"></span></strong> a <strong><span class="cliente"></span></strong></p>
 					</div>
 					<div class="col-xs-3">
@@ -35,42 +36,42 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-xs-12 grid">
-						<div id="grid"></div>
-					</div>
+                    <div class="col-xs-12">
+					   <div id="grid-entregas" class="handsontable"></div>
+                        
+                    </div>
 				</div>
 			</div>
 			<div class="modal-footer">
+                <button type="button" class="btn btn-success" onclick="guardar()"><i class="fa fa-hdd-o" aria-hidden="true"><span> Guardar</span></i></button>
 			</div>
 		</div>
 	</div>
 </div>
 
 
-
-
 <script type="application/javascript">
+var hot;
 
 $(document).ready(function () {
-	$('#calendario').zabuto_calendar({
-		year: 2014,
-		month: 11,
-		cell_border: true,
-		today: true,
-		action: function () {
-			detalle(this.id);
-		},
-		ajax: {
-			url: BASE_URL + 'transporte/envios/apicalendario',
-			modal: false
-		},
-		language: 'es',
-		legend: [
-			{type: 'block', label: 'Envío solicitado', classname:'transporte-envio-solicitado'},
-			{type: 'block', label: 'Envío programado', classname:'transporte-envio-programado'}
-		]
-	});
-	$("#grid").shieldGrid({dataSource:{data: []}});
+    $('#calendario').zabuto_calendar({
+        year: 2014,
+        month: 12,
+        cell_border: true,
+        today: true,
+        action: function () {
+            detalle(this.id);
+        },
+        ajax: {
+            url: BASE_URL + 'transporte/envios/apicalendario',
+            modal: false
+        },
+        language: 'es',
+        legend: [
+            {type: 'block', label: 'Envío solicitado', classname:'transporte-envio-solicitado'},
+            {type: 'block', label: 'Envío programado', classname:'transporte-envio-programado'}
+        ]
+    });
 });
 
 function detalle(id) {
@@ -80,7 +81,7 @@ function detalle(id) {
 	$('#entregas-detalle').bootstrapTable({
 		method: 'get',
 		url: BASE_URL + 'api/v1/pedidosdetalle/fecha/' + date,
-		columns: [{field:'CVE_DOC',title:'Clave',sortable:true},{field:'NOMBRE',title:'Cliente',sortable:true},{field:'CVE_ART',title:'Producto',sortable:true},{field:'DESCR',title:'Descripción',sortable:true},{field:'CANT',title:'Cantidad',sortable:true},{field:'CALLE',title:'Calle',sortable:false},{field:'COLONIA',title:'Colonia',sortable:true},{field:'MUNICIPIO',title:'Municipio',sortable:true},{field:'ESTADO',title:'Estado',sortable:true},{field:'CVE_ART',title:'Prd.',sortable:false}],
+		columns: [{field:'CVE_DOC',title:'Clave',sortable:true},{field:'NOMBRE',title:'Cliente',sortable:true},{field:'CVE_ART',title:'Producto',sortable:true},{field:'DESCR',title:'Descripción',sortable:true},{field:'CANT',title:'Cantidad',sortable:true},{field:'CALLE',title:'Calle',sortable:false},{field:'COLONIA',title:'Colonia',sortable:true},{field:'MUNICIPIO',title:'Municipio',sortable:true},{field:'ESTADO',title:'Estado',sortable:true}],
 		height: 600,
 		striped: true,
 		pagination: true,
@@ -96,153 +97,68 @@ function detalle(id) {
 	loader.hide();
 }
 
-$('#entregas-detalle').on('dbl-click-row.bs.table', function (row, element) {
-	$(".cantidad").html(Number(element.CANT).toFixed(3));
-	$(".producto").html(element.DESCR);
-	$(".cliente").html(element.NOMBRE);
-	var options = {
-        dataSource: {
-            remote: {
-                read: BASE_URL + "api/v1/pedidoentregasprogramadas/pedido/" + element.CVE_DOC.trim() + '/producto/' + element.CVE_ART.trim(),
-                modify: {
-                    create: {
-                        url: BASE_URL + "api/v1/pedidoentregasprogramadas/pedido/" + element.CVE_DOC.trim() + '/producto/' + element.CVE_ART.trim(),
-                        type: "post",
-                        data: function (edited) {
-                            var items = [];
-                            for (var i = 0; i < edited.length; i++) {
-                                var date = edited[i].data.fechaEntrega ? edited[i].data.fechaEntrega.toJSON() : new Date().toJSON();
-                                items.push({
-                                    fechaEntrega: date,
-                                    cantidad: edited[i].data.cantidad,
-                                    idOperador: edited[i].data.operador,
-                                    idUnidad: edited[i].data.unidad
-                                });
-                            }
-                            return { entrega: items };
-                        }
-                    },
-                    update: {
-                        url: BASE_URL + "api/v1/pedidoentregasprogramadas/pedido/" + element.CVE_DOC.trim() + '/producto/' + element.CVE_ART.trim(),
-                        type: "put",
-                        data: function (edited) {
-                            var items = [];
-                            for (var i = 0; i < edited.length; i++) {
-                                var date = edited[i].data.fechaEntrega ? edited[i].data.fechaEntrega.toJSON() : new Date().toJSON();
-                                items.push({
-                                    fechaEntrega: date,
-                                    cantidad: edited[i].data.cantidad,
-                                    idOperador: edited[i].data.operador,
-                                    idUnidad: edited[i].data.unidad
-                                });
-                            }
-                            return { "": items };
-                        }
-                    },
-                    remove: {
-                        url: BASE_URL + "api/v1/pedidoentregasprogramadas/pedido/" + element.CVE_DOC.trim() + '/producto/' + element.CVE_ART.trim(),
-                        type: "delete",
-                        data: function (edited) {
-                            var items = [];
-                            for (var i = 0; i < edited.length; i++) {
-                                var date = edited[i].data.fechaEntrega ? edited[i].data.fechaEntrega.toJSON() : new Date().toJSON();
-                                items.push({
-                                    fechaEntrega: date,
-                                    cantidad: edited[i].data.cantidad,
-                                    idOperador: edited[i].data.operador,
-                                    idUnidad: edited[i].data.unidad
-                                });
-                            }
-                            return { "": items };
-                        }
-                    }
-                }
-            },
-            schema: {
-                fields: {
-                    cantidad: { path: "cantidad", type: Number },
-                    fechaEntrega: { path: "fechaEntrega", type: Date },
-                    operador: { path: "operador", type: String },
-                    unidad: { path: "unidad", type: String },
-                }
-            }
-        },
-        rowHover: false,
-        events: {
-            command: function(e) {
-                console.log('EVENTO');
-                console.log(e);
-            }    
-        },
-        columns: [
-            { field: "fechaEntrega", title: "Fecha", width: "100px", format: "{0:yyyy-MM-dd}" },
-            { field: "cantidad", title: "Cantidad", width: "150px" },
-            { field: "operador", title: "Operador", width: "200px", editor: dropOperadores },
-            { field: "unidad", title: "Unidad", width: "200px", editor: dropUnidades },
-            {
-                title: " ",
-                buttons: [
-                    { cls: "deleteButton", commandName: "delete", caption: "<span><i class='fa fa-ban' aria-hidden='true'></i>Borrar</span>" }
-                ]
-            }
-        ],
-        editing: {
-            enabled: true,
-            event: "click",
-            type: "cell",
-            batch: true,
-            confirmation: {
-                "delete": {
-                    enabled: true,
-                    template: function (item) {
-                        return "Borrar entrega " + item.ID
-                    }
-                }
-            }
-        },
-        toolbar: [
-            {
-                buttons: [
-                    { commandName: "insert", caption: "Nueva Entrega" },
-                    { commandName: "save", caption: "Guardar" },
-                    { commandName: "cancel", caption: "Cancelar" }
-                ],
-                position: "top"
-            }
-        ],
-    };	
-	var grid = $("#grid").swidget();
-    grid.refresh(options);
+function guardar() {
+    var data = [];
+    $(hot.getData()).each(function() {
+        if (this[3]) {
+            data.push({fechaEntrega:this[0], idUnidad:this[1], idOperador:this[2], cantidad:this[3], producto:$(".producto").html(), pedido:$(".pedido").html()});
+        }
+    });
+    loader.show()
+    sincco.consumirAPI('POST','{{constant("BASE_URL")}}ventas/cotizaciones/apiguardar', {data: data})
+    .done(function(data) {
+        toastr.success('Envíos programados.', 'Éxito');
+        loader.hide();
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        console.log('Error',errorThrown);
+        loader.hide();
+    });
+}
 
-	function dropOperadores(cell, item) {
-		$('<div id="dropdown"/>')
-		.appendTo(cell)
-		.shieldDropDown({
-			dataSource: {
-				data: [
-                    {% for dato in operadores %}
-                    "{{dato.clave}}|{{dato.nombre}}",
-                    {% endfor %}
-                ] 
-			},
-			value: !item["operador"] ? null : item["operador"].toString()
-		}).swidget().focus();
-	}
-	function dropUnidades(cell, item) {
-		$('<div id="dropdown"/>')
-		.appendTo(cell)
-		.shieldDropDown({
-			dataSource: {
-				data: [
-                    {% for dato in unidades %}
-                    "{{dato.noEco}}",
-                    {% endfor %}
-                ]
-			},
-			value: !item["unidad"] ? null : item["unidad"].toString()
-		}).swidget().focus();
-	}
-	$('#modal').modal({backdrop: 'static', keyboard: false});
+$('#entregas-detalle').on('dbl-click-row.bs.table', function (row, element) {
+    $(".cantidad").html(Number(element.CANT).toFixed(3));
+	$(".producto").html(element.CVE_ART + '|' + element.DESCR);
+	$(".cliente").html(element.NOMBRE);
+    $(".pedido").html(element.CVE_DOC);
+    $('#modal').modal({backdrop: 'static', keyboard: false});
+    hot = new Handsontable(document.getElementById('grid-entregas'), {
+        data: [],
+        minSpareRows: 1,
+        colHeaders: true,
+        rowHeaders: true,
+        fixedRowsTop: 0,
+        startCols: 4,
+        contextMenu: ['remove_row'],
+        colWidths: [100,100,250,80],
+        colHeaders: ['Fecha', 'Unidad', 'Operador', 'Cantidad'],
+        columns: [
+            {data:'fecha', type: 'date', dateFormat: 'YYYY-MM-DD', correctFormat: true},
+            {data:'unidad',type: 'dropdown',
+                source: [{% for unidad in unidades %}'{{ unidad.noEco|e}}',{% endfor %}]
+            },
+            {data:'operador',type: 'dropdown',
+                source: [{% for operador in operadores %}'{{ operador.clave|e}}|{{ operador.nombre|e}}',{% endfor %}]
+            },
+            {data:'cantidad', type: 'numeric', format: '0,0.000', language: 'en'},
+        ], 
+        afterChange: function (changes, source) {
+            if ((source == 'edit' || source == 'paste')) {
+                if (changes[0][1] == 'cantidad') {
+                    var total=0;
+                    $(hot.getData()).each(function() {
+                        total += this[3];
+                    });
+                    var resta = Number($(".cantidad").html()) - total;
+                    if (resta < 0) {
+                        hot.setDataAtCell(changes[0][0], 3, changes[0][3] + resta);
+                    }
+                }
+            }
+        }
+    });
+    setTimeout(function () {
+        hot.render();
+    }, 1000);
 });
 
 </script>
