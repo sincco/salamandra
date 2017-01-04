@@ -117,8 +117,9 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 	}
 
 	public function envio() {
-		$model = $this->getModel('Proyectos\Tareas');
+		$model = $this->getModel('Transporte\Envios');
 		$data = $this->getParams('data');
+		var_dump($data); die();
 		switch ($this->getRequest()['method']) {
 			case 'GET':
 				new Response('json', ['respuesta'=>$model->getByClave($this->getParams('idProyecto'))]);

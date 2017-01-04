@@ -104,8 +104,9 @@ function guardar() {
             data.push({fechaEntrega:this[0], idUnidad:this[1], idOperador:this[2], cantidad:this[3], producto:$(".producto").html(), pedido:$(".pedido").html()});
         }
     });
+    console.log(data);
     loader.show()
-    sincco.consumirAPI('POST','{{constant("BASE_URL")}}ventas/cotizaciones/apiguardar', {data: data})
+    sincco.consumirAPI('POST','{{constant("BASE_URL")}}api/v1/envio', {data: data})
     .done(function(data) {
         toastr.success('Envíos programados.', 'Éxito');
         loader.hide();
