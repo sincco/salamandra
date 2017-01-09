@@ -8,9 +8,14 @@ class EnviosModel extends Sincco\Sfphp\Abstracts\Model
 		return $this->connector->query('SELECT DISTINCT fechaEntrega FROM entregas WHERE EXTRACT(YEAR FROM fechaEntrega) = :year AND EXTRACT(MONTH FROM fechaEntrega) = :month',['year'=>$year, 'month'=>$month]);
 	}
 
+	public function getEntregasDia()
+	{
+		return $this->connector->query('SELECT ent.*, noEco unidad, nombre operador FROM entregas ent INNER JOIN unidades USING (idUnidad) INNER JOIN operadores USING (idOperador) WHERE ent.fechaEntrega = CURDATE();');
+	}
+
 	public function getEntregasPedido($pedido, $producto)
 	{
-		$query = 'SELECT ent.*, noEco unidad, concat(concat(clave,\'|\'),nombre) operador FROM entregas ent INNER JOIN unidades USING (idUnidad) INNER JOIN operadores USING (idOperador) WHERE ent.pedido = :pedido AND ent.producto = :producto';
+		$query = 'SELECT ent.*, noEco unidad, concat(concat(clave,\'|\'),nombre) operador FROM entregas ent INNER JOIN unidades USING (idUnidad) INNER JOIN operadores USING (idOperador) WHERE ent.pedido = :pedido AND ent.producto = :producto;';
 		$params['pedido'] = $pedido;
 		$params['producto'] = $producto;
 		return $this->connector->query($query, $params);
