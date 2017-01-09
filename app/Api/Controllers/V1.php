@@ -3,6 +3,18 @@
 use \Sincco\Sfphp\Response;
 
 class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
+
+	public function almacenProductos() {
+		switch ($this->getRequest()['method']) {
+			case 'GET':
+				new Response('json', $this->getModel('Catalogo\Almacenes')->getProductos($this->getParams('almacen')));
+				break;
+			default:
+				new Response('json', 'Metodo no soportado');
+				break;
+		}
+	}
+
 	public function pedidosDetalle() {
 		new Response('json', $this->getModel('Ventas\Pedidos')->getDetalleDia($this->getParams('fecha')));
 	}

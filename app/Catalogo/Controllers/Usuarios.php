@@ -36,13 +36,13 @@ class UsuariosController extends Sincco\Sfphp\Abstracts\Controller {
 
 	public function apiAgregar() {
 		$user = $this->getParams('userData');
-		if($user[ 'action' ] == 'ins') {
+		if($user['action'] == 'ins') {
 			if($userId = $this->helper('UsersAccount')->createUser($user)) {
 				$mdlUsuarios = $this->getModel('Catalogo\Usuarios');
 				$mdlUsuarios->usuarioAEmpresas($userId);
 				$mdlUsuarios->insExtra($this->getParams('userExtra'));
 			}
-			echo json_encode([ 'respuesta'=>$userId ]);
+			echo json_encode(['respuesta'=>$userId]);
 		}
 		else {
 
