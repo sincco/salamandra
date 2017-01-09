@@ -16,7 +16,19 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 	}
 
 	public function pedidosDetalle() {
-		new Response('json', $this->getModel('Ventas\Pedidos')->getDetalleDia($this->getParams('fecha')));
+		$data = [];
+		$solicitados = $this->getModel('Ventas\Pedidos')->getDetalleDia($this->getParams('fecha'));
+		foreach ($solicitados as $_data) {
+			$programados = $this->getModel('Transporte\Envios')->getEntregasProgramadas($_data['CVE_DOC'], $_data['CVE_ART']);
+			if (isset($programados[0]['cantidad'])) {
+				if ($programados[0]['cantidad'] < $_data['CANT']) {
+					$data[] = $_data;
+				}
+			} else {
+				$data[] = $_data;
+			}
+		}
+		new Response('json', $data);
 	}
 
 	public function pedidoEntregasProgramadas() {

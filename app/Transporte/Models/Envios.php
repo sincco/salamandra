@@ -16,6 +16,14 @@ class EnviosModel extends Sincco\Sfphp\Abstracts\Model
 		return $this->connector->query($query, $params);
 	}
 
+	public function getEntregasProgramadas($pedido, $producto)
+	{
+		$query = 'SELECT SUM(cantidad) cantidad FROM entregas ent WHERE ent.pedido = :pedido AND ent.producto = :producto;';
+		$params['pedido'] = $pedido;
+		$params['producto'] = $producto;
+		return $this->connector->query($query, $params);
+	}
+
 	public function insert($data) {
 		$campos = [];
 		foreach ($data as $campo => $valor)

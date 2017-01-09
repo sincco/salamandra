@@ -23,8 +23,10 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 id="modal-titulo" class="modal-title">Programación de entregas</h4>
-                <button type="button" class="btn btn-success" onclick="guardar()"><i class="fa fa-hdd-o" aria-hidden="true"><span> Guardar</span></i></button>
+				<h4 id="modal-titulo" class="modal-title">
+                    Programación de entregas
+                    <button type="button" class="btn btn-success btn-xs" onclick="guardar()"><i class="fa fa-hdd-o" aria-hidden="true"><span> Guardar</span></i></button>
+                </h4>
 			</div>
 			<div class="modal-body">
 				<div class="row">
@@ -70,7 +72,6 @@ $(document).ready(function () {
         language: 'es',
         legend: [
             {type: 'block', label: 'Envío solicitado', classname:'transporte-envio-solicitado'},
-            {type: 'block', label: 'Envío programado', classname:'transporte-envio-programado'}
         ]
     });
 });
@@ -82,7 +83,7 @@ function detalle(id) {
 	$('#entregas-detalle').bootstrapTable({
 		method: 'get',
 		url: BASE_URL + 'api/v1/pedidosdetalle/fecha/' + date,
-		columns: [{field:'CVE_DOC',title:'Clave',sortable:true},{field:'NOMBRE',title:'Cliente',sortable:true},{field:'CVE_ART',title:'Producto',sortable:true},{field:'DESCR',title:'Descripción',sortable:true},{field:'CANT',title:'Cantidad',sortable:true},{field:'CALLE',title:'Calle',sortable:false},{field:'COLONIA',title:'Colonia',sortable:true},{field:'MUNICIPIO',title:'Municipio',sortable:true},{field:'ESTADO',title:'Estado',sortable:true}],
+		columns: [{field:'CVE_DOC',title:'Pedido',sortable:true},{field:'NOMBRE',title:'Cliente',sortable:true},{field:'CVE_ART',title:'Producto',sortable:true},{field:'DESCR',title:'Descripción',sortable:true},{field:'CANT',title:'Cantidad',sortable:true},{field:'CALLE',title:'Calle',sortable:false},{field:'COLONIA',title:'Colonia',sortable:true},{field:'MUNICIPIO',title:'Municipio',sortable:true},{field:'ESTADO',title:'Estado',sortable:true}],
 		height: 600,
 		striped: true,
 		pagination: true,
