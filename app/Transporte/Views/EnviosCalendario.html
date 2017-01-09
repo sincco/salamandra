@@ -112,6 +112,7 @@ function guardar() {
         if (data.respuesta) {
             $("#modal").modal("hide");
             toastr.success('Envíos programados.', 'Éxito');
+            window.location.reload();
         } else {
             toastr.error('No se pudo guardar la programación.', 'Intenta de nuevo');
         }
