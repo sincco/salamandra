@@ -25,7 +25,6 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 				new Response('json', $this->getModel('Transporte\Envios')->getEntregasPedido($this->getParams('pedido'),$this->getParams('producto')));
 				break;
 			case 'POST':
-				var_dump($this->getParams());
 				//new Response('json', $this->getModel('Transporte\Envios')->getEntregasPedido($this->getParams('pedido'),$this->getParams('producto')));
 				break;
 			default:
@@ -131,15 +130,30 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 	public function envio() {
 		$model = $this->getModel('Transporte\Envios');
 		$data = $this->getParams('data');
-		var_dump($data); die();
 		switch ($this->getRequest()['method']) {
 			case 'GET':
-				new Response('json', ['respuesta'=>$model->getByClave($this->getParams('idProyecto'))]);
+				new Response('json', ['respuesta'=>$model->getEntregasPedido($this->getParams('pedido'), $this->getParams('producto'))]);
 				break;
 			case 'POST':
-				unset($data['idTarea']);
-				$id = $model->insert($data);
-				new Response('json', ['respuesta'=>$id]);
+				$id = [];
+				try {
+					foreach ($data as $_data) {
+						if($_data['cantidad'] > 0) {
+							$_data['producto'] = explode('|', $_data['producto'])[0];
+							$_data['idOperador'] = explode('|', $_data['idOperador'])[0];
+							$_data['idOperador'] = $this->getModel('Catalogo\Operadores')->getBy(['clave'=>$_data['idOperador']])[0]['idOperador'];
+							$_data['idUnidad'] = $this->getModel('Catalogo\Unidades')->getBy(['noEco'=>$_data['idUnidad']])[0]['idUnidad'];
+							$id[] = $model->insert($_data);
+						}
+					}
+				} catch (Exception $e) {
+					$id = false;
+				}
+				if ($id) {
+					new Response('json', ['respuesta'=>true, 'ids'=>$id]);
+				} else {
+					new Response('json', ['respuesta'=>false]);
+				}
 				break;
 			case 'PUT':
 				$where = ['idTarea'=>$data['idTarea']];

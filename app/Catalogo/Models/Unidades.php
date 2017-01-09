@@ -12,6 +12,13 @@ class UnidadesModel extends Sincco\Sfphp\Abstracts\Model {
 			ORDER BY nombre', ['idUnidad'=>$data]);
 	}
 
+	public function getBy($data) {
+		$where = [];
+		foreach ($data as $campo => $valor)
+			$where[] = $campo . "=:" . $campo;
+		return $this->connector->query('SELECT  * FROM unidades WHERE ' . implode(",", $where), $data);
+	}
+
 	public function insert($data) {
 		$campos = [];
 		foreach ($data as $campo => $valor)

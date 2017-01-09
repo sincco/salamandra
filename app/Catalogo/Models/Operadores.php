@@ -12,6 +12,13 @@ class OperadoresModel extends Sincco\Sfphp\Abstracts\Model {
 			ORDER BY nombre', ['idOperador'=>$data]);
 	}
 
+	public function getBy($data) {
+		$where = [];
+		foreach ($data as $campo => $valor)
+			$where[] = $campo . "=:" . $campo;
+		return $this->connector->query('SELECT  * FROM operadores WHERE ' . implode(",", $where), $data);
+	}
+
 	public function insert($data) {
 		$campos = [];
 		foreach ($data as $campo => $valor)

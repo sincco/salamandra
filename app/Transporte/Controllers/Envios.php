@@ -20,6 +20,9 @@ class EnviosController extends Sincco\Sfphp\Abstracts\Controller {
 		foreach ($this->getModel('Ventas\Pedidos')->getFechaPedido($this->getParams('year'), $this->getParams('month')) as $data) {
 			$calendario[] = ['date'=>trim(str_replace('00:00:00', '', $data['FECHA_ENT'])), 'badge'=>false, 'title'=>'Entregas solicitadas', 'body'=>'<p class="lead">'.$data['NOMBRE'].'</p>', 'classname'=>'transporte-envio-solicitado'];
 		}
+		foreach ($this->getModel('Transporte\Envios')->getEntregasFecha($this->getParams('year'), $this->getParams('month')) as $data) {
+			$calendario[] = ['date'=>trim(str_replace('00:00:00', '', $data['fechaEntrega'])), 'badge'=>false, 'title'=>'Entregas solicitadas', 'body'=>'<p class="lead">Envío Programado</p>', 'classname'=>'transporte-envio-programado'];
+		}
 		new Response('json', $calendario);
 	}
 
