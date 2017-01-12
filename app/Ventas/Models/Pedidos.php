@@ -108,6 +108,7 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 			$query .= ' AND trim(c.CVE_VEND) = :vendedor ';
 			$params['vendedor'] = $user['userName'];
 		}
+		#var_dump($query);
 		return $this->connector->query($query, $params);
 	}
 

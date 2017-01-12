@@ -178,4 +178,17 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 				break;
 		}
 	}
+
+	public function detallePedido() {
+		$model = $this->getModel('Ventas\Pedidos');
+		$data = $this->getParams('data');
+		switch ($this->getRequest()['method']) {
+			case 'GET':
+				new Response('json', $model->getDetallePedido($this->getParams('pedido')));
+				break;
+			default:
+				new Response('htmlstatuscode', 'Operacion no soportada');
+				break;
+		}
+	}
 }
