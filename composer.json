@@ -28,7 +28,8 @@
             "var/tmp",
             "etc/config",
             "etc/local",
-            "bkp"
+            "bkp",
+            "_proyectos"
         ]
     }
 }
