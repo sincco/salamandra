@@ -249,11 +249,18 @@ CREATE TABLE `entregas` (
 --
 DROP TABLE IF EXISTS `proyectos`;
 CREATE TABLE `proyectos` (
-  `idProyecto` INT NOT NULL AUTO_INCREMENT,
-  `clave` CHAR(10) NOT NULL,
-  `titulo` VARCHAR(150) NOT NULL,
-  `resumen` MEDIUMTEXT NULL,
-  `estatus` ENUM('En proceso', 'Cancelado', 'Pendiente', 'Terminado', 'Pausado', 'Cotizado', 'Aprobado') NOT NULL,
+  `idProyecto` int(11) NOT NULL AUTO_INCREMENT,
+  `clave` char(10) NOT NULL,
+  `titulo` varchar(150) NOT NULL,
+  `cliente` varchar(30) NOT NULL,
+  `contacto` varchar(45) NOT NULL,
+  `planta` varchar(30) NOT NULL,
+  `projectManager` varchar(30) NOT NULL,
+  `lugarEntrega` varchar(45) NOT NULL,
+  `cantidadLh` int(4) NOT NULL,
+  `cantidadRh` int(4) NOT NULL,
+  `resumen` mediumtext,
+  `estatus` enum('En proceso','Cancelado','Pendiente','Terminado','Pausado','Cotizado','Aprobado') NOT NULL,
   PRIMARY KEY (`idProyecto`));
 
 -- --------------------------------------------------------

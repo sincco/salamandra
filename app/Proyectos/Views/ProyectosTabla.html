@@ -26,26 +26,61 @@
 </div>
 
 <div id="modal-nueva" class="modal fade">
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h4 id="modal-titulo" class="modal-title">Registrar nuevo proyecto</h4>
 			</div>
 			<div class="modal-body">
-				<div class="row">
-					<div class="col-xs-12">
-						<form role="form">
-	  						<div class="form-group">
-	  							<input type="hidden" class="form-control col-xs-12" name="idProyecto">
-	  							<label>Clave</label> <input type="text" class="form-control col-xs-12" name="clave"><br>
-								<label>Título</label> <input type="text" class="form-control col-xs-12" name="titulo"><br>
-								<label>Resumen</label> <textarea class="form-control" rows="3" name="resumen"></textarea><br>
+				<form role="form">
+					<div class="form-group">
+						<div class="row">
+							<div class="col-xs-4">
+								<input type="hidden" class="form-control col-xs-12" name="idProyecto">
+								<label>Clave</label> <input type="text" class="form-control col-xs-12" name="clave">
+							</div>
+							<div class="col-xs-8">
+								<label>Título</label> <input type="text" class="form-control col-xs-12" name="titulo">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-8">
+								<label>Resumen</label> <textarea class="form-control" rows="3" name="resumen"></textarea>
+							</div>
+							<div class="col-xs-4">
 								<label>Estatus</label> <select class="form-control col-xs-12" name="estatus"><option value="Pendiente">Pendiente</option><option value="Cotizado">Cotizado</option><option value="Aprobado">Aprobado</option><option value="En proceso">En proceso</option><option value="Cancelado">Cancelado</option><option value="Terminado">Terminado</option><option value="Pausado">Pausado</option></select></label>
 							</div>
-						</form>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<label>Cliente</label> <input type="text" class="form-control col-xs-12" name="cliente">
+							</div>
+							<div class="col-xs-6">
+								<label>Contacto</label> <input type="text" class="form-control col-xs-12" name="contacto">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<label>Planta</label> <input type="text" class="form-control col-xs-12" name="planta">
+							</div>
+							<div class="col-xs-6">
+								<label>Project Manager</label> <input type="text" class="form-control col-xs-12" name="projectManager">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-4">
+								<label>Lugar Entrega</label> <input type="text" class="form-control col-xs-12" name="lugarEntrega">
+							</div>
+							<div class="col-xs-4">
+								<label>Cantidad Izquierda</label> <input type="text" class="form-control col-xs-12" name="cantidadLh">
+							</div>
+							<div class="col-xs-4">
+								<label>Cantidad Derecha</label> <input type="text" class="form-control col-xs-12" name="cantidadRh">
+							</div>
+						</div>
 					</div>
-				</div>
+				</form>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-success" onclick="guardarCaptura($('form').serializeJSON())"><i class="fa fa-cloud" aria-hidden="true"> <span>Guardar</span></i></button>
@@ -102,6 +137,13 @@ $('table').on('dbl-click-row.bs.table', function (row, element) {
 		$('form input[name=titulo]').val(proyecto.titulo);
 		$('form textarea[name=resumen]').val(proyecto.resumen);
 		$('form input[name=estatus]').val(proyecto.estatus);
+		$('form input[name=cliente]').val(proyecto.cliente);
+		$('form input[name=contacto]').val(proyecto.contacto);
+		$('form input[name=planta]').val(proyecto.planta);
+		$('form input[name=projectManager]').val(proyecto.projectManager);
+		$('form input[name=lugarEntrega]').val(proyecto.lugarEntrega);
+		$('form input[name=cantidadLh]').val(proyecto.cantidadLh);
+		$('form input[name=cantidadRh]').val(proyecto.cantidadRh);
 		$('#modal-nueva').modal('show');
 	}).fail(function(jqXHR, textStatus, errorThrown) {
 		console.log(errorThrown);
