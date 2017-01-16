@@ -139,6 +139,33 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 		}
 	}
 
+	public function proyectosAdjuntos() {
+		switch ($this->getRequest()['method']) {
+			case 'GET':
+				$data = [];
+				foreach (scandir(PATH_PROJECTS_FILES . '/' . $this->getParams('idProyecto')) as $file) {
+					$info = finfo_file(finfo_open(FILEINFO_MIME_TYPE), PATH_PROJECTS_FILES . '/' . $this->getParams('idProyecto') . '/' . $file);
+					switch ($info) {
+						case 'image/jpeg':
+						case 'image/gif':
+						case 'image/png':
+							$data[] = ['type'=>'image','path'=>'_proyectos/' . $this->getParams('idProyecto') . '/' . $file, 'name'=>$file];
+							break;
+						case 'directory':
+							break;
+						default:
+							$data[] = ['type'=>'other','path'=>'_proyectos/' . $this->getParams('idProyecto') . '/' . $file, 'name'=>$file];
+							break;
+					}
+				}
+				new Response('json', ['files'=>$data]);
+				break;
+			default:
+				new Response('htmlstatuscode', 'Operacion no soportada');
+				break;
+		}
+	}
+
 	public function envio() {
 		$model = $this->getModel('Transporte\Envios');
 		$data = $this->getParams('data');
