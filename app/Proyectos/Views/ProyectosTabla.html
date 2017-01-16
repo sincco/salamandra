@@ -187,9 +187,9 @@ function cargaAdjuntos(idProyecto) {
 		var files = '';
 		$(data.files).each(function() {
 			if (this.type == 'image') {
-				$('.adjuntos-previo').append('<div class="col-xs-3"><div class="thumbnail"><img src="' + BASE_URL + this.path + '"><div class="caption"><h6>' + this.name + '</h6></div><a href="#" class="btn btn-success btn-xs" role="button" onclick="window.open(\'' + BASE_URL + this.path + '\');console.log(this.href);"><i class="fa fa-download" aria-hidden="true"></i></a></div></div>');
+				$('.adjuntos-previo').append('<div class="col-xs-3"><div class="thumbnail"><img src="' + BASE_URL + this.path + '"><div class="caption"><h6>' + this.name + '</h6></div><a href="#" class="btn btn-primary btn-xs" role="button" onclick="window.open(\'' + BASE_URL + this.path + '\');console.log(this.href);"><i class="fa fa-eye" aria-hidden="true"> <span>Ver</span></i></a></div></div>');
 			} else {
-				$('.adjuntos-previo').append('<div class="col-xs-3"><div class="thumbnail"><img src="' + BASE_URL + 'html/img/attachment.png"><div class="caption"><h6>' + this.name + '</h6></div><a href="#" class="btn btn-success btn-xs" role="button" onclick="window.open(\'' + BASE_URL + this.path + '\');console.log(this.href);"><i class="fa fa-download" aria-hidden="true"></i></a></div></div>');
+				$('.adjuntos-previo').append('<div class="col-xs-3"><div class="thumbnail"><img src="' + BASE_URL + 'html/img/attachment.png"><div class="caption"><h6>' + this.name + '</h6></div><a href="#" class="btn btn-primary btn-xs" role="button" onclick="window.open(\'' + BASE_URL + this.path + '\');console.log(this.href);"><i class="fa fa-eye" aria-hidden="true"> <span>Ver</span></i></a></div></div>');
 			}
 		});
 	}).fail(function(jqXHR, textStatus, errorThrown) {
