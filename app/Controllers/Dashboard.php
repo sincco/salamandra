@@ -3,6 +3,7 @@
 use \Sincco\Sfphp\XML;
 use \Sincco\Sfphp\Response;
 use \Sincco\Tools\Debug;
+use \Sincco\Sfphp\Messages;
 
 /**
  * Dashboard del sistema
@@ -14,6 +15,7 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 	 * @return none
 	 */
 	public function index() {
+		Messages::new('ACCESO CORRECTO');
 		$this->helper('UsersAccount')->checkLogin();
 		$xml = new XML('etc/config/dashboard' . $_SESSION[ 'companiaClave' ] . '.xml');
 		
