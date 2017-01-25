@@ -218,4 +218,29 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 				break;
 		}
 	}
+
+	public function pedidos() {
+		$model = $this->getModel('Ventas\Pedidos');
+		$data = $this->getParams('data');
+		switch ($this->getRequest()['method']) {
+			case 'POST':
+				switch ($this->getParams('seccion')) {
+					case 'por_aprobar':
+						$enProceso = $this->getModel('Ventas\ControlPedidos')->getAll();
+						foreach ($model->getNotIn($enProceso) as $_pedido) {
+							$this->getModel('Ventas\ControlPedidos')->insert(['empresa'=>$_SESSION['companiaClave'], 'pedido'=>$_pedido['CVE_DOC'], 'estatus'=>'Pendiente'], 'pedidosEstatus');
+						}
+						new Response('json', ['actualizado'=>true]);
+						break;
+					
+					default:
+						new Response('json', $model->getAll());
+						break;
+				}
+				break;
+			default:
+				new Response('htmlstatuscode', 'Operacion no soportada');
+				break;
+		}	
+	}
 }
