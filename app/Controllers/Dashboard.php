@@ -15,7 +15,7 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 	 * @return none
 	 */
 	public function index() {
-		Messages::new('ACCESO CORRECTO');
+		Messages::add('ACCESO CORRECTO');
 		$this->helper('UsersAccount')->checkLogin();
 		$xml = new XML('etc/config/dashboard' . $_SESSION[ 'companiaClave' ] . '.xml');
 		
