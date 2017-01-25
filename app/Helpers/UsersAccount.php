@@ -46,7 +46,7 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 				$extra = array_shift($extra);
 				$_SESSION['companiaClave'] = $empresas[ 'empresa' ];
 				$_SESSION['companiaRazonSocial'] = $empresas[ 'razonSocial' ];
-				$_SESSION['extraPerfil'] = $extra[ 'perfil' ];
+				$_SESSION['extraPerfil'] = $extra[ 'idPerfil' ];
 				$_SESSION['extraFiltroClientes'] = $extra[ 'filtroClientes' ];
 				define('SESSION_USERID', $data[ 'userId' ]);
 				define('SESSION_USERNAME', $data[ 'userName' ]);

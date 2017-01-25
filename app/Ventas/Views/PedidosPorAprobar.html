@@ -5,15 +5,17 @@
 	<div class="row">
 		<h1>Pedidos por aprobar</h1>
 		<button type="button" class="btn btn-success" onclick="refresh();"><i class="fa fa-refresh" aria-hidden="true"><span> Actualizar</span></i></button>
+		<button type="button" class="btn btn-warning" onclick="$('#autorizar').modal('show');"><i class="fa fa-lock" aria-hidden="true"><span> Aprobar</span></i></button>
 		<table id="pedidos" data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
 			<thead>
 				<tr>
-					<th>Folio</th><th>Estatus</th>
+					<th data-checkbox="true"></th><th data-sortable="true" data-field="pedido">Folio</th><th data-sortable="true" data-field="estatus">Estatus</th>
 				</tr>
 			</thead>
 			<tbody>
 				{% for pedido in pedidos %}
 				<tr>
+					<td></td>
 					<td>{{ pedido.pedido|e }}</td>
 					<td>{{ pedido.estatus|e }}</td>
 				</tr>
@@ -27,7 +29,7 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="decoder.stop();">&times;</button>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h4 id="modal-titulo" class="modal-title">Detalle de remisiones</h4>
 			</div>
 			<div class="modal-body">
@@ -37,10 +39,27 @@
 	</div>
 </div>
 
+<div id="autorizar" class="modal fade">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 id="modal-titulo" class="modal-title">Llave de autorización</h4>
+			</div>
+			<div class="modal-body">
+				<input type="text" name="llave" class="form-control" id="2step2">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" onclick="autorizar();"><i class="fa fa-lock" aria-hidden="true"><span> Autorizar</span></i></button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript">
 function refresh() {
 	loader.show()
-	sincco.consumirAPI('POST','{{constant('BASE_URL')}}api/v1/pedidos/seccion/por_aprobar')
+	sincco.consumirAPI('POST',BASE_URL + 'api/v1/pedidos/seccion/por_aprobar')
 	.done(function(data) {
 		loader.hide()
 		toastr.success('Pedidos actualizados.', 'Éxito')
@@ -48,6 +67,25 @@ function refresh() {
 	}).fail(function(jqXHR, textStatus, errorThrown) {
 		toastr.error('Hubo un error al consultar los datos.', 'Intenta de nuevo')
 		loader.hide()
+	})
+}
+
+function autorizar() {
+	loader.show();
+	sincco.consumirAPI('POST', BASE_URL + 'api/v1/pedidos/seccion/cambio_estatus', { auth: $('#2step2').val(), pedidos: $('#pedidos').bootstrapTable('getSelections'), estatus:'Autorizado' })
+	.done(function(data) {
+		if(data.status) {
+			toastr.success('Se han autorizado los pedidos', 'Éxito');
+			window.location.reload()
+		}
+		else {
+			toastr.error(data.error, 'Intenta de nuevo');
+		}
+		loader.hide();
+		$('#autorizar').modal('hide');
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		toastr.error('Error al efectuar la operación.', 'Intenta de nuevo');
+		loader.hide();
 	})
 }
 
@@ -63,7 +101,7 @@ $('#pedidos').on('dbl-click-row.bs.table', function ( row, element ) {
 
 	$('#pedido-detalle').bootstrapTable({
 		method: 'get',
-		url: BASE_URL + 'api/v1/detallepedido/pedido/' + element[0].trim(),
+		url: BASE_URL + 'api/v1/detallepedido/pedido/' + element.pedido.trim(),
 		columns: cols,
 		height: 600,
 		striped: true,

@@ -12,9 +12,20 @@ class PedidosController extends Sincco\Sfphp\Abstracts\Controller {
 	}
 
 	public function porAprobar() {
-		$model = $this->getModel('Ventas\ControlPedidos');
 		$view = $this->newView('Ventas\PedidosPorAprobar');
-		$view->pedidos = $model->getAll();
+		$view->pedidos = $this->getModel('Salamandra')->pedidosEstatus()->where('estatus', 'Pendiente')->getData();
+		$view->menus = $this->helper('UsersAccount')->createMenus();
+		$view->render();
+	}
+
+	public function aprobados() {
+		$view = $this->newView('Ventas\PedidosTabla');
+		$aprobados = $this->getModel('Salamandra')->pedidosEstatus()->where('estatus', 'Autorizado')->getData();
+		$pedidos = [];
+		foreach ($aprobados as $_pedido) {
+			$pedidos[] = $_pedido;
+		}
+		$view->pedidos = $this->getModel('Ventas\Pedidos')->getIn($pedidos);
 		$view->menus = $this->helper('UsersAccount')->createMenus();
 		$view->render();
 	}

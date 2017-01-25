@@ -232,7 +232,16 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 						}
 						new Response('json', ['actualizado'=>true]);
 						break;
-					
+					case 'cambio_estatus':
+						if(! $this->helper('Google2Step')->validaCodigo('GEAKO2IJW4PKLBXF', $this->getParams('auth'))){
+							new Response('json', ['status'=>false, 'error'=>'El código de seguridad no es válido']);
+							return false;
+						}
+						foreach ($this->getParams('pedidos') as $_pedido) {
+							$this->getModel('Ventas\ControlPedidos')->update(['estatus'=>$this->getParams('estatus')], ['empresa'=>$_SESSION['companiaClave'], 'pedido'=>$_pedido['pedido']]);
+						}
+						new Response('json', ['status'=>true]);
+						break;
 					default:
 						new Response('json', $model->getAll());
 						break;

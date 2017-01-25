@@ -21,7 +21,7 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 		return $this->connector->query($query, $params);
 	}
 
-	public function getNotIn($pedidos) {
+	public function getNotIn($pedidos=[]) {
 		$pedido = [];
 		foreach ($pedidos as $_pedido) {
 			$pedido[] = "'" . $_pedido['pedido'] . "'";
@@ -33,6 +33,23 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 			WHERE f.status= :estatus AND f.TIP_DOC_SIG IS NULL';
 		if (count($pedido)) {
 			$query .= '	AND f.CVE_DOC NOT IN (' . implode(",", $pedido) . ')';
+		}
+		$params['estatus'] = 'E';
+		return $this->connector->query($query, $params);
+	}
+
+	public function getIn($pedidos=[]) {
+		$pedido = [];
+		foreach ($pedidos as $_pedido) {
+			$pedido[] = "'" . $_pedido['pedido'] . "'";
+		}
+		$query = 'SELECT f.CVE_DOC, c.NOMBRE CLIENTE ,  f.FECHA_DOC,  f.IMPORTE, COALESCE(c.CVE_VEND,0) CVE_VEND, v.NOMBRE VENDEDOR
+			FROM FACTP' . $_SESSION['companiaClave'] . ' f
+			INNER JOIN CLIE' . $_SESSION['companiaClave'] . ' c ON c.CLAVE=f.CVE_CLPV
+			LEFT JOIN VEND' . $_SESSION['companiaClave'] . ' v ON v.CVE_VEND=f.CVE_VEND
+			WHERE f.status= :estatus AND f.TIP_DOC_SIG IS NULL';
+		if (count($pedido)) {
+			$query .= '	AND f.CVE_DOC IN (' . implode(",", $pedido) . ')';
 		}
 		$params['estatus'] = 'E';
 		return $this->connector->query($query, $params);
@@ -125,7 +142,6 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 			$query .= ' AND trim(c.CVE_VEND) = :vendedor ';
 			$params['vendedor'] = $user['userName'];
 		}
-		#var_dump($query);
 		return $this->connector->query($query, $params);
 	}
 
