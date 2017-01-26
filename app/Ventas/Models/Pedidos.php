@@ -32,7 +32,7 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 			LEFT JOIN VEND' . $_SESSION['companiaClave'] . ' v ON v.CVE_VEND=f.CVE_VEND
 			WHERE f.status= :estatus AND f.TIP_DOC_SIG IS NULL';
 		if (count($pedido)) {
-			$query .= '	AND f.CVE_DOC NOT IN (' . implode(",", $pedido) . ')';
+			$query .= '	AND TRIM(f.CVE_DOC) NOT IN (' . implode(",", $pedido) . ')';
 		}
 		$params['estatus'] = 'E';
 		return $this->connector->query($query, $params);
@@ -47,7 +47,7 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 			FROM FACTP' . $_SESSION['companiaClave'] . ' f
 			INNER JOIN CLIE' . $_SESSION['companiaClave'] . ' c ON c.CLAVE=f.CVE_CLPV
 			LEFT JOIN VEND' . $_SESSION['companiaClave'] . ' v ON v.CVE_VEND=f.CVE_VEND
-			WHERE f.status= :estatus AND f.TIP_DOC_SIG IS NULL	AND f.CVE_DOC IN (' . implode(",", $pedido) . ')';
+			WHERE f.status= :estatus AND f.TIP_DOC_SIG IS NULL	AND TRIM(f.CVE_DOC) IN (' . implode(",", $pedido) . ')';
 		$params['estatus'] = 'E';
 		return $this->connector->query($query, $params);
 	}
