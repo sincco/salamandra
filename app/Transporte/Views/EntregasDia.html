@@ -1,13 +1,16 @@
 {% include 'header.html' %}
 {% include 'menu.html' %}
 
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
 <div class="container">
     <div class="row">
         <h1>Entregas del día</h1>
-        <table id="almacenes" data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
+        <button type="button" class="btn btn-warning" onclick="ruta()"><i class="fa fa-map" aria-hidden="true"><span> Planificar ruta</span></i></button>
+        <table id="pedidos" data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
             <thead>
                 <tr>
-                    <th>Pedido</th><th>Producto</th><th>Unidad</th><th>Operador</th><th>Cantidad</th>
+                    <th data-sortable="true" data-field="pedido">Pedido</th><th data-sortable="true" data-field="producto">Producto</th><th data-sortable="true" data-field="unidad">Unidad</th><th data-sortable="true" data-field="operador">Operador</th><th data-sortable="true" data-field="cantidad">Cantidad</th>
                 </tr>
             </thead>
             <tbody>
@@ -15,8 +18,8 @@
                 <tr>
                     <td>{{ entrega.pedido|trim }}</td>
                     <td>{{ entrega.producto|trim }}</td>
-                    <td>{{ entrega.unidad|trim }}</td>
-                    <td>{{ entrega.operador|trim }}</td>
+                    <td>{{ entrega.noEco|trim }}</td>
+                    <td>{{ entrega.nombre|trim }}</td>
                     <td>{{ entrega.cantidad|trim }}</td>
                 </tr>
                 {% endfor %}
@@ -25,48 +28,47 @@
     </div>
 </div>
 
-<div id="modal" class="modal fade">
+<div id="ruta" class="modal fade">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 id="modal-titulo" class="modal-title">Productos en el alamacen</h4>
+                <h4 id="modal-titulo" class="modal-title">Ruta sugerida</h4>
             </div>
             <div class="modal-body">
-                <table id="almacen-productos"></table>
+                <div id="map-canvas"></div>
             </div>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
-$('#almacenes').on('dbl-click-row.bs.table', function ( row, element ) {
-    var cols = [{"field":"CVE_ART","title":"Producto","sortable":true},
-        {"field":"DESCR","title":"Descripción","sortable":true},
-        {"field":"STATUS","title":"Estatus","sortable":true},
-        {"field":"EXIST","title":"Existencias","sortable":true}];
-    var data = false;
-    loader.show();
-    $('#almacen-productos').bootstrapTable( 'destroy' );
-    $('#almacen-productos').bootstrapTable({
-        method: 'get',
-        url: BASE_URL + 'api/v1/almacenproductos/almacen/' + element[0].trim(),
-        columns: cols,
-        height: 600,
-        striped: true,
-        pagination: true,
-        pageSize: 25,
-        pageList: [10, 25, 50, 100, 200],
-        search: true,
-        showColumns: true,
-        showRefresh: true,
-        showExport: true,
-        mobileResponsive: true,
-        minimumCountColumns: 2
-    });
-    $('#modal').modal('show');
-    loader.hide();
-});
+    function ruta() {
+        loader.show()
+        var pedidos = [];
+        var data = $('#pedidos').bootstrapTable('getData');
+        $(data).each(function() {
+            pedidos.push(this.pedido);
+        });
+        jQuery.unique(pedidos);
+        sincco.consumirAPI('GET',BASE_URL + 'api/v1/pedidos/pedidos/' + pedidos)
+        .done(function(data) {
+            $(data.pedidos).each(function(){
+                sincco.consumirAPI('GET',BASE_URL + 'api/v1/clientes/cliente/' + this.CVE_CLIENTE.trim())
+                .done(function(data) {
+                    sincco.consumirAPI('GET','http://maps.google.com/maps/api/geocode/json?address=' + data.NUMEXT + '+' + data.CALLE + ',+' + data.MUNICIPIO + ',+' + data.ESTADO)
+                    .done(function(data) {
+                        console.log(data);
+                    });
+                });
+            });
+            loader.hide()
+            toastr.success('Pedidos actualizados.', 'Éxito')
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            toastr.error('Hubo un error al consultar los datos.', 'Intenta de nuevo')
+            loader.hide()
+        })
+    }
 </script>
 
 {% include 'footer.html' %}

@@ -19,16 +19,6 @@ class OperadoresModel extends Sincco\Sfphp\Abstracts\Model {
 		return $this->connector->query('SELECT  * FROM operadores WHERE ' . implode(",", $where), $data);
 	}
 
-	public function insert($data) {
-		$campos = [];
-		foreach ($data as $campo => $valor)
-			$campos[] = $campo . "=:" . $campo;
-		$campos = implode(",", $campos);
-		$query = 'INSERT INTO operadores 
-			SET ' . $campos;
-		return $this->connector->query($query, $data);
-	}
-
 	public function update($set,$where) {
 		$campos = [];
 		$condicion = [];
