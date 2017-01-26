@@ -228,7 +228,7 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 					case 'por_aprobar':
 						$enProceso = $this->getModel('Ventas\ControlPedidos')->getAll();
 						foreach ($model->getNotIn($enProceso) as $_pedido) {
-							$this->getModel('Ventas\ControlPedidos')->insert(['empresa'=>$_SESSION['companiaClave'], 'pedido'=>$_pedido['CVE_DOC'], 'estatus'=>'Pendiente'], 'pedidosEstatus');
+							$this->getModel('Ventas\ControlPedidos')->insert(['empresa'=>$_SESSION['companiaClave'], 'pedido'=>trim($_pedido['CVE_DOC']), 'estatus'=>'Pendiente'], 'pedidosEstatus');
 						}
 						new Response('json', ['actualizado'=>true]);
 						break;
