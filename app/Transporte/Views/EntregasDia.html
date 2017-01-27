@@ -52,18 +52,19 @@
         });
         jQuery.unique(pedidos);
         sincco.consumirAPI('GET',BASE_URL + 'api/v1/pedidos/pedidos/' + pedidos)
-        .done(function(data) {
-            $(data.pedidos).each(function(){
+        .done(function(pedidos) {
+            $(pedidos.pedidos).each(function(){
                 sincco.consumirAPI('GET',BASE_URL + 'api/v1/clientes/cliente/' + this.CVE_CLIENTE.trim())
-                .done(function(data) {
-                    sincco.consumirAPI('GET','http://maps.google.com/maps/api/geocode/json?address=' + data.NUMEXT + '+' + data.CALLE + ',+' + data.MUNICIPIO + ',+' + data.ESTADO)
-                    .done(function(data) {
-                        console.log(data);
-                    });
+                .done(function(clientes) {
+                    $(clientes).each(function(){
+                        $.ajax('https://maps.google.com/maps/api/geocode/json?address=' + this.NUMEXT + '+' + this.CALLE + ',+' + this.MUNICIPIO + ',+' + this.ESTADO)
+                        .done(function(maps) {
+                            console.log(maps.results[0].geometry);
+                            loader.hide()
+                        });
+                    })
                 });
             });
-            loader.hide()
-            toastr.success('Pedidos actualizados.', 'Éxito')
         }).fail(function(jqXHR, textStatus, errorThrown) {
             toastr.error('Hubo un error al consultar los datos.', 'Intenta de nuevo')
             loader.hide()
