@@ -65,7 +65,7 @@
 <script type="text/javascript">
 
 var uploadControl = new Resumable({
-	target: BASE_URL + 'images/upload',
+	target: BASE_URL + 'entregasimages/upload',
 	query: {},
 	maxChunkRetries: 2,
 	maxFiles: 10,
@@ -118,17 +118,17 @@ $(function() {
 			form_data.append('file[' + $(this).attr('name') + ']', $(this).prop('files')[0]);
 		});
 		$.ajax({
-			url: BASE_URL + 'gestion/levantamiento/apiupload/pedido/' + $('[name=pedido]').val(),
+			url: BASE_URL + 'api/v1/entregas/pedido/' + $('[name=pedido]').val(),
 			dataType: 'text',
 			cache: false,
 			contentType: false,
 			processData: false,
-			data: form_data,                         
+			data: form_data,
 			type: 'post',
 			success: function(response){
 				var api = JSON.parse(response);
 				if (api.respuesta) {
-					toastr.success('Imágenes guardadas.', 'Éxito');
+					toastr.success('Entrega registrada.', 'Éxito');
 				} else {
 					toastr.error('Error al subir imagenes.', 'Intenta de nuevo');
 				}
@@ -148,7 +148,23 @@ function buscarPedido() {
 			$('[data-field=cliente]').html(pedido.CLIENTE);
 			$('[data-field=fecha]').html(pedido.FECHA_DOC);
 			$('[data-field=monto]').html(pedido.IMPORTE);
-
+			sincco.consumirAPI('GET', BASE_URL + 'api/v1/entregas/tipo/dia/pedido/'+ $('[name=pedido]').val())
+			.done(function(data) {
+				console.log(data.respuesta);
+				$('#productos').bootstrapTable({
+					columns: [{field:'producto',title:'Producto',sortable:true},{field:'cantidad',title:'Cantidad',sortable:true}],
+					data: data.respuesta,
+					height: 600,
+					striped: true,
+					pagination: false,
+					search: false,
+					showColumns: false,
+					showRefresh: false,
+					showExport: false,
+					mobileResponsive: true,
+					minimumCountColumns: 2
+				});
+			});
 			$('.rowPedido').show();
 			$('.rowImagenes').show();
 		}

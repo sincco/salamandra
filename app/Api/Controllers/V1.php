@@ -217,6 +217,48 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 		}
 	}
 
+	public function entregas() {
+		$model = $this->getModel('Transporte\Envios');
+		$data = $this->getParams('data');
+		switch ($this->getRequest()['method']) {
+			case 'GET':
+				if ($this->getParams('tipo') == 'dia') {
+					new Response('json', ['respuesta'=>$model->getPedidoEntregaDia($this->getParams('pedido'))]);
+				}
+				break;
+			case 'POST':
+				$id = [];
+				try {
+					foreach ($data as $_data) {
+						if($_data['cantidad'] > 0) {
+							$_data['producto'] = explode('|', $_data['producto'])[0];
+							$_data['idOperador'] = explode('|', $_data['idOperador'])[0];
+							$_data['idOperador'] = $this->getModel('Catalogo\Operadores')->getBy(['clave'=>$_data['idOperador']])[0]['idOperador'];
+							$_data['idUnidad'] = $this->getModel('Catalogo\Unidades')->getBy(['noEco'=>$_data['idUnidad']])[0]['idUnidad'];
+							$id[] = $model->insert($_data, 'entregas');
+						}
+					}
+				} catch (Exception $e) {
+					$id = false;
+				}
+				if ($id) {
+					new Response('json', ['respuesta'=>true, 'ids'=>$id]);
+				} else {
+					new Response('json', ['respuesta'=>false]);
+				}
+				break;
+			case 'PUT':
+				$where = ['idTarea'=>$data['idTarea']];
+				unset($data['idTarea']);
+				$model->update($data, $where);
+				new Response('json', ['respuesta'=>true]);
+				break;
+			default:
+				new Response('htmlstatuscode', 'Operacion no soportada');
+				break;
+		}
+	}
+
 	public function detallePedido() {
 		$model = $this->getModel('Ventas\Pedidos');
 		$data = $this->getParams('data');
