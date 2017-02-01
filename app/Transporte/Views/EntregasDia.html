@@ -44,7 +44,8 @@
 
 <script type="text/javascript">
     function ruta() {
-        loader.show()
+        loader.show();
+        var locations = [];
         var pedidos = [];
         var data = $('#pedidos').bootstrapTable('getData');
         $(data).each(function() {
@@ -59,10 +60,11 @@
                     $(clientes).each(function(){
                         $.ajax('https://maps.google.com/maps/api/geocode/json?address=' + this.NUMEXT + '+' + this.CALLE + ',+' + this.MUNICIPIO + ',+' + this.ESTADO)
                         .done(function(maps) {
-                            console.log(maps.results[0].geometry);
-                            loader.hide()
+                            locations.push(maps.results[0].geometry.location);
+                            loader.hide();
                         });
                     })
+                    console.log(locations);
                 });
             });
         }).fail(function(jqXHR, textStatus, errorThrown) {

@@ -17,4 +17,12 @@ class EntregasController extends Sincco\Sfphp\Abstracts\Controller {
 		$view->entregas = $entregas;
 		$view->render();
 	}
+
+	public function visita()
+	{
+		$this->helper('UsersAccount')->checkLogin();
+		$view = $this->newView('Transporte\EntregasVisita');
+		$view->menus = $this->helper('UsersAccount')->createMenus();
+		$view->render();
+	}
 }

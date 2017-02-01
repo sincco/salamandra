@@ -1,0 +1,164 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	<div class="row">
+		<h1>Entrega de mercancía</h1>
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="input-group">
+					<input type="text" name="pedido" class="form-control" placeholder="Pedido..." value="Q001015">
+					<span class="input-group-btn">
+						<button class="btn btn-primary" type="button" onclick="buscarPedido();">Buscar</button>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row rowPedido">
+		<h4>Datos de la entrega</h4>
+		<div class="row">
+			<div class="col-lg-4">
+				<label>Cliente: <span data-field="cliente"></span></label>
+				<div class="col-lg-8">
+					<div class="row">
+						<label>Fecha: <span data-field="fecha"></span></label>
+						<label>Monto: <span data-field="monto"></span></label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<table id="productos"></table>
+			</div>
+		</div>
+	</div>
+
+	<form name="imagenes">
+		<div class="row rowImagenes">
+			<h4>Cargar imágenes de la entrega</h4>
+			<div class="row">
+				<div class="col-xs-6">
+					<div class="fileUpload btn btn-default">
+						<i class="fa fa-camera"> <span>Recepción de mercancía</span></i>
+						<input type="file" class="upload" name="1recepcion-{{ "now"|date("Ymd") }}" />
+					</div>
+				</div>
+				<div class="col-xs-6">
+					<div class="fileUpload btn btn-default">
+						<i class="fa fa-camera"> <span>Mercancía</span></i>
+						<input type="file" class="upload" name="2mercancia-{{ "now"|date("Ymd") }}" />
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6">
+					<button id="upload" type="button" class="btn btn-success"><i class="fa fa-cloud" aria-hidden="true"> <span>Aceptar</span></i></button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+
+var uploadControl = new Resumable({
+	target: BASE_URL + 'images/upload',
+	query: {},
+	maxChunkRetries: 2,
+	maxFiles: 10,
+	prioritizeFirstAndLastChunk: true,
+	simultaneousUploads: 4
+});
+
+uploadControl.on('fileAdded', function (file, name, event) {
+	file.uniqueIdentifier = $('[name=pedido]').val() + '-' + name;
+	file.fileName = name + '.' + file.fileName.split('.').pop();
+	// console.log('IMAGEN AGREGADA',file.uniqueIdentifier, file.fileName, file.file.type)
+});
+
+uploadControl.on('fileProgress', function (file) {
+	var progress = Math.floor(file.progress() * 100);
+	// console.log(progress);
+});
+
+uploadControl.on('fileSuccess', function (file, message) {
+	// console.log(file.uniqueIdentifier);
+});
+
+uploadControl.on('uploadStart', function () {
+	// console.log('CARGANDO...');
+	loader.show();
+});
+
+uploadControl.on('complete', function () {
+	// console.log('completo...')
+	loader.hide();
+	toastr.success('Imágenes guardadas.', 'Éxito');
+});
+
+$(function() {
+	$('.rowPedido').hide();
+	$('.rowImagenes').hide();
+
+	$('.upload').change(function() {
+		$(this).parent().removeClass('btn-default');
+		$(this).parent().addClass('btn-info');
+		uploadControl.addFile(this.files[0], this.name);
+	});
+
+	$('#upload').click(function() {
+		uploadControl.upload();
+		return;
+		loader.show();
+		var form_data = new FormData();
+		$('.upload').each(function() {
+			form_data.append('file[' + $(this).attr('name') + ']', $(this).prop('files')[0]);
+		});
+		$.ajax({
+			url: BASE_URL + 'gestion/levantamiento/apiupload/pedido/' + $('[name=pedido]').val(),
+			dataType: 'text',
+			cache: false,
+			contentType: false,
+			processData: false,
+			data: form_data,                         
+			type: 'post',
+			success: function(response){
+				var api = JSON.parse(response);
+				if (api.respuesta) {
+					toastr.success('Imágenes guardadas.', 'Éxito');
+				} else {
+					toastr.error('Error al subir imagenes.', 'Intenta de nuevo');
+				}
+				loader.hide();
+			}
+		});
+	});
+});
+
+function buscarPedido() {
+	loader.show();
+	$('[data-field=cliente]').html('');
+	sincco.consumirAPI('GET', BASE_URL + 'api/v1/pedidos/pedidos/'+ $('[name=pedido]').val())
+	.done(function(data) {
+		if (data.pedidos.length > 0) {
+			var pedido = data.pedidos[0];
+			$('[data-field=cliente]').html(pedido.CLIENTE);
+			$('[data-field=fecha]').html(pedido.FECHA_DOC);
+			$('[data-field=monto]').html(pedido.IMPORTE);
+			
+			$('.rowPedido').show();
+			$('.rowImagenes').show();
+		}
+		loader.hide();
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		toastr.error('Error al hacer la petición de la información.', 'Intenta de nuevo');
+		loader.hide();
+	});
+}
+
+</script>
+
+{% include 'footer.html' %}
