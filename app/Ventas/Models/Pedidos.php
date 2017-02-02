@@ -7,7 +7,7 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 	}
 	
 	public function getAll() {
-		$query = 'SELECT f.CVE_DOC, c.NOMBRE CLIENTE ,  f.FECHA_DOC,  f.IMPORTE, COALESCE(c.CVE_VEND,0) CVE_VEND, v.NOMBRE VENDEDOR
+		$query = 'SELECT TRIM(f.CVE_DOC) CVE_DOC, c.NOMBRE CLIENTE ,  f.FECHA_DOC,  f.IMPORTE, COALESCE(c.CVE_VEND,0) CVE_VEND, v.NOMBRE VENDEDOR
 			FROM FACTP' . $_SESSION['companiaClave'] . ' f
 			INNER JOIN CLIE' . $_SESSION['companiaClave'] . ' c ON c.CLAVE=f.CVE_CLPV
 			LEFT JOIN VEND' . $_SESSION['companiaClave'] . ' v ON v.CVE_VEND=f.CVE_VEND
@@ -26,7 +26,7 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 		foreach ($pedidos as $_pedido) {
 			$pedido[] = "'" . $_pedido['pedido'] . "'";
 		}
-		$query = 'SELECT f.CVE_DOC, c.NOMBRE CLIENTE ,  f.FECHA_DOC,  f.IMPORTE, COALESCE(c.CVE_VEND,0) CVE_VEND, v.NOMBRE VENDEDOR
+		$query = 'SELECT TRIM(f.CVE_DOC) CVE_DOC, c.NOMBRE CLIENTE ,  f.FECHA_DOC,  f.IMPORTE, COALESCE(c.CVE_VEND,0) CVE_VEND, v.NOMBRE VENDEDOR
 			FROM FACTP' . $_SESSION['companiaClave'] . ' f
 			INNER JOIN CLIE' . $_SESSION['companiaClave'] . ' c ON c.CLAVE=f.CVE_CLPV
 			LEFT JOIN VEND' . $_SESSION['companiaClave'] . ' v ON v.CVE_VEND=f.CVE_VEND
@@ -43,7 +43,7 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 		foreach ($pedidos as $_pedido) {
 			$pedido[] = "'" . $_pedido['pedido'] . "'";
 		}
-		$query = 'SELECT f.CVE_DOC, c.NOMBRE CLIENTE ,  f.FECHA_DOC,  f.IMPORTE, COALESCE(c.CVE_VEND,0) CVE_VEND, v.NOMBRE VENDEDOR
+		$query = 'SELECT TRIM(f.CVE_DOC) CVE_DOC, c.NOMBRE CLIENTE ,  f.FECHA_DOC,  f.IMPORTE, COALESCE(c.CVE_VEND,0) CVE_VEND, v.NOMBRE VENDEDOR
 			FROM FACTP' . $_SESSION['companiaClave'] . ' f
 			INNER JOIN CLIE' . $_SESSION['companiaClave'] . ' c ON c.CLAVE=f.CVE_CLPV
 			LEFT JOIN VEND' . $_SESSION['companiaClave'] . ' v ON v.CVE_VEND=f.CVE_VEND
@@ -57,7 +57,7 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 		foreach ($pedidos as $_pedido) {
 			$pedido[] = "'" . $_pedido['pedido'] . "'";
 		}
-		$query = 'SELECT f.CVE_DOC, c.CLAVE CVE_CLIENTE, c.NOMBRE CLIENTE ,  f.FECHA_DOC,  f.IMPORTE, COALESCE(c.CVE_VEND,0) CVE_VEND, v.NOMBRE VENDEDOR
+		$query = 'SELECT TRIM(f.CVE_DOC) CVE_DOC, c.CLAVE CVE_CLIENTE, c.NOMBRE CLIENTE ,  f.FECHA_DOC,  f.IMPORTE, COALESCE(c.CVE_VEND,0) CVE_VEND, v.NOMBRE VENDEDOR
 			FROM FACTP' . $_SESSION['companiaClave'] . ' f
 			INNER JOIN CLIE' . $_SESSION['companiaClave'] . ' c ON c.CLAVE=f.CVE_CLPV
 			LEFT JOIN VEND' . $_SESSION['companiaClave'] . ' v ON v.CVE_VEND=f.CVE_VEND
@@ -69,7 +69,7 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 		$query = '
 			SELECT CVE_DOC,NOMBRE,FECHA_DOC,FECHA_ENT,CAN_TOT,STR_OBS,REMISION,FACTURA,SUM(IMPORTE_PAGO) PAGO, CAN_TOT - SUM(IMPORTE_PAGO) RESTA FROM (
 				SELECT
-				FAC.CVE_DOC FACTURA, FAC.CVE_CLPV CLIENTE, FAC.FECHA_DOC FACTURA_FECHA,FAC.CAN_TOT FACTURA_TOTAL,
+				TRIM(f.CVE_DOC) FACTURA, FAC.CVE_CLPV CLIENTE, FAC.FECHA_DOC FACTURA_FECHA,FAC.CAN_TOT FACTURA_TOTAL,
 				CTA.IMPORTE IMPORTE_PAGO,
 				NULL REMISION,NULL REMISION_FECHA, NULL REMISION_TOTAL,
 				PED.*
@@ -139,7 +139,7 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 
 	public function getDetallePedido($pedido)
 	{
-		$query = "SELECT P.CVE_DOC, P.CVE_CLPV, C.NOMBRE, I.CVE_ART, I.DESCR, PP.CANT, P.FECHA_ENT, C.CALLE, C.COLONIA, C.MUNICIPIO, C.ESTADO
+		$query = "SELECT TRIM(P.CVE_DOC) CVE_DOC, P.CVE_CLPV, C.NOMBRE, I.CVE_ART, I.DESCR, PP.CANT, P.FECHA_ENT, C.CALLE, C.COLONIA, C.MUNICIPIO, C.ESTADO
 			FROM FACTP" . $_SESSION['companiaClave'] . " P
 			INNER JOIN CLIE" . $_SESSION['companiaClave'] . " C ON P.CVE_CLPV=C.CLAVE
 			INNER JOIN PAR_FACTP" . $_SESSION['companiaClave'] . " PP ON P.CVE_DOC=PP.CVE_DOC
@@ -157,7 +157,7 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 
 	public function getDetalleDia($fecha)
 	{
-		$query = "SELECT P.CVE_DOC, P.CVE_CLPV, C.NOMBRE, I.CVE_ART, I.DESCR, PP.CANT, P.FECHA_ENT, C.CALLE, C.COLONIA, C.MUNICIPIO, C.ESTADO
+		$query = "SELECT TRIM(P.CVE_DOC) CVE_DOC, P.CVE_CLPV, C.NOMBRE, I.CVE_ART, I.DESCR, PP.CANT, P.FECHA_ENT, C.CALLE, C.COLONIA, C.MUNICIPIO, C.ESTADO
 			FROM FACTP" . $_SESSION['companiaClave'] . " P
 			INNER JOIN CLIE" . $_SESSION['companiaClave'] . " C ON P.CVE_CLPV=C.CLAVE
 			INNER JOIN PAR_FACTP" . $_SESSION['companiaClave'] . " PP ON P.CVE_DOC=PP.CVE_DOC
