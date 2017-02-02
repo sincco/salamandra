@@ -111,7 +111,6 @@ $(function() {
 
 	$('#upload').click(function() {
 		uploadControl.upload();
-		return;
 		loader.show();
 		var form_data = new FormData();
 		$('.upload').each(function() {
@@ -124,10 +123,16 @@ $(function() {
 			contentType: false,
 			processData: false,
 			data: form_data,
-			type: 'post',
+			type: 'put',
 			success: function(response){
 				var api = JSON.parse(response);
 				if (api.respuesta) {
+					$('.rowPedido').hide();
+					$('.rowImagenes').hide();
+					$('[data-field=cliente]').html('');
+					$('[data-field=fecha]').html('');
+					$('[data-field=monto]').html('');
+					$('[name=pedido]').val('');
 					toastr.success('Entrega registrada.', 'Éxito');
 				} else {
 					toastr.error('Error al subir imagenes.', 'Intenta de nuevo');

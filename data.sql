@@ -238,7 +238,7 @@ CREATE TABLE `entregas` (
   `cantidad` FLOAT NULL,
   `idUnidad` INT NULL,
   `idOperador` INT NULL,
-  `entregado` BIT NULL,
+  `entregado` INT NULL,
   `tarimasPorRecoger` INT NULL COMMENT 'Control de entregas',
   PRIMARY KEY (`idEntrega`));
 

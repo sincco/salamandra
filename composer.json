@@ -29,7 +29,8 @@
             "etc/config",
             "etc/local",
             "bkp",
-            "_proyectos"
+            "_proyectos",
+            "_entregas"
         ]
     }
 }

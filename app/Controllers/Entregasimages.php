@@ -3,7 +3,7 @@
 use \Sincco\Sfphp\Response;
 use \Sincco\Tools\Debug;
 
-class Entregasimages extends Sincco\Sfphp\Abstracts\Controller 
+class EntregasimagesController extends Sincco\Sfphp\Abstracts\Controller 
 {
 	public function upload() {
 		if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -34,7 +34,6 @@ class Entregasimages extends Sincco\Sfphp\Abstracts\Controller
 			if(isset($_POST['resumableIdentifier']) && trim($_POST['resumableIdentifier'])!=''){
 				$temp_dir = PATH_TMP . '/' . $_POST['resumableIdentifier'];
 			}
-
 			$dest_file = $temp_dir.'/'.$_POST['resumableFilename'].'.part'.$_POST['resumableChunkNumber'];
 			if (!is_dir($temp_dir)) {
 				mkdir($temp_dir, 0777, true);
@@ -44,12 +43,14 @@ class Entregasimages extends Sincco\Sfphp\Abstracts\Controller
 			} else {
 				// checa las partes cargadas y crea el archivo
 				$headers = getallheaders();
-				$this->createFileFromChunks($temp_dir, $_POST['resumableFilename'], $_POST['resumableChunkSize'], $_POST['resumableTotalSize'], $_POST['resumableTotalChunks'], $headers['target']);
+				$this->createFileFromChunks($temp_dir, $_POST['resumableFilename'], $_POST['resumableChunkSize'], $_POST['resumableTotalSize'], $_POST['resumableTotalChunks'], $headers['target'], $subDir[0]);
 			}
 		}
 	}
 
 	private function createFileFromChunks($temp_dir, $fileName, $chunkSize, $totalSize,$total_files, $subDir) {
+		$subDir = explode('-', $_POST['resumableIdentifier']);
+		$subDir = $subDir[0];
 		// cuenta las partes del archivo
 		$total_files_on_server_size = 0;
 		$temp_total = 0;
@@ -68,7 +69,7 @@ class Entregasimages extends Sincco\Sfphp\Abstracts\Controller
 			if (($fp = fopen(PATH_DELIVERIES_FILES . '/' . $subDir . '/' . $fileName, 'w')) !== false) {
 				for ($i=1; $i<=$total_files; $i++) {
 					fwrite($fp, file_get_contents($temp_dir.'/'.$fileName.'.part'.$i));
-					var_dump('escribiendo parte '.$i);
+					#var_dump('escribiendo parte '.$i);
 				}
 				fclose($fp);
 				chmod(PATH_DELIVERIES_FILES . '/' . $subDir . '/' . $fileName, 0777);
