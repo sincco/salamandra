@@ -58,8 +58,8 @@ var hot;
 
 $(document).ready(function () {
     $('#calendario').zabuto_calendar({
-        year: 2014,
-        month: 12,
+        year: new Date().getFullYear(),
+        month: new Date().getMonth() + 1,
         cell_border: true,
         today: true,
         action: function () {

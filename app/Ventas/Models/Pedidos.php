@@ -61,7 +61,7 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 			FROM FACTP' . $_SESSION['companiaClave'] . ' f
 			INNER JOIN CLIE' . $_SESSION['companiaClave'] . ' c ON c.CLAVE=f.CVE_CLPV
 			LEFT JOIN VEND' . $_SESSION['companiaClave'] . ' v ON v.CVE_VEND=f.CVE_VEND
-			WHERE f.TIP_DOC_SIG IS NULL	AND TRIM(f.CVE_DOC) IN (' . implode(",", $pedido) . ')';
+			WHERE TRIM(f.CVE_DOC) IN (' . implode(",", $pedido) . ')';
 		return $this->connector->query($query);
 	}
 
