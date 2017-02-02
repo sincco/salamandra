@@ -282,7 +282,6 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 				foreach (explode(',', $this->getParams('pedidos')) as $_pedido) {
 					$pedidos[] = ['pedido'=>$_pedido];
 				}
-				var_dump($pedidos);
 				new Response('json', ['pedidos'=>$model->_getIn($pedidos)]);
 				break;
 			default:
