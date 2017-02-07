@@ -17,6 +17,7 @@
 	<div class="row">
 		<button type="button" class="btn btn-success" onclick="nuevaCaptura();"><i class="fa fa-plus-circle" aria-hidden="true"> <span>Nueva tarea</span></i></button>
 		<button type="button" class="btn btn-warning" onclick="jQuery.redirect(BASE_URL + 'proyectos/proyectos/gantt', { 'idProyecto': {{ idProyecto|trim }} });"><i class="fa fa-line-chart" aria-hidden="true"> <span>Ver diagrama</span></i></button>
+		<button type="button" class="btn btn-info" onclick="jQuery.redirect(BASE_URL + 'proyectos/proyectos/formato', { 'idProyecto': {{ idProyecto|trim }} });"><i class="fa fa-file-text " aria-hidden="true"> <span>Ver formato</span></i></button>
 		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
 			<thead>
 				<tr>
