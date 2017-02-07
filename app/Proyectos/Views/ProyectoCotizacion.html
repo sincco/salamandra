@@ -188,7 +188,7 @@ function guardar(idProyectoCotizacion) {
     if (data.respuesta) {
       hot.loadData([])
       toastr.success('Cotización asignada a la tarea.', 'Éxito');
-      //$.redirect(BASE_URL + 'proyectos/proyectos/tareas',{idProyecto:$('#idProyecto').val()}, 'POST');
+      $.redirect(BASE_URL + 'proyectos/proyectos/tareas',{idProyecto:$('#idProyecto').val()}, 'POST');
       loader.hide()
     } else {
        toastr.error('Hubo un error al guardar los datos.', 'Intenta de nuevo');
