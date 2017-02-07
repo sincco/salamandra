@@ -102,14 +102,21 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		$model = $this->getModel('Salamandra');
 		foreach ($this->getParams('data') as $_data) {
 			foreach ($_data['productos'] as $producto) {
-				if (trim($producto[0]) != '') {
-					$_producto['idProyectoCotizacion'] = $_data['idProyectoCotizacion'];
-					$_producto['producto'] = $producto[0];
-					$_producto['descripcion'] = $producto[1];
-					$_producto['unidad'] = $producto[2];
-					$_producto['precio'] = $producto[3];
-					$_producto['cantidad'] = $producto[4];
-					$id = $model->proyectosCotizacionDetalle()->insert($_producto);
+				$model->init();
+				$existe = $model->proyectosCotizacionDetalle()->where('idProyectoCotizacion', $_data['idProyectoCotizacion'])->where('descripcion', $producto[1])->getData();
+				if (count($existe) > 0) {
+
+				} else {
+					if (trim($producto[0]) != '') {
+						$_producto['idProyectoCotizacion'] = $_data['idProyectoCotizacion'];
+						$_producto['producto'] = $producto[0];
+						$_producto['descripcion'] = $producto[1];
+						$_producto['unidad'] = $producto[2];
+						$_producto['precio'] = $producto[3];
+						$_producto['cantidad'] = $producto[4];
+						$model->init();
+						$id = $model->proyectosCotizacionDetalle()->insert($_producto);
+					}
 				}
 			}
 		}
