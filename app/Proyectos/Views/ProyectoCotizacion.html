@@ -58,13 +58,26 @@
 <script type="text/javascript">
 var
   grid = document.getElementById('grid-venta'),
-  hot
+  hot,
+  data = [
+    {% for data in cotizacion %}
+      ['{{data.producto}}','{{data.descripcion}}','{{data.unidad}}','{{data.precio}}','{{data.cantidad}}', {{data.cantidad}}*{{data.precio}}],
+    {% endfor %}];
 
 crearTabla();
+var fila = 0;
+$(data).each(function() {
+  hot.setDataAtCell(fila, 0, data[fila][0]);
+  hot.setDataAtCell(fila, 1, data[fila][1]);
+  hot.setDataAtCell(fila, 2, data[fila][2]);
+  hot.setDataAtCell(fila, 3, data[fila][3]);
+  hot.setDataAtCell(fila, 4, data[fila][4]);
+  fila++;
+})
 
 function crearTabla () {
   hot = new Handsontable(grid, {
-    data: [],
+    data: data,
     minSpareRows: 1,
     colHeaders: true,
     rowHeaders: true,
@@ -112,7 +125,6 @@ function crearTabla () {
           var subtotal = parseFloat(hot.getDataAtCell(changes[0][0], 3)) * parseFloat(hot.getDataAtCell(changes[0][0], 4))
           hot.setDataAtCell(changes[0][0], 5, subtotal)
         }
-        actualizaTotal()
       }
     }
   })
@@ -176,7 +188,7 @@ function guardar(idProyectoCotizacion) {
     if (data.respuesta) {
       hot.loadData([])
       toastr.success('Cotización asignada a la tarea.', 'Éxito');
-      $.redirect(BASE_URL + 'proyectos/proyectos/tareas',{idProyecto:$('#idProyecto').val()}, 'POST');
+      //$.redirect(BASE_URL + 'proyectos/proyectos/tareas',{idProyecto:$('#idProyecto').val()}, 'POST');
       loader.hide()
     } else {
        toastr.error('Hubo un error al guardar los datos.', 'Intenta de nuevo');

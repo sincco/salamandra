@@ -334,7 +334,8 @@ CREATE TABLE IF NOT EXISTS `proyectosCotizacionDetalle` (
   `unidad` varchar(10) NOT NULL,
   `cantidad` float NOT NULL,
   `precio` float NOT NULL,
-  PRIMARY KEY (`idProyectoCotizacionDetalle`)
+  PRIMARY KEY (`idProyectoCotizacionDetalle`),
+  UNIQUE KEY `proyecto_cotizacion_detalle` (`idProyectoCotizacion`, `descripcion`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Detalle de cotizacion de proyecto';
 
 -- --------------------------------------------------------

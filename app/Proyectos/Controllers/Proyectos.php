@@ -79,9 +79,14 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		$model = $this->getModel('Salamandra');
 		$info = $model->proyectos()->join('proyectosTareas tar', 'tar.idProyecto = maintable.idProyecto')->join('proyectosCotizacion cot', 'cot.idTarea = tar.idTarea')->where('idTarea', $this->getParams('idTarea'), '=', 'tar')->fields('idProyecto')->fields('titulo')->fields('idTarea', 'tar')->fields('titulo tarea', 'tar')->fields('idProyectoCotizacion', 'cot')->getData();
 
+		$idProyectoCotizacion = $info[0];
+		$model->init();
+		$cotizacion = $model->proyectosCotizacionDetalle()->where('idProyectoCotizacion', $idProyectoCotizacion['idProyectoCotizacion'])->getData();
+
 		$view = $this->newView('Proyectos\ProyectoCotizacion');
 		$view->menus = $this->helper('UsersAccount')->createMenus();
 		$view->info = $info;
+		$view->cotizacion = $cotizacion;
 		$view->render();
 	}
 
