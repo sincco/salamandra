@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `cotizaciones` (
   `userId` int(11) NOT NULL,
   PRIMARY KEY (`cotizacion`),
   UNIQUE KEY `cotizacion_cliente` (`cliente`,`fecha`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Cotizaciones a clientes' AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Cotizaciones a clientes';
 
 -- --------------------------------------------------------
 
@@ -305,7 +305,37 @@ CREATE TABLE `pedidosEstatus` (
   `empresa` char(3) NOT NULL,
   `pedido` char(12) NOT NULL,
   `estatus` ENUM('Pendiente', 'Autorizado', 'No Autorizado') NOT NULL COMMENT 'Control de pedidos',
-  PRIMARY KEY (`idLoggeo`));
+  PRIMARY KEY (`empresa`, `pedido`));
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `proyectosCotizacion`
+--
+DROP TABLE IF EXISTS `proyectosCotizacion`;
+CREATE TABLE IF NOT EXISTS `proyectosCotizacion` (
+  `idProyectoCotizacion` int(11) NOT NULL AUTO_INCREMENT,
+  `idTarea` int(11) NOT NULL,
+  PRIMARY KEY (`idProyectoCotizacion`),
+  UNIQUE KEY `proyecto_cotizacion` (`idTarea`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Cotizacion  de proyectos';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `proyectosCotizacionDetalle`
+--
+DROP TABLE IF EXISTS `proyectosCotizacionDetalle`;
+CREATE TABLE IF NOT EXISTS `proyectosCotizacionDetalle` (
+  `idProyectoCotizacionDetalle` int(11) NOT NULL AUTO_INCREMENT,
+  `idProyectoCotizacion` int(11) NOT NULL,
+  `producto` varchar(16) NOT NULL,
+  `descripcion` varchar(150) NOT NULL,
+  `unidad` varchar(10) NOT NULL,
+  `cantidad` float NOT NULL,
+  `precio` float NOT NULL,
+  PRIMARY KEY (`idProyectoCotizacionDetalle`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Detalle de cotizacion de proyecto';
 
 -- --------------------------------------------------------
 

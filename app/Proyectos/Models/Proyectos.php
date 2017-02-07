@@ -17,7 +17,7 @@ class ProyectosModel extends Sincco\Sfphp\Abstracts\Model {
 			ORDER BY clave', ['clave'=>$data]);
 	}
 
-	public function insert($data) {
+	public function insert($data, $tabla='') {
 		$campos = [];
 		foreach ($data as $campo => $valor)
 			$campos[] = $campo . "=:" . $campo;

@@ -22,7 +22,7 @@ class TareasModel extends Sincco\Sfphp\Abstracts\Model {
 			ORDER BY inicio', $data);
 	}
 
-	public function insert($data) {
+	public function insert($data, $tabla='') {
 		$campos = [];
 		foreach ($data as $campo => $valor)
 			$campos[] = $campo . "=:" . $campo;
