@@ -1,0 +1,217 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	<div class="row">
+  {% for data in info %}
+		<h1>{{data.titulo}}</h1>
+    <h3>{{data.tarea}}</h3>
+    <input type="hidden" id="idProyectoCotizacion" value="{{data.idProyectoCotizacion}}">
+    <input type="hidden" id="idProyecto" value="{{data.idProyecto}}">
+  {% endfor %}
+	</div>
+
+
+	<div class="row">
+    <div class="col-xs-6">
+      <button type="button" class="btn btn-default" onclick="$.redirect(BASE_URL + 'proyectos/proyectos/tareas',{idProyecto:$('#idProyecto').val()}, 'POST');"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"><span> Regresar</span></i></button>
+    </div>
+    <div class="col-xs-6">
+      <div class="row">
+        <div class="col-xs-6">
+          Lista de precios
+        </div>
+        <div class="col-xs-6">
+          <select id="lista-precio" class="form-control col-xs-6">
+          {% for precio in precios %}
+          <option value="{{precio.CVE_PRECIO|trim}}">{{precio.DESCRIPCION|trim}}</option>
+          {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <hr>
+
+  <div class="row">
+    <div class="col-xs-10"></div>
+    <div class="col-xs-2">
+      <button type="button" class="btn btn-success" onclick="guardar($('#idProyectoCotizacion').val());"><i class="fa fa-hdd-o" aria-hidden="true"><span> Guardar</span></i></button>
+    </div>
+	</div>
+
+  <hr>
+
+	<div class="row">
+		<div id="grid-venta" class="handsontable"></div>
+	</div>
+
+</div>
+
+<div id="modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 id="modal-titulo" class="modal-title">Buscar producto</h4>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="fila-actual">
+        <table id="tabla-productos"></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+var
+  grid = document.getElementById('grid-venta'),
+  hot,
+  data = [
+    {% for data in cotizacion %}
+      ['{{data.producto}}','{{data.descripcion}}','{{data.unidad}}','{{data.precio}}','{{data.cantidad}}', {{data.cantidad}}*{{data.precio}}],
+    {% endfor %}];
+
+crearTabla();
+var fila = 0;
+$(data).each(function() {
+  hot.setDataAtCell(fila, 0, data[fila][0]);
+  hot.setDataAtCell(fila, 1, data[fila][1]);
+  hot.setDataAtCell(fila, 2, data[fila][2]);
+  hot.setDataAtCell(fila, 3, data[fila][3]);
+  hot.setDataAtCell(fila, 4, data[fila][4]);
+  fila++;
+})
+
+function crearTabla () {
+  hot = new Handsontable(grid, {
+    data: data,
+    minSpareRows: 1,
+    colHeaders: true,
+    rowHeaders: true,
+    fixedRowsTop: 0,
+    startCols: 4,
+    contextMenu: ['remove_row'],
+    colHeaders: ['Clave', 'Descripcion', 'Unidad', 'Precio', 'Cantidad', 'Subtotal'],
+    columns: [
+      {data:'clave'},
+      {data:'descripcionCorta',readOnly: false},
+      {data:'unidad', readOnly: false},
+      {data:'precio', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'cantidad', type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'subtotal', type: 'numeric', format: '0,0.000', language: 'en', readOnly: true},
+    ], 
+    afterChange: function (changes, source) {
+      if ((source == 'edit' || source == 'paste')) {
+        if (changes[0][1] == "clave") {
+          if (changes[0][3] == "@@") {
+            hot.setDataAtCell(changes[0][0], 1, 'Producto personalizado')
+            hot.setDataAtCell(changes[0][0], 2, 'N/A')
+            hot.setDataAtCell(changes[0][0], 3, '1.00')
+            hot.setDataAtCell(changes[0][0], 4, 1)
+          } else {
+            var cve = changes[0][3];
+            if (cve.trim() != '') {
+              sincco.consumirAPI('POST', '{{constant("BASE_URL")}}catalogo/productos/apiClave', { data: cve.trim(), listaPrecio: $('#lista-precio').val() })
+              .done(function(data) {
+                if (data.length) {
+                  hot.setDataAtCell(changes[0][0], 1, data[0].DESCR)
+                  hot.setDataAtCell(changes[0][0], 2, data[0].UNI_MED)
+                  hot.setDataAtCell(changes[0][0], 3, data[0].PRECIO)
+                  hot.setDataAtCell(changes[0][0], 4, 1)
+                } else {
+                  hot.setDataAtCell(changes[0][0], 1, 'NO EXISTE')
+                  toastr.error('El producto no existe.', 'Intenta de nuevo')
+                }
+              }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.log(errorThrown)
+              })
+            }
+          }
+        }
+        if (changes[0][1] == "cantidad") {
+          var subtotal = parseFloat(hot.getDataAtCell(changes[0][0], 3)) * parseFloat(hot.getDataAtCell(changes[0][0], 4))
+          hot.setDataAtCell(changes[0][0], 5, subtotal)
+        }
+      }
+    }
+  })
+
+  hot.updateSettings({
+    beforeKeyDown: function (e) {
+      var selection = hot.getSelected()
+      if (e.keyCode == 113) {
+        $('#fila-actual').val(selection[0])
+        loader.show()
+        e.preventDefault()
+        lastChange = null
+        e.stopImmediatePropagation();
+        $('#tabla-productos').bootstrapTable({
+          method: 'get',
+          url: '{{constant('BASE_URL')}}catalogo/productos/apicatalogo',
+          columns: [{ field:'CVE_ART', title:'Clave' }, { field:'DESCR', title:'Descripcion' }, { field:'UNI_MED', title:'Unidad' }],
+          height: 300,
+          striped: true,
+          pagination: true,
+          pageSize: 50,
+          pageList: [50, 100, 200],
+          search: true,
+          showColumns: true,
+          showRefresh: true,
+          showExport: true,
+          mobileResponsive: true,
+          minimumCountColumns: 2
+        })
+        $('#modal').modal('show')
+        loader.hide()
+      }
+    }
+  })
+}
+
+function actualizaTotal() {
+  var totalVenta = 0
+  hot.getData().forEach(function(element, index, array) {
+    if (!isNaN(parseFloat(element.subtotal))) {
+      totalVenta = totalVenta + parseFloat(element.subtotal)
+    }
+  })
+  $('#totalVenta').html(Math.round(totalVenta * 100) /100)
+  $('#total').val(Math.round(totalVenta * 100) /100)
+  $('#efectivo').val(Math.round(totalVenta * 100) /100)
+  $('#tarjeta').val('0.000')
+  $('#monedero').val('0.000')
+  $('#cambio').val('0.000')
+  return true
+}
+
+function notificar() {
+  $('#myModal').modal('show')
+}
+
+function guardar(idProyectoCotizacion) {
+  loader.show()
+  sincco.consumirAPI('POST','{{constant("BASE_URL")}}proyectos/proyectos/cotiza', { data: [{idProyectoCotizacion: idProyectoCotizacion, productos: hot.getData() }] })
+  .done(function(data) {
+    if (data.respuesta) {
+      hot.loadData([])
+      toastr.success('Cotización asignada a la tarea.', 'Éxito');
+      $.redirect(BASE_URL + 'proyectos/proyectos/tareas',{idProyecto:$('#idProyecto').val()}, 'POST');
+      loader.hide()
+    } else {
+       toastr.error('Hubo un error al guardar los datos.', 'Intenta de nuevo');
+       loader.hide()
+     }
+  }).fail(function(jqXHR, textStatus, errorThrown) {
+    console.log('Error',errorThrown)
+    loader.hide()
+  })
+}
+
+$('#tabla-productos').on('dbl-click-row.bs.table', function (row, element) {
+  hot.setDataAtCell($('#fila-actual').val(), 0, element.CVE_ART)
+  $('#modal').modal('hide')
+})
+</script>
+{% include 'footer.html' %}
