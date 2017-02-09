@@ -8,27 +8,28 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 
 	public function index() {
 		$this->helper('UsersAccount')->checkLogin();
-		$view = $this->newView('Proyectos\ProyectosTabla');
-		$view->proyectos = $this->getModel('Salamandra')
-					->table('proyectos')
-					->getData();
+		$view = $this->newView('Gonzalez\ProyectosTabla');
+		$view->proyectos = $this->getModel('Salamandra')->gzlzProyectos()->getData();
 		$view->menus = $this->helper('UsersAccount')->createMenus();
 		$view->render();
 	}
 
 	public function nuevo() {
 		$this->helper('UsersAccount')->checkLogin();
-		$view = $this->newView('Proyectos\ProyectoNuevo');
+		$view = $this->newView('Gonzalez\ProyectoNuevo');
 		$view->menus = $this->helper('UsersAccount')->createMenus();
 		$view->render();
 	}
 
 	public function tareas() {
+		$model = $this->getModel('Salamandra');
 		$this->helper('UsersAccount')->checkLogin();
-		$view = $this->newView('Proyectos\ProyectoTareas');
+		$view = $this->newView('Gonzalez\ProyectoTareas');
 		$view->menus = $this->helper('UsersAccount')->createMenus();
-		$view->proyectos = $this->getModel('Proyectos\Proyectos')->getById($this->getParams('idProyecto'));
-		$view->tareas = $this->getModel('Proyectos\Tareas')->getByIdProyecto($this->getParams('idProyecto'));
+		$model->init();
+		$view->proyectos = $model->gzlzProyectos()->where('idProyecto', $this->getParams('idProyecto'))->getData();
+		$model->init();
+		$view->tareas = $model->gzlzProyectosTareas()->where('idProyecto', $this->getParams('idProyecto'))->getData();
 		$view->idProyecto = $this->getParams('idProyecto');
 		$view->render();
 	}
@@ -87,13 +88,12 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		$userData = $this->helper('UsersAccount')->getUserData();
 
 		$model = $this->getModel('Salamandra');
-		$info = $model->proyectos()->join('proyectosTareas tar', 'tar.idProyecto = maintable.idProyecto')->join('proyectosCotizacion cot', 'cot.idTarea = tar.idTarea')->where('idTarea', $this->getParams('idTarea'), '=', 'tar')->fields('idProyecto')->fields('titulo')->fields('idTarea', 'tar')->fields('titulo tarea', 'tar')->fields('idProyectoCotizacion', 'cot')->getData();
+		$info = $model->gzlzProyectos()->join('gzlzProyectosTareas tar', 'tar.idProyecto = maintable.idProyecto')->where('idTarea', $this->getParams('idTarea'), '=', 'tar')->fields('idProyecto')->fields('titulo')->fields('idTarea', 'tar')->fields('titulo tarea', 'tar')->getData();
 
-		$idProyectoCotizacion = $info[0];
 		$model->init();
-		$cotizacion = $model->proyectosCotizacionDetalle()->where('idProyectoCotizacion', $idProyectoCotizacion['idProyectoCotizacion'])->getData();
+		$cotizacion = $model->gzlzProductosTareas()->where('idTarea', $this->getParams('idTarea'))->getData();
 
-		$view = $this->newView('Proyectos\ProyectoCotizacion');
+		$view = $this->newView('Gonzalez\ProyectoCotizacion');
 		$view->menus = $this->helper('UsersAccount')->createMenus();
 		$view->info = $info;
 		$view->cotizacion = $cotizacion;
@@ -113,19 +113,22 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		foreach ($this->getParams('data') as $_data) {
 			foreach ($_data['productos'] as $producto) {
 				$model->init();
-				$existe = $model->proyectosCotizacionDetalle()->where('idProyectoCotizacion', $_data['idProyectoCotizacion'])->where('descripcion', $producto[1])->getData();
+				$existe = $model->gzlzProductosTareas()->where('idTarea', $_data['idTarea'])->where('descripcion', $producto[1])->getData();
 				if (count($existe) > 0) {
 
 				} else {
 					if (trim($producto[0]) != '') {
-						$_producto['idProyectoCotizacion'] = $_data['idProyectoCotizacion'];
+						$_producto['idTarea'] = $_data['idTarea'];
 						$_producto['producto'] = $producto[0];
 						$_producto['descripcion'] = $producto[1];
 						$_producto['unidad'] = $producto[2];
 						$_producto['precio'] = $producto[3];
 						$_producto['cantidad'] = $producto[4];
+						$_producto['hoja'] = $producto[6];
+						$_producto['det'] = $producto[7];
+						$_producto['subDet'] = $producto[8];
 						$model->init();
-						$id = $model->proyectosCotizacionDetalle()->insert($_producto);
+						$id = $model->gzlzProductosTareas()->insert($_producto);
 					}
 				}
 			}

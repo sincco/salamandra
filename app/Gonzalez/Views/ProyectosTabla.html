@@ -17,7 +17,7 @@
 					<td>{{ proyecto.clave|trim }}</td>
 					<td>{{ proyecto.titulo|trim }}</td>
 					<td>{{ proyecto.estatus|trim }}</td>
-					<td><button type="button" class="btn btn-primary btn-xs" onclick="jQuery.redirect(BASE_URL + 'proyectos/proyectos/tareas', { 'idProyecto': {{ proyecto.idProyecto|trim }} });"><i class="fa fa-tasks" aria-hidden="true"> <span>Tareas</span></i></button><button type="button" class="btn btn-warning btn-xs" onclick="adjuntarArchivos('{{ proyecto.clave|trim }}');"><i class="fa fa-paperclip" aria-hidden="true"> <span>Archivos</span></i></button></td>
+					<td><button type="button" class="btn btn-primary btn-xs" onclick="jQuery.redirect(BASE_URL + 'gonzalez/proyectos/tareas', { 'idProyecto': {{ proyecto.idProyecto|trim }} });"><i class="fa fa-tasks" aria-hidden="true"> <span>Tareas</span></i></button><button type="button" class="btn btn-warning btn-xs" onclick="adjuntarArchivos('{{ proyecto.clave|trim }}');"><i class="fa fa-paperclip" aria-hidden="true"> <span>Archivos</span></i></button></td>
 				</tr>
 				{% endfor %}
 			</tbody>
@@ -128,7 +128,7 @@
 <script type="text/javascript">
 
 $('table').on('dbl-click-row.bs.table', function (row, element) {
-	sincco.consumirAPI('GET',BASE_URL + 'api/v1/proyectos/clave/' + element.clave)
+	sincco.consumirAPI('GET',BASE_URL + 'api/gonzalez/proyectos/clave/' + element.clave)
 	.done(function(data) {
 		loader.hide();
 		var proyecto = data.respuesta[0];
@@ -247,11 +247,11 @@ function guardarCaptura(data) {
 	if(data.idProyecto > 0) {
 		method = 'PUT';
 	}
-	sincco.consumirAPI(method,BASE_URL + 'api/v1/proyectos',{data:data})
+	sincco.consumirAPI(method,BASE_URL + 'api/gonzalez/proyectos',{data:data})
 	.done(function(data) {
 		loader.hide();
 		if (data.respuesta) {
-			window.location = BASE_URL + 'proyectos/proyectos';
+			window.location = BASE_URL + 'gonzalez/proyectos';
 		} else {
 			toastr.error('Error al hacer la petición.', 'Intenta de nuevo');
 		}

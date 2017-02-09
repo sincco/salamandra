@@ -15,13 +15,14 @@
 	{% endfor %}
 
 	<div class="row">
-		<button type="button" class="btn btn-success" onclick="nuevaCaptura();"><i class="fa fa-plus-circle" aria-hidden="true"> <span>Nueva tarea</span></i></button>
-		<button type="button" class="btn btn-warning" onclick="jQuery.redirect(BASE_URL + 'proyectos/proyectos/gantt', { 'idProyecto': {{ idProyecto|trim }} });"><i class="fa fa-line-chart" aria-hidden="true"> <span>Ver diagrama</span></i></button>
+		<!--<button type="button" class="btn btn-success" onclick="nuevaCaptura();"><i class="fa fa-plus-circle" aria-hidden="true"> <span>Nueva tarea</span></i></button>-->
+		<!--<button type="button" class="btn btn-warning" onclick="jQuery.redirect(BASE_URL + 'proyectos/proyectos/gantt', { 'idProyecto': {{ idProyecto|trim }} });"><i class="fa fa-line-chart" aria-hidden="true"> <span>Ver diagrama</span></i></button>-->
+		<button type="button" class="btn btn-default" onclick="jQuery.redirect(BASE_URL + 'gonzalez/proyectos');"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"> <span>Regresar</span></i></button>
 		<button type="button" class="btn btn-info" onclick="jQuery.redirect(BASE_URL + 'proyectos/proyectos/formato', { 'idProyecto': {{ idProyecto|trim }} });"><i class="fa fa-file-text " aria-hidden="true"> <span>Ver formato</span></i></button>
 		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
 			<thead>
 				<tr>
-					<th data-field="clave">Id</th><th data-field="titulo">Título</th><th data-field="estatus">Estatus</th><th>Inicio Planeado</th><th>Fin Planeado</th><th></th>
+					<th data-field="clave">Id</th><th data-field="titulo">Título</th><th data-field="estatus">Estatus</th><th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -30,9 +31,9 @@
 					<td>{{ tarea.idTarea|trim }}</td>
 					<td>{{ tarea.titulo|trim }}</td>
 					<td>{{ tarea.estatus|trim }}</td>
-					<td>{{ tarea.fechaInicioProyectado|trim }}</td>
-					<td>{{ tarea.fechaFinProyectado|trim }}</td>
-					<td><button type="button" class="btn btn-primary btn-xs" onclick="jQuery.redirect(BASE_URL + 'proyectos/proyectos/loggeo', { 'idTarea': {{ tarea.idTarea|trim }}, 'idProyecto': {{ idProyecto|trim }} });"><i class="fa fa-clock-o" aria-hidden="true"> <span>Tiempo</span></i></button><button type="button" class="btn btn-warning btn-xs" onclick="cotizacion({{ tarea.idTarea|trim }});"><i class="fa fa-money" aria-hidden="true"> <span>Cotizar</span></i></button></td>
+					<td>
+						<!--<button type="button" class="btn btn-primary btn-xs" onclick="jQuery.redirect(BASE_URL + 'proyectos/proyectos/loggeo', { 'idTarea': {{ tarea.idTarea|trim }}, 'idProyecto': {{ idProyecto|trim }} });"><i class="fa fa-clock-o" aria-hidden="true"> <span>Tiempo</span></i></button>-->
+						<button type="button" class="btn btn-info btn-xs" onclick="cotizacion({{ tarea.idTarea|trim }});"><i class="fa fa-th" aria-hidden="true"> <span>Lista de Productos</span></i></button></td>
 				</tr>
 				{% endfor %}
 			</tbody>
@@ -144,15 +145,8 @@ function guardarCaptura(data) {
 
 function cotizacion(tarea) {
 	loader.show();
-	var method = 'POST';
-	sincco.consumirAPI(method,BASE_URL + 'proyectos/proyectos/cotizar',{idTarea:tarea})
-	.done(function(data) {
-		$.redirect(BASE_URL + 'proyectos/proyectos/cotizacion',{idTarea:tarea}, 'POST');
-		loader.hide();
-	}).fail(function(jqXHR, textStatus, errorThrown) {
-		$.redirect(BASE_URL + 'proyectos/proyectos/cotizacion',{idTarea:tarea}, 'POST');
-		loader.hide();
-	})
+	$.redirect(BASE_URL + 'gonzalez/proyectos/cotizacion',{idTarea:tarea}, 'POST');
+	loader.hide();
 }
 
 </script>

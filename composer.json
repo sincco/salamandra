@@ -27,7 +27,6 @@
             "var/log",
             "var/tmp",
             "etc/config",
-            "etc/local",
             "bkp",
             "_proyectos",
             "_entregas"
