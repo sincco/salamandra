@@ -139,7 +139,7 @@ function crearTabla () {
             if (typeof cve === 'undefined') {
               return;
             }
-            if (cve.trim() != '') {
+            if (cve.trim() != '' || cve.trim() != '@@') {
               sincco.consumirAPI('POST', '{{constant("BASE_URL")}}catalogo/productos/apiClave', { data: cve.trim(), listaPrecio: $('#lista-precio').val() })
               .done(function(data) {
                 if (data.length) {
