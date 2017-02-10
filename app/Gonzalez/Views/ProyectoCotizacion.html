@@ -2,12 +2,19 @@
 {% include 'menu.html' %}
 
 <div class="container">
-	<div class="row">
-  {% for data in info %}
-		<h1>{{data.titulo}}</h1>
-    <h3>{{data.tarea}}</h3>
-    <input type="hidden" id="idTarea" value="{{data.idTarea}}">
-    <input type="hidden" id="idProyecto" value="{{data.idProyecto}}">
+  {% for proyecto in proyectos %}
+  <div class="page-header">
+    <div class="col-xs-6">
+      <h2>{{ proyecto.clave|trim }}<small>{{ proyecto.titulo|trim }}</small></h2>
+      <h4>{{ proyecto.estatus|trim }}</h4>
+    </div>
+    <div class="col-xs-6">
+      <h6>{{ proyecto.resumen|trim }}</h6>
+    </div>
+  </div>
+  <input type="hidden" id="idProyecto" value="{{proyecto.idProyecto}}">
+  <input type="hidden" id="cantidadLh" value="{{proyecto.cantidadLh}}">
+  <input type="hidden" id="cantidadRh" value="{{proyecto.cantidadRh}}">
   {% endfor %}
 	</div>
 
@@ -37,7 +44,7 @@
   <div class="row">
     <div class="col-xs-10"></div>
     <div class="col-xs-2">
-      <button type="button" class="btn btn-success" onclick="guardar($('#idTarea').val());"><i class="fa fa-hdd-o" aria-hidden="true"><span> Guardar</span></i></button>
+      <button type="button" class="btn btn-success" onclick="guardar($('#idProyecto').val());"><i class="fa fa-hdd-o" aria-hidden="true"><span> Guardar</span></i></button>
     </div>
 	</div>
 
@@ -69,23 +76,29 @@ var
   grid = document.getElementById('grid-venta'),
   hot,
   data = [
-    {% for data in cotizacion %}
-      ['{{data.producto}}','{{data.descripcion}}','{{data.unidad}}','{{data.precio}}','{{data.cantidad}}', {{data.cantidad}}*{{data.precio}},'','{{data.hoja}}','{{data.det}}','{{data.subDet}}']
+    {% for data in productos %}
+      ['{{data.producto}}','{{data.descripcion}}',{{data.precio}},'{{data.hoja}}','{{data.det}}','{{data.subDet}}',{{data.cutFit}},{{data.ncMach}},{{data.conventionalMach}},{{data.welding}},{{data.finishing}},{{data.assyPacking}},{{data.laserService}},{{data.installation}}]
     {% endfor %}];
-
 crearTabla();
 var fila = 0;
 $(data).each(function() {
   hot.setDataAtCell(fila, 0, data[fila][0]);
   hot.setDataAtCell(fila, 1, data[fila][1]);
   hot.setDataAtCell(fila, 2, data[fila][2]);
-  hot.setDataAtCell(fila, 3, data[fila][3]);
-  hot.setDataAtCell(fila, 4, data[fila][4]);
-  hot.setDataAtCell(fila, 6, data[fila][7]);
-  hot.setDataAtCell(fila, 7, data[fila][8]);
-  hot.setDataAtCell(fila, 8, data[fila][9]);
+  hot.setDataAtCell(fila, 4, data[fila][3]);
+  hot.setDataAtCell(fila, 5, data[fila][4]);
+  hot.setDataAtCell(fila, 6, data[fila][5]);
+  hot.setDataAtCell(fila, 7, data[fila][6]);
+  hot.setDataAtCell(fila, 8, data[fila][7]);
+  hot.setDataAtCell(fila, 9, data[fila][8]);
+  hot.setDataAtCell(fila, 10, data[fila][9]);
+  hot.setDataAtCell(fila, 11, data[fila][10]);
+  hot.setDataAtCell(fila, 12, data[fila][11]);
+  hot.setDataAtCell(fila, 13, data[fila][12]);
+  hot.setDataAtCell(fila, 14, data[fila][13]);
   fila++;
 })
+
 
 function crearTabla () {
   hot = new Handsontable(grid, {
@@ -96,26 +109,31 @@ function crearTabla () {
     fixedRowsTop: 0,
     startCols: 4,
     contextMenu: ['remove_row'],
-    colHeaders: ['Clave', 'Descripcion', 'Unidad', 'Precio', 'Cantidad', 'Subtotal', 'Hoja', 'Det', 'Sub-Det'],
+    colHeaders: ['Clave', 'Descripcion', 'Precio', 'Subtotal', 'Hoja', 'Det', 'Sub-Det','Cut & Fit','NC Mach','Conventional Mach','Welding','Finishing','Assy / Packing','Laser Service','Installation'],
     columns: [
       {data:'clave'},
       {data:'descripcionCorta',readOnly: false},
-      {data:'unidad', readOnly: false},
       {data:'precio', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
-      {data:'cantidad', type: 'numeric', format: '0,0.000', language: 'en'},
       {data:'subtotal', type: 'numeric', format: '0,0.000', language: 'en', readOnly: true},
       {data:'hoja'},
       {data:'det'},
       {data:'subdet'},
+      {data:'cut_fit', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'nc_mach', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'conventional_mach', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'welding', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'finishing', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'assy_packing', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'laser_service', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'installation', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false}
     ], 
     afterChange: function (changes, source) {
       if ((source == 'edit' || source == 'paste')) {
         if (changes[0][1] == "clave") {
           if (changes[0][3] == "@@") {
             hot.setDataAtCell(changes[0][0], 1, 'Producto personalizado')
-            hot.setDataAtCell(changes[0][0], 2, 'N/A')
-            hot.setDataAtCell(changes[0][0], 3, '1.00')
-            hot.setDataAtCell(changes[0][0], 4, 1)
+            hot.setDataAtCell(changes[0][0], 2, '1.00')
+            hot.setDataAtCell(changes[0][0], 3, 1)
           } else {
             var cve = changes[0][3];
             if (typeof cve === 'undefined') {
@@ -126,9 +144,7 @@ function crearTabla () {
               .done(function(data) {
                 if (data.length) {
                   hot.setDataAtCell(changes[0][0], 1, data[0].DESCR)
-                  hot.setDataAtCell(changes[0][0], 2, data[0].UNI_MED)
-                  hot.setDataAtCell(changes[0][0], 3, data[0].PRECIO)
-                  hot.setDataAtCell(changes[0][0], 4, 1)
+                  hot.setDataAtCell(changes[0][0], 2, data[0].PRECIO)
                 } else {
                   hot.setDataAtCell(changes[0][0], 1, 'NO EXISTE')
                   toastr.error('El producto no existe.', 'Intenta de nuevo')
@@ -139,9 +155,59 @@ function crearTabla () {
             }
           }
         }
-        if (changes[0][1] == "cantidad") {
-          var subtotal = parseFloat(hot.getDataAtCell(changes[0][0], 3)) * parseFloat(hot.getDataAtCell(changes[0][0], 4))
-          hot.setDataAtCell(changes[0][0], 5, subtotal)
+        if (changes[0][1] == "precio" || changes[0][1] == "cut_fit" || changes[0][1] == "nc_mach" || changes[0][1] == "conventional_mach" || changes[0][1] == "welding" || changes[0][1] == "finishing" || changes[0][1] == "assy_packing" || changes[0][1] == "laser_service" || changes[0][1] == "installation") {
+
+          var precio = parseFloat(hot.getDataAtCell(changes[0][0], 2));
+          var montoLh = parseFloat($('#cantidadLh').val());
+          var montoRh = parseFloat($('#cantidadRh').val());
+          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 7)))) {
+            var col_7 = 0;
+          } else {
+            var col_7 = parseFloat(hot.getDataAtCell(changes[0][0], 7));
+          }
+          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 8)))) {
+            var col_8 = 0;
+          } else {
+            var col_8 = parseFloat(hot.getDataAtCell(changes[0][0], 8));
+          }
+          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 9)))) {
+            var col_9 = 0;
+          } else {
+            var col_9 = parseFloat(hot.getDataAtCell(changes[0][0], 9));
+          }
+          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 10)))) {
+            var col_10 = 0;
+          } else {
+            var col_10 = parseFloat(hot.getDataAtCell(changes[0][0], 10));
+          }
+          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 11)))) {
+            var col_11 = 0;
+          } else {
+            var col_11 = parseFloat(hot.getDataAtCell(changes[0][0], 11));
+          }
+          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 11)))) {
+            var col_11 = 0;
+          } else {
+            var col_11 = parseFloat(hot.getDataAtCell(changes[0][0], 11));
+          }
+          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 12)))) {
+            var col_12 = 0;
+          } else {
+            var col_12 = parseFloat(hot.getDataAtCell(changes[0][0], 12));
+          }
+          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 13)))) {
+            var col_13 = 0;
+          } else {
+            var col_13 = parseFloat(hot.getDataAtCell(changes[0][0], 13));
+          }
+          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 14)))) {
+            var col_14 = 0;
+          } else {
+            var col_14 = parseFloat(hot.getDataAtCell(changes[0][0], 14));
+          }
+          var subtotalLh = (parseFloat(col_7) * montoLh * precio) + (parseFloat(col_8) * montoLh * precio) + (parseFloat(col_9) * montoLh * precio) + (parseFloat(col_10) * montoLh * precio) + (parseFloat(col_11) * montoLh * precio) + (parseFloat(col_12) * montoLh * precio) + (parseFloat(col_13) * montoLh * precio) + (parseFloat(col_14) * montoLh * precio);
+          var subtotalRh = (parseFloat(col_7) * montoRh * precio) + (parseFloat(col_8) * montoRh * precio) + (parseFloat(col_9) * montoRh * precio) + (parseFloat(col_10) * montoRh * precio) + (parseFloat(col_11) * montoRh * precio) + (parseFloat(col_12) * montoRh * precio) + (parseFloat(col_13) * montoRh * precio) + (parseFloat(col_14) * montoRh * precio);
+          hot.setDataAtCell(changes[0][0], 3, subtotalLh + subtotalRh);
         }
       }
     }
@@ -179,14 +245,14 @@ function crearTabla () {
   })
 }
 
-function guardar(idTarea) {
+function guardar(idProyecto) {
   loader.show()
-  sincco.consumirAPI('POST',BASE_URL + 'gonzalez/proyectos/cotiza', { data: [{idTarea: idTarea, productos: hot.getData() }] })
+  sincco.consumirAPI('POST',BASE_URL + 'gonzalez/proyectos/cotiza', { data: [{idProyecto: idProyecto, productos: hot.getData() }] })
   .done(function(data) {
     if (data.respuesta) {
       hot.loadData([])
       toastr.success('Cotización asignada a la tarea.', 'Éxito');
-      $.redirect(BASE_URL + 'gonzalez/proyectos/tareas',{idProyecto:$('#idProyecto').val()}, 'POST');
+      $.redirect(BASE_URL + 'gonzalez/proyectos',{idProyecto:$('#idProyecto').val()}, 'POST');
       loader.hide()
     } else {
        toastr.error('Hubo un error al guardar los datos.', 'Intenta de nuevo');

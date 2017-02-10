@@ -37,24 +37,29 @@ CREATE TABLE `gzlzProyectosTareas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `proyectosCotizacionDetalle`
---
-DROP TABLE IF EXISTS `gzlzProductosTareas`;
-CREATE TABLE IF NOT EXISTS `gzlzProductosTareas` (
-  `idProductoTarea` int(11) NOT NULL AUTO_INCREMENT,
-  `idTarea` int(11) NOT NULL,
+DROP TABLE IF EXISTS `gzlzProyectosProductos`;
+CREATE TABLE IF NOT EXISTS `gzlzProyectosProductos` (
+  `idProyectoProducto` int(11) NOT NULL AUTO_INCREMENT,
+  `idProyecto` int(11) NOT NULL,
   `producto` varchar(16) NOT NULL,
   `descripcion` varchar(150) NOT NULL,
-  `unidad` varchar(10) NOT NULL,
-  `cantidad` float NOT NULL,
   `precio` float NOT NULL,
   `hoja` varchar(150) NOT NULL,
   `det` varchar(150) NOT NULL,
   `subDet` varchar(150) NOT NULL,
-  PRIMARY KEY (`idProductoTarea`),
-  UNIQUE KEY `gzlz_productos_tareas` (`idTarea`, `descripcion`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Detalle de materiales en tareas';
+  `cutFit` float NOT NULL,
+  `ncMach` float NOT NULL,
+  `conventionalMach` float NOT NULL,
+  `welding` float NOT NULL,
+  `finishing` float NOT NULL,
+  `assyPacking` float NOT NULL,
+  `laserService` float NOT NULL,
+  `installation` float NOT NULL,
+  PRIMARY KEY (`idProyectoProducto`),
+  UNIQUE KEY `gzlz_productos_tareas` (`idProyecto`, `descripcion`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Proyeccion de materiales en proyectos';
 
 -- --------------------------------------------------------
 
+--
 INSERT INTO `__menus` VALUES (900,'Procesos Especiales',NULL,0),(901,'Proyectos','gonzalez/proyectos',900);

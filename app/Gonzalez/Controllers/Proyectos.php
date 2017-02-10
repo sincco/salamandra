@@ -88,24 +88,15 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		$userData = $this->helper('UsersAccount')->getUserData();
 
 		$model = $this->getModel('Salamandra');
-		$info = $model->gzlzProyectos()->join('gzlzProyectosTareas tar', 'tar.idProyecto = maintable.idProyecto')->where('idTarea', $this->getParams('idTarea'), '=', 'tar')->fields('idProyecto')->fields('titulo')->fields('idTarea', 'tar')->fields('titulo tarea', 'tar')->getData();
-
+		$info = $model->gzlzProyectos()->where('idProyecto', $this->getParams('idProyecto'))->getData();
 		$model->init();
-		$cotizacion = $model->gzlzProductosTareas()->where('idTarea', $this->getParams('idTarea'))->getData();
+		$productos = $model->gzlzProyectosProductos()->where('idProyecto', $this->getParams('idProyecto'))->getData();
 
 		$view = $this->newView('Gonzalez\ProyectoCotizacion');
 		$view->menus = $this->helper('UsersAccount')->createMenus();
-		$view->info = $info;
-		$view->cotizacion = $cotizacion;
+		$view->proyectos = $info;
+		$view->productos = $productos;
 		$view->render();
-	}
-
-	public function cotizar() {
-		$model = $this->getModel('Salamandra');
-		$tareas = $model->proyectosTareas()->fields('idTarea')->where('idTarea', $this->getParams('idTarea'))->getData();
-		foreach ($tareas as $_tarea) {
-			$model->proyectosCotizacion()->insert($_tarea);
-		}
 	}
 
 	public function cotiza() {
@@ -113,22 +104,28 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		foreach ($this->getParams('data') as $_data) {
 			foreach ($_data['productos'] as $producto) {
 				$model->init();
-				$existe = $model->gzlzProductosTareas()->where('idTarea', $_data['idTarea'])->where('descripcion', $producto[1])->getData();
+				$existe = $model->gzlzProyectosProductos()->where('idProyecto', $_data['idProyecto'])->where('descripcion', $producto[1])->getData();
 				if (count($existe) > 0) {
 
 				} else {
 					if (trim($producto[0]) != '') {
-						$_producto['idTarea'] = $_data['idTarea'];
+						$_producto['idProyecto'] = $_data['idProyecto'];
 						$_producto['producto'] = $producto[0];
 						$_producto['descripcion'] = $producto[1];
-						$_producto['unidad'] = $producto[2];
-						$_producto['precio'] = $producto[3];
-						$_producto['cantidad'] = $producto[4];
-						$_producto['hoja'] = $producto[6];
-						$_producto['det'] = $producto[7];
-						$_producto['subDet'] = $producto[8];
+						$_producto['precio'] = $producto[2];
+						$_producto['hoja'] = $producto[4];
+						$_producto['det'] = $producto[5];
+						$_producto['subDet'] = $producto[6];
+						$_producto['cutFit'] = floatval($producto[7]);
+						$_producto['ncMach'] = floatval($producto[8]);
+						$_producto['conventionalMach'] = floatval($producto[9]);
+						$_producto['welding'] = floatval($producto[10]);
+						$_producto['finishing'] = floatval($producto[11]);
+						$_producto['assyPacking'] = floatval($producto[12]);
+						$_producto['laserService'] = floatval($producto[13]);
+						$_producto['installation'] = floatval($producto[14]);
 						$model->init();
-						$id = $model->gzlzProductosTareas()->insert($_producto);
+						$id = $model->gzlzProyectosProductos()->insert($_producto);
 					}
 				}
 			}
