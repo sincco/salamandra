@@ -51,7 +51,9 @@
   <hr>
 
 	<div class="row">
-		<div id="grid-venta" class="handsontable"></div>
+    <div class="col-xs-12">
+		  <div id="grid-venta" class="handsontable"></div>
+    </div>
 	</div>
 
 </div>
@@ -108,7 +110,7 @@ function crearTabla () {
     rowHeaders: true,
     fixedRowsTop: 0,
     startCols: 4,
-    contextMenu: ['remove_row'],
+    contextMenu: [],
     colHeaders: ['Clave', 'Descripcion', 'Precio', 'Subtotal', 'Hoja', 'Det', 'Sub-Det','Cut & Fit','NC Mach','Conventional Mach','Welding','Finishing','Assy / Packing','Laser Service','Installation'],
     columns: [
       {data:'clave'},
