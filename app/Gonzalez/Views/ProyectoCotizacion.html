@@ -77,7 +77,7 @@ var
   hot,
   data = [
     {% for data in productos %}
-      ['{{data.producto}}','{{data.descripcion}}',{{data.precio}},'{{data.hoja}}','{{data.det}}','{{data.subDet}}',{{data.cutFit}},{{data.ncMach}},{{data.conventionalMach}},{{data.welding}},{{data.finishing}},{{data.assyPacking}},{{data.laserService}},{{data.installation}}]
+      ['{{data.producto}}','{{data.descripcion}}',{{data.precio}},'{{data.hoja}}','{{data.det}}','{{data.subDet}}',{{data.cutFit}},{{data.ncMach}},{{data.conventionalMach}},{{data.welding}},{{data.finishing}},{{data.assyPacking}},{{data.laserService}},{{data.installation}}],
     {% endfor %}];
 crearTabla();
 var fila = 0;
