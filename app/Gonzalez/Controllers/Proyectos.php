@@ -109,21 +109,28 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 
 				} else {
 					if (trim($producto[0]) != '') {
-						$_producto['idProyecto'] = $_data['idProyecto'];
-						$_producto['producto'] = $producto[0];
-						$_producto['descripcion'] = $producto[1];
-						$_producto['precio'] = $producto[2];
-						$_producto['hoja'] = $producto[4];
-						$_producto['det'] = $producto[5];
-						$_producto['subDet'] = $producto[6];
-						$_producto['cutFit'] = floatval($producto[7]);
-						$_producto['ncMach'] = floatval($producto[8]);
-						$_producto['conventionalMach'] = floatval($producto[9]);
-						$_producto['welding'] = floatval($producto[10]);
-						$_producto['finishing'] = floatval($producto[11]);
-						$_producto['assyPacking'] = floatval($producto[12]);
-						$_producto['laserService'] = floatval($producto[13]);
-						$_producto['installation'] = floatval($producto[14]);
+						$_producto['idProyecto'] = intval($_data['idProyecto']);
+						$_producto['hoja'] = floatval($producto[0]);
+						$_producto['det'] = floatval($producto[1]);
+						$_producto['subDet'] = floatval($producto[2]);
+						$_producto['producto'] = trim($producto[3]);
+						$_producto['descripcion'] = trim($producto[4]);
+						$_producto['kgm'] = floatval($producto[5]);
+						$_producto['kgpzs'] = floatval($producto[6]);
+						$_producto['cant'] = floatval($producto[7]);
+						$_producto['lng'] = floatval($producto[8]);
+						$_producto['scrap'] = floatval($producto[9]);
+						$_producto['pesoTotal'] = floatval($producto[10]);
+						$_producto['precio'] = floatval($producto[11]);
+						$_producto['subTotal'] = floatval($producto[12]);
+						$_producto['cutFit'] = floatval($producto[13]);
+						$_producto['ncMach'] = floatval($producto[14]);
+						$_producto['conventionalMach'] = floatval($producto[15]);
+						$_producto['welding'] = floatval($producto[16]);
+						$_producto['finishing'] = floatval($producto[17]);
+						$_producto['assyPacking'] = floatval($producto[18]);
+						$_producto['laserService'] = floatval($producto[19]);
+						$_producto['installation'] = floatval($producto[20]);
 						$model->init();
 						$id = $model->gzlzProyectosProductos()->insert($_producto);
 					}

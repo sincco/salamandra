@@ -79,7 +79,7 @@ var
   hot,
   data = [
     {% for data in productos %}
-      ['{{data.producto}}','{{data.descripcion}}',{{data.precio}},'{{data.hoja}}','{{data.det}}','{{data.subDet}}',{{data.cutFit}},{{data.ncMach}},{{data.conventionalMach}},{{data.welding}},{{data.finishing}},{{data.assyPacking}},{{data.laserService}},{{data.installation}}],
+      [{{data.hoja}}, {{data.det}}, {{data.subDet}}, '{{data.producto}}', '{{data.descripcion}}', {{data.kgm}}, {{data.kgpzs}}, {{data.cant}}, {{data.lng}}, {{data.scrap}}, {{data.pesoTotal}}, {{data.precio}}, {{data.cutFit}}, {{data.ncMach}}, {{data.conventionalMach}}, {{data.welding}}, {{data.finishing}}, {{data.assyPacking}}, {{data.laserService}}, {{data.installation}}],
     {% endfor %}];
 crearTabla();
 var fila = 0;
@@ -87,17 +87,23 @@ $(data).each(function() {
   hot.setDataAtCell(fila, 0, data[fila][0]);
   hot.setDataAtCell(fila, 1, data[fila][1]);
   hot.setDataAtCell(fila, 2, data[fila][2]);
-  hot.setDataAtCell(fila, 4, data[fila][3]);
-  hot.setDataAtCell(fila, 5, data[fila][4]);
-  hot.setDataAtCell(fila, 6, data[fila][5]);
-  hot.setDataAtCell(fila, 7, data[fila][6]);
-  hot.setDataAtCell(fila, 8, data[fila][7]);
-  hot.setDataAtCell(fila, 9, data[fila][8]);
-  hot.setDataAtCell(fila, 10, data[fila][9]);
-  hot.setDataAtCell(fila, 11, data[fila][10]);
-  hot.setDataAtCell(fila, 12, data[fila][11]);
+  hot.setDataAtCell(fila, 3, data[fila][3]);
+  hot.setDataAtCell(fila, 4, data[fila][4]);
+  hot.setDataAtCell(fila, 5, data[fila][5]);
+  hot.setDataAtCell(fila, 6, data[fila][6]);
+  hot.setDataAtCell(fila, 7, data[fila][7]);
+  hot.setDataAtCell(fila, 8, data[fila][8]);
+  hot.setDataAtCell(fila, 9, data[fila][9]);
+  hot.setDataAtCell(fila, 10, data[fila][10]);
+  hot.setDataAtCell(fila, 11, data[fila][11]);
   hot.setDataAtCell(fila, 13, data[fila][12]);
   hot.setDataAtCell(fila, 14, data[fila][13]);
+  hot.setDataAtCell(fila, 15, data[fila][14]);
+  hot.setDataAtCell(fila, 16, data[fila][15]);
+  hot.setDataAtCell(fila, 17, data[fila][16]);
+  hot.setDataAtCell(fila, 18, data[fila][17]);
+  hot.setDataAtCell(fila, 19, data[fila][18]);
+  hot.setDataAtCell(fila, 20, data[fila][19]);
   fila++;
 })
 
@@ -112,31 +118,37 @@ function crearTabla () {
     startCols: 4,
     stretchH: "all",
     contextMenu: [],
-    colHeaders: ['Clave', 'Descripcion', 'Precio', 'Subtotal', 'Hoja', 'Det', 'Sub-Det','Cut & Fit','NC Mach','Conventional Mach','Welding','Finishing','Assy / Packing','Laser Service','Installation'],
+    colHeaders: ['Hoja', 'Det', 'Sub-Det', 'Clave', 'Descripcion', 'kg/m', 'kg/pzs', 'cant', 'long', 'scrap', 'Peso total', 'Precio kg/pza', 'Subtotal', 'Cut & Fit','NC Mach','Conventional Mach','Welding','Finishing','Assy / Packing','Laser Service','Installation'],
     columns: [
+      {data:'hoja',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'det',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'subDet',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
       {data:'clave'},
       {data:'descripcionCorta',readOnly: false},
+      {data:'kgm',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'kgpzs',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'cant',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'long',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'scrap',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'pesoTotal',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
       {data:'precio', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
-      {data:'subtotal', type: 'numeric', format: '0,0.000', language: 'en', readOnly: true},
-      {data:'hoja'},
-      {data:'det'},
-      {data:'subdet'},
-      {data:'cut_fit', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
-      {data:'nc_mach', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
-      {data:'conventional_mach', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'subTotal', type: 'numeric', format: '0,0.000', language: 'en', readOnly: true},
+      {data:'cutFit', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'ncMach', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'conventionalMach', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
       {data:'welding', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
       {data:'finishing', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
-      {data:'assy_packing', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
-      {data:'laser_service', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'assyPacking', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'laserService', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
       {data:'installation', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false}
     ], 
     afterChange: function (changes, source) {
       if ((source == 'edit' || source == 'paste')) {
         if (changes[0][1] == "clave") {
           if (changes[0][3] == "@@") {
-            hot.setDataAtCell(changes[0][0], 1, 'Producto personalizado')
-            hot.setDataAtCell(changes[0][0], 2, '1.00')
-            hot.setDataAtCell(changes[0][0], 3, 1)
+            hot.setDataAtCell(changes[0][0], 4, 'Producto personalizado')
+            hot.setDataAtCell(changes[0][0], 7, '1.00')
+            hot.setDataAtCell(changes[0][0], 11, '1.00')
           } else {
             var cve = changes[0][3];
             if (typeof cve === 'undefined') {
@@ -146,10 +158,10 @@ function crearTabla () {
               sincco.consumirAPI('POST', '{{constant("BASE_URL")}}catalogo/productos/apiClave', { data: cve.trim(), listaPrecio: $('#lista-precio').val() })
               .done(function(data) {
                 if (data.length) {
-                  hot.setDataAtCell(changes[0][0], 1, data[0].DESCR)
-                  hot.setDataAtCell(changes[0][0], 2, data[0].PRECIO)
+                  hot.setDataAtCell(changes[0][0], 4, data[0].DESCR)
+                  hot.setDataAtCell(changes[0][0], 11, data[0].PRECIO)
                 } else {
-                  hot.setDataAtCell(changes[0][0], 1, 'NO EXISTE')
+                  hot.setDataAtCell(changes[0][0], 4, 'NO EXISTE')
                   toastr.error('El producto no existe.', 'Intenta de nuevo')
                 }
               }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -158,6 +170,20 @@ function crearTabla () {
             }
           }
         }
+
+        if (changes[0][1] == "pesoTotal" || changes[0][1] == "precio") {
+          hot.setDataAtCell(changes[0][0], 12, parseFloat(hot.getDataAtCell(changes[0][0], 10)) * parseFloat(hot.getDataAtCell(changes[0][0], 11)))
+        }
+
+        if (changes[0][1] == "kgm" || changes[0][1] == "kgpzs" || changes[0][1] == "cant" || changes[0][1] == "long" || changes[0][1] == "scrap") {
+          if (parseFloat(hot.getDataAtCell(changes[0][0], 5)) > 0) {
+            hot.setDataAtCell(changes[0][0], 10, (parseFloat(hot.getDataAtCell(changes[0][0], 5)) * parseFloat(hot.getDataAtCell(changes[0][0], 7))) * (1+(parseFloat(hot.getDataAtCell(changes[0][0], 9)) / 100)))
+          } else {
+            hot.setDataAtCell(changes[0][0], 10, (parseFloat(hot.getDataAtCell(changes[0][0], 6)) * parseFloat(hot.getDataAtCell(changes[0][0], 7)) * parseFloat(hot.getDataAtCell(changes[0][0], 8))) * (1+(parseFloat(hot.getDataAtCell(changes[0][0], 9)) / 100)))
+          }
+        }
+
+        /*
         if (changes[0][1] == "precio" || changes[0][1] == "cut_fit" || changes[0][1] == "nc_mach" || changes[0][1] == "conventional_mach" || changes[0][1] == "welding" || changes[0][1] == "finishing" || changes[0][1] == "assy_packing" || changes[0][1] == "laser_service" || changes[0][1] == "installation") {
 
           var precio = parseFloat(hot.getDataAtCell(changes[0][0], 2));
@@ -212,6 +238,7 @@ function crearTabla () {
           var subtotalRh = (parseFloat(col_7) * montoRh * precio) + (parseFloat(col_8) * montoRh * precio) + (parseFloat(col_9) * montoRh * precio) + (parseFloat(col_10) * montoRh * precio) + (parseFloat(col_11) * montoRh * precio) + (parseFloat(col_12) * montoRh * precio) + (parseFloat(col_13) * montoRh * precio) + (parseFloat(col_14) * montoRh * precio);
           hot.setDataAtCell(changes[0][0], 3, subtotalLh + subtotalRh);
         }
+        */
       }
     }
   })
@@ -268,7 +295,7 @@ function guardar(idProyecto) {
 }
 
 $('#tabla-productos').on('dbl-click-row.bs.table', function (row, element) {
-  hot.setDataAtCell($('#fila-actual').val(), 0, element.CVE_ART)
+  hot.setDataAtCell($('#fila-actual').val(), 3, element.CVE_ART)
   $('#modal').modal('hide')
 })
 </script>

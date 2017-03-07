@@ -63,3 +63,21 @@ CREATE TABLE IF NOT EXISTS `gzlzProyectosProductos` (
 
 --
 INSERT INTO `__menus` VALUES (900,'Procesos Especiales',NULL,0),(901,'Proyectos','gonzalez/proyectos',900);
+
+ALTER TABLE `salamandra`.`gzlzProyectosProductos` 
+ADD COLUMN `kgm` FLOAT NOT NULL AFTER `installation`,
+ADD COLUMN `kgpzs` FLOAT NOT NULL AFTER `kgm`,
+ADD COLUMN `cant` FLOAT NOT NULL AFTER `kgpzs`,
+ADD COLUMN `long` FLOAT NOT NULL AFTER `cant`,
+ADD COLUMN `scrap` FLOAT NOT NULL AFTER `long`,
+ADD COLUMN `pesoTotal` FLOAT NOT NULL AFTER `scrap`,
+ADD COLUMN `subTotal` VARCHAR(45) NULL AFTER `pesoTotal`;
+
+ALTER TABLE `salamandra`.`gzlzProyectosProductos` 
+CHANGE COLUMN `hoja` `hoja` FLOAT NOT NULL ,
+CHANGE COLUMN `det` `det` FLOAT NOT NULL ,
+CHANGE COLUMN `subDet` `subDet` FLOAT NOT NULL ;
+
+ALTER TABLE `salamandra`.`gzlzProyectosProductos` 
+CHANGE COLUMN `long` `lng` FLOAT NOT NULL ,
+CHANGE COLUMN `subTotal` `subTotal` FLOAT NOT NULL ;
