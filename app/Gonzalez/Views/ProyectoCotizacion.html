@@ -24,18 +24,6 @@
       <button type="button" class="btn btn-default" onclick="$.redirect(BASE_URL + 'gonzalez/proyectos',{idProyecto:$('#idProyecto').val()}, 'POST');"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"><span> Regresar</span></i></button>
     </div>
     <div class="col-xs-6">
-      <div class="row">
-        <div class="col-xs-6">
-          Lista de precios
-        </div>
-        <div class="col-xs-6">
-          <select id="lista-precio" class="form-control col-xs-6">
-          {% for precio in precios %}
-          <option value="{{precio.CVE_PRECIO|trim}}">{{precio.DESCRIPCION|trim}}</option>
-          {% endfor %}
-          </select>
-        </div>
-      </div>
     </div>
   </div>
   
