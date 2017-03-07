@@ -81,3 +81,7 @@ CHANGE COLUMN `subDet` `subDet` FLOAT NOT NULL ;
 ALTER TABLE `salamandra`.`gzlzProyectosProductos` 
 CHANGE COLUMN `long` `lng` FLOAT NOT NULL ,
 CHANGE COLUMN `subTotal` `subTotal` FLOAT NOT NULL ;
+
+ALTER TABLE `salamandra`.`gzlzProyectosProductos` 
+ADD COLUMN `seccion` VARCHAR(45) NOT NULL AFTER `subTotal`;
+

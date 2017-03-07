@@ -67,7 +67,7 @@ var
   hot,
   data = [
     {% for data in productos %}
-      [{{data.hoja}}, {{data.det}}, {{data.subDet}}, '{{data.producto}}', '{{data.descripcion}}', {{data.kgm}}, {{data.kgpzs}}, {{data.cant}}, {{data.lng}}, {{data.scrap}}, {{data.pesoTotal}}, {{data.precio}}, {{data.cutFit}}, {{data.ncMach}}, {{data.conventionalMach}}, {{data.welding}}, {{data.finishing}}, {{data.assyPacking}}, {{data.laserService}}, {{data.installation}}],
+      ['{{data.seccion}}', {{data.hoja}}, {{data.det}}, {{data.subDet}}, '{{data.producto}}', '{{data.descripcion}}', {{data.kgm}}, {{data.kgpzs}}, {{data.cant}}, {{data.lng}}, {{data.scrap}}, {{data.pesoTotal}}, {{data.precio}}, {{data.cutFit}}, {{data.ncMach}}, {{data.conventionalMach}}, {{data.welding}}, {{data.finishing}}, {{data.assyPacking}}, {{data.laserService}}, {{data.installation}}],
     {% endfor %}];
 crearTabla();
 var fila = 0;
@@ -84,7 +84,7 @@ $(data).each(function() {
   hot.setDataAtCell(fila, 9, data[fila][9]);
   hot.setDataAtCell(fila, 10, data[fila][10]);
   hot.setDataAtCell(fila, 11, data[fila][11]);
-  hot.setDataAtCell(fila, 13, data[fila][12]);
+  hot.setDataAtCell(fila, 12, data[fila][12]);
   hot.setDataAtCell(fila, 14, data[fila][13]);
   hot.setDataAtCell(fila, 15, data[fila][14]);
   hot.setDataAtCell(fila, 16, data[fila][15]);
@@ -92,6 +92,7 @@ $(data).each(function() {
   hot.setDataAtCell(fila, 18, data[fila][17]);
   hot.setDataAtCell(fila, 19, data[fila][18]);
   hot.setDataAtCell(fila, 20, data[fila][19]);
+  hot.setDataAtCell(fila, 21, data[fila][20]);
   fila++;
 })
 
@@ -106,8 +107,11 @@ function crearTabla () {
     startCols: 4,
     stretchH: "all",
     contextMenu: [],
-    colHeaders: ['Hoja', 'Det', 'Sub-Det', 'Clave', 'Descripcion', 'kg/m', 'kg/pzs', 'cant', 'long', 'scrap', 'Peso total', 'Precio kg/pza', 'Subtotal', 'Cut & Fit','NC Mach','Conventional Mach','Welding','Finishing','Assy / Packing','Laser Service','Installation'],
+    colHeaders: ['Seccion', 'Hoja', 'Det', 'Sub-Det', 'Clave', 'Descripcion', 'kg/m', 'kg/pzs', 'cant', 'long', 'scrap', 'Peso total', 'Precio kg/pza', 'Subtotal', 'Cut & Fit','NC Mach','Conventional Mach','Welding','Finishing','Assy / Packing','Laser Service','Installation'],
     columns: [
+      {data:'seccion',type: 'dropdown',
+        source: ['COMERCIAL PARTS', 'EXTERNAL SERVICES', 'MATERIAL', 'LABOR']
+      },
       {data:'hoja',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
       {data:'det',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
       {data:'subDet',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
@@ -134,9 +138,9 @@ function crearTabla () {
       if ((source == 'edit' || source == 'paste')) {
         if (changes[0][1] == "clave") {
           if (changes[0][3] == "@@") {
-            hot.setDataAtCell(changes[0][0], 4, 'Producto personalizado')
-            hot.setDataAtCell(changes[0][0], 7, '1.00')
-            hot.setDataAtCell(changes[0][0], 11, '1.00')
+            hot.setDataAtCell(changes[0][0], 5, 'Producto personalizado')
+            hot.setDataAtCell(changes[0][0], 8, '1.00')
+            hot.setDataAtCell(changes[0][0], 12, '1.00')
           } else {
             var cve = changes[0][3];
             if (typeof cve === 'undefined') {
@@ -146,10 +150,10 @@ function crearTabla () {
               sincco.consumirAPI('POST', '{{constant("BASE_URL")}}catalogo/productos/apiClave', { data: cve.trim(), listaPrecio: $('#lista-precio').val() })
               .done(function(data) {
                 if (data.length) {
-                  hot.setDataAtCell(changes[0][0], 4, data[0].DESCR)
-                  hot.setDataAtCell(changes[0][0], 11, data[0].PRECIO)
+                  hot.setDataAtCell(changes[0][0], 5, data[0].DESCR)
+                  hot.setDataAtCell(changes[0][0], 12, data[0].PRECIO)
                 } else {
-                  hot.setDataAtCell(changes[0][0], 4, 'NO EXISTE')
+                  hot.setDataAtCell(changes[0][0], 5, 'NO EXISTE')
                   toastr.error('El producto no existe.', 'Intenta de nuevo')
                 }
               }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -160,14 +164,14 @@ function crearTabla () {
         }
 
         if (changes[0][1] == "pesoTotal" || changes[0][1] == "precio") {
-          hot.setDataAtCell(changes[0][0], 12, parseFloat(hot.getDataAtCell(changes[0][0], 10)) * parseFloat(hot.getDataAtCell(changes[0][0], 11)))
+          hot.setDataAtCell(changes[0][0], 13, parseFloat(hot.getDataAtCell(changes[0][0], 11)) * parseFloat(hot.getDataAtCell(changes[0][0], 12)))
         }
 
         if (changes[0][1] == "kgm" || changes[0][1] == "kgpzs" || changes[0][1] == "cant" || changes[0][1] == "long" || changes[0][1] == "scrap") {
-          if (parseFloat(hot.getDataAtCell(changes[0][0], 5)) > 0) {
-            hot.setDataAtCell(changes[0][0], 10, (parseFloat(hot.getDataAtCell(changes[0][0], 5)) * parseFloat(hot.getDataAtCell(changes[0][0], 7))) * (1+(parseFloat(hot.getDataAtCell(changes[0][0], 9)) / 100)))
+          if (parseFloat(hot.getDataAtCell(changes[0][0], 6)) > 0) {
+            hot.setDataAtCell(changes[0][0], 11, (parseFloat(hot.getDataAtCell(changes[0][0], 6)) * parseFloat(hot.getDataAtCell(changes[0][0], 8))) * (1+(parseFloat(hot.getDataAtCell(changes[0][0], 10)) / 100)))
           } else {
-            hot.setDataAtCell(changes[0][0], 10, (parseFloat(hot.getDataAtCell(changes[0][0], 6)) * parseFloat(hot.getDataAtCell(changes[0][0], 7)) * parseFloat(hot.getDataAtCell(changes[0][0], 8))) * (1+(parseFloat(hot.getDataAtCell(changes[0][0], 9)) / 100)))
+            hot.setDataAtCell(changes[0][0], 11, (parseFloat(hot.getDataAtCell(changes[0][0], 7)) * parseFloat(hot.getDataAtCell(changes[0][0], 8)) * parseFloat(hot.getDataAtCell(changes[0][0], 9))) * (1+(parseFloat(hot.getDataAtCell(changes[0][0], 10)) / 100)))
           }
         }
 
@@ -283,7 +287,7 @@ function guardar(idProyecto) {
 }
 
 $('#tabla-productos').on('dbl-click-row.bs.table', function (row, element) {
-  hot.setDataAtCell($('#fila-actual').val(), 3, element.CVE_ART)
+  hot.setDataAtCell($('#fila-actual').val(), 4, element.CVE_ART)
   $('#modal').modal('hide')
 })
 </script>
