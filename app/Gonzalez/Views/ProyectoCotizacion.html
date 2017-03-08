@@ -44,6 +44,23 @@
     </div>
 	</div>
 
+  <hr>
+
+  <div class="row">
+    <div class="col-xs-4"><strong>Cut&Fit:</strong><span class="cutFit"></span></div>
+    <div class="col-xs-4"><strong>NC Mach:</strong><span class="ncMach"></span></div>
+    <div class="col-xs-4"><strong>Mach:</strong><span class="conventionalMach"></span></div>
+  </div>
+  <div class="row">
+    <div class="col-xs-4"><strong>Welding:</strong><span class="welding"></span></div>
+    <div class="col-xs-4"><strong>Finishing:</strong><span class="finishing"></span></div>
+    <div class="col-xs-4"><strong>Assy Packing:</strong><span class="assyPacking"></span></div>
+  </div>
+  <div class="row">
+    <div class="col-xs-4"><strong>Laser Service:</strong><span class="laserService"></span></div>
+    <div class="col-xs-4"><strong>Installation:<span class="installation"></span></div>
+  </div>
+
 </div>
 
 <div id="modal" class="modal fade">
@@ -174,63 +191,7 @@ function crearTabla () {
             hot.setDataAtCell(changes[0][0], 11, (parseFloat(hot.getDataAtCell(changes[0][0], 7)) * parseFloat(hot.getDataAtCell(changes[0][0], 8)) * parseFloat(hot.getDataAtCell(changes[0][0], 9))) * (1+(parseFloat(hot.getDataAtCell(changes[0][0], 10)) / 100)))
           }
         }
-
-        /*
-        if (changes[0][1] == "precio" || changes[0][1] == "cut_fit" || changes[0][1] == "nc_mach" || changes[0][1] == "conventional_mach" || changes[0][1] == "welding" || changes[0][1] == "finishing" || changes[0][1] == "assy_packing" || changes[0][1] == "laser_service" || changes[0][1] == "installation") {
-
-          var precio = parseFloat(hot.getDataAtCell(changes[0][0], 2));
-          var montoLh = parseFloat($('#cantidadLh').val());
-          var montoRh = parseFloat($('#cantidadRh').val());
-          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 7)))) {
-            var col_7 = 0;
-          } else {
-            var col_7 = parseFloat(hot.getDataAtCell(changes[0][0], 7));
-          }
-          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 8)))) {
-            var col_8 = 0;
-          } else {
-            var col_8 = parseFloat(hot.getDataAtCell(changes[0][0], 8));
-          }
-          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 9)))) {
-            var col_9 = 0;
-          } else {
-            var col_9 = parseFloat(hot.getDataAtCell(changes[0][0], 9));
-          }
-          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 10)))) {
-            var col_10 = 0;
-          } else {
-            var col_10 = parseFloat(hot.getDataAtCell(changes[0][0], 10));
-          }
-          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 11)))) {
-            var col_11 = 0;
-          } else {
-            var col_11 = parseFloat(hot.getDataAtCell(changes[0][0], 11));
-          }
-          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 11)))) {
-            var col_11 = 0;
-          } else {
-            var col_11 = parseFloat(hot.getDataAtCell(changes[0][0], 11));
-          }
-          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 12)))) {
-            var col_12 = 0;
-          } else {
-            var col_12 = parseFloat(hot.getDataAtCell(changes[0][0], 12));
-          }
-          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 13)))) {
-            var col_13 = 0;
-          } else {
-            var col_13 = parseFloat(hot.getDataAtCell(changes[0][0], 13));
-          }
-          if (isNaN(parseFloat(hot.getDataAtCell(changes[0][0], 14)))) {
-            var col_14 = 0;
-          } else {
-            var col_14 = parseFloat(hot.getDataAtCell(changes[0][0], 14));
-          }
-          var subtotalLh = (parseFloat(col_7) * montoLh * precio) + (parseFloat(col_8) * montoLh * precio) + (parseFloat(col_9) * montoLh * precio) + (parseFloat(col_10) * montoLh * precio) + (parseFloat(col_11) * montoLh * precio) + (parseFloat(col_12) * montoLh * precio) + (parseFloat(col_13) * montoLh * precio) + (parseFloat(col_14) * montoLh * precio);
-          var subtotalRh = (parseFloat(col_7) * montoRh * precio) + (parseFloat(col_8) * montoRh * precio) + (parseFloat(col_9) * montoRh * precio) + (parseFloat(col_10) * montoRh * precio) + (parseFloat(col_11) * montoRh * precio) + (parseFloat(col_12) * montoRh * precio) + (parseFloat(col_13) * montoRh * precio) + (parseFloat(col_14) * montoRh * precio);
-          hot.setDataAtCell(changes[0][0], 3, subtotalLh + subtotalRh);
-        }
-        */
+        actualizarTotales();
       }
     }
   })
@@ -290,5 +251,36 @@ $('#tabla-productos').on('dbl-click-row.bs.table', function (row, element) {
   hot.setDataAtCell($('#fila-actual').val(), 4, element.CVE_ART)
   $('#modal').modal('hide')
 })
+
+function actualizarTotales() {
+  var result = [];
+  result['cutFit'] = 0;
+  result['ncMach'] = 0;
+  result['conventionalMach'] = 0;
+  result['welding'] = 0;
+  result['finishing'] = 0;
+  result['assyPacking'] = 0;
+  result['laserService'] = 0;
+  result['installation'] = 0;
+  $(hot.getSourceData()).each(function(){
+    if ($.isNumeric(this.cutFit)){ result['cutFit'] += this.cutFit; }
+    if ($.isNumeric(this.ncMach)){ result['ncMach'] += this.ncMach; }
+    if ($.isNumeric(this.conventionalMach)){ result['conventionalMach'] += this.conventionalMach; }
+    if ($.isNumeric(this.welding)){ result['welding'] += this.welding; }
+    if ($.isNumeric(this.finishing)){ result['finishing'] += this.finishing; }
+    if ($.isNumeric(this.assyPacking)){ result['assyPacking'] += this.assyPacking; }
+    if ($.isNumeric(this.laserService)){ result['laserService'] += this.laserService; }
+    if ($.isNumeric(this.installation)){ result['installation'] += this.installation; }
+  });
+  
+  $('.cutFit').html(result['cutFit']);
+  $('.ncMach').html(result['ncMach']);
+  $('.conventionalMach').html(result['conventionalMach']);
+  $('.welding').html(result['welding']);
+  $('.finishing').html(result['finishing']);
+  $('.assyPacking').html(result['assyPacking']);
+  $('.laserService').html(result['laserService']);
+  $('.installation').html(result['installation']);  
+}
 </script>
 {% include 'footer.html' %}
