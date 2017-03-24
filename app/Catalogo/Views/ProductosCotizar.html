@@ -1,0 +1,52 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	<div class="row">
+		<h1>Productos</h1>
+		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
+			<thead>
+				<tr>
+					<th>Descripción</th><th>Unidad</th><th>Precio</th><th>Cantidad</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for producto in productos %}
+				<tr>
+					<td>{{ producto.descripcion|e }}</td>
+					<td>{{ producto.unidad|e }}</td>
+					<td>
+						<div class="input-group">
+							<input type="text" class="form-control" name="precio" value="0.00" data-id="{{ producto.idCotizacionDetalle|e }}">
+							<span class="input-group-btn">
+								<button class="btn btn-success" type="button" onclick="guardarPrecio('{{ producto.idCotizacionDetalle|e }}', $('[data-id={{ producto.idCotizacionDetalle|e }}]').val());"><i class="fa fa-cloud" aria-hidden="true"> <span></span></i></button>
+							</span>
+						</div>
+					</td>
+					<td>{{ producto.cantidad|number_format(2, '.', ',') }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function guardarPrecio(id, precio) {
+		loader.show();
+		sincco.consumirAPI('PUT',BASE_URL + 'api/v2/cotizaciones/detalle',{id:id, precio:precio})
+		.done(function(data) {
+			loader.hide();
+			if(data.respuesta === false) {
+				toastr.warning('Error al guardar los datos.', 'Intenta de nuevo');
+			} else {
+				toastr.success('Precio guardado.', 'Éxito');
+			}
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			toastr.error('Error al hacer la petición.', 'Intenta de nuevo')
+			loader.hide();
+		})
+	}
+</script>
+
+{% include 'footer.html' %}

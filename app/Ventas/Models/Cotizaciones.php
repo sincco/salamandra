@@ -24,7 +24,7 @@ class CotizacionesModel extends Sincco\Sfphp\Abstracts\Model {
 			ORDER BY det.descripcion', [ 'Cotizacion'=>$data ]);
 	}
 
-	public function insert($data) {
+	public function insert($data, $tabla = '') {
 		$query = 'INSERT INTO cotizaciones 
 			SET fecha=NOW(), cliente=:Cliente, 
 			razonSocial=:RazonSocial, email=:Email, 
@@ -49,8 +49,8 @@ class CotizacionesModel extends Sincco\Sfphp\Abstracts\Model {
 					'Producto'=>$producto[ 0 ],
 					'Descripcion'=>$producto[ 1 ],
 					'Unidad'=>$producto[ 2 ],
-					'Cantidad'=>$producto[ 3 ],
-					'Precio'=>$producto[ 4 ]
+					'Precio'=>$producto[ 3 ],
+					'Cantidad'=>$producto[ 4 ]
 					]);
 			}
 			return $id;
