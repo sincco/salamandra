@@ -16,10 +16,7 @@ class PerfilesController extends Sincco\Sfphp\Abstracts\Controller {
 	 */
 	public function index() {
 		$view = $this->newView('Pefiles');
-		$view->paneles = $paneles;
 		$view->menus = $this->helper('UsersAccount')->createMenus();
-		$view->filtros = $paramsFront;
-		$view->compras = $this->getModel('Dashboard')->getCompras($fechaInicio, $fechaFin);
 		$view->render();
 	}
 }

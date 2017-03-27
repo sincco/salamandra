@@ -10,8 +10,14 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 		$this->helper('UsersAccount')->checkLogin();
 		$mdlAdeudos = $this->getModel('Cxc\Adeudos');
 		$view = $this->newView('Cxc\AdeudosTabla');
-		$view->adeudos = $mdlAdeudos->getAdeudos();
+		if (strlen($this->getParams('fechaInicio')) >0) {
+			$view->adeudos = $mdlAdeudos->getAdeudos(false, $this->getParams('fechaInicio'), $this->getParams('fechaFin'));	
+		} else {
+			$view->adeudos = $mdlAdeudos->getAdeudos();
+		}
 		$view->clientes = $mdlAdeudos->getNotificaciones();
+		$view->fechaInicio = $this->getParams('fechaInicio');
+		$view->fechaFin = $this->getParams('fechaFin');
 		$view->menus = $this->helper('UsersAccount')->createMenus();
 		$view->render();
 	}

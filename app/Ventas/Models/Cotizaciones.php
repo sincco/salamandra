@@ -57,7 +57,7 @@ class CotizacionesModel extends Sincco\Sfphp\Abstracts\Model {
 		}
 	}
 
-	public function update($set, $where) {
+	public function update($set, $where, $table="") {
 		$campos = [];
 		$condicion = [];
 		foreach ($set as $campo => $valor)

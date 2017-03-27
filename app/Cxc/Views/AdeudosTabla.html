@@ -3,8 +3,46 @@
 
 <div class="container">
 	<div class="row">
-		<h1>Adeudos</h1>
-		<button type="button" class="btn btn-primary"><i class="fa fa-envelope " aria-hidden="true" onclick="notificar()"><span> Notificar a clientes</span></i></button>
+		<div class='col-xs-8'>
+			<h1>Adeudos</h1>
+		</div>
+		<div class='col-xs-4'>
+			<button type="button" class="btn btn-primary btn-sm"><i class="fa fa-envelope " aria-hidden="true" onclick="notificar()"><span> Notificar a clientes</span></i></button>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class='col-xs-1'>
+			Desde
+		</div>
+		<div class='col-xs-3'>
+			<div class="form-group">
+			<div class='input-group date' id='fecha-inicio'>
+			<input type='text' class="form-control" id="fechaInicio" value="{{fechaInicio}}"/>
+			<span class="input-group-addon">
+			<span class="glyphicon glyphicon-calendar"></span>
+			</span>
+			</div>
+			</div>
+		</div>
+		<div class='col-xs-1'>
+			Hasta
+		</div>
+		<div class='col-xs-3'>
+			<div class="form-group">
+			<div class='input-group date' id='fecha-fin'>
+			<input type='text' class="form-control" id="fechaFin" value="{{fechaFin}}"/>
+			<span class="input-group-addon">
+			<span class="glyphicon glyphicon-calendar"></span>
+			</span>
+			</div>
+			</div>
+		</div>
+		<div class='col-xs-2'>
+			<button type="button" class="btn btn-success btn-sm" onclick="filtrar()">Filtrar</button>
+		</div>
+	</div>
+	<div class="row">
 		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
 			<thead>
 				<tr>
@@ -74,6 +112,10 @@
 </div>
 
 <script type="text/javascript">
+function filtrar() {
+	$.redirect(BASE_URL + 'cxc/adeudos', { 'fechaInicio': $('#fechaInicio').val(), 'fechaFin': $('#fechaFin').val() });
+}
+
 function notificar() {
 	$('#modal-envio').modal('show');
 }
@@ -94,6 +136,23 @@ function enviar() {
 		loader.hide()
 	})
 }
+
+$(function() {
+	$('#fecha-fin').datetimepicker({
+		format: 'YYYY-MM-DD'
+	});
+	$('#fecha-inicio').datetimepicker({
+		useCurrent: true,
+		format: 'YYYY-MM-DD'
+	});
+	$("#fecha-inicio").on("dp.change", function (e) {
+		$('#fecha-fin').data("DateTimePicker").minDate(e.date);
+		$('#fecha-fin').data("DateTimePicker").date(e.date);
+	});
+	$("#fecha-fin").on("dp.change", function (e) {
+		$('#fecha-inicio').data("DateTimePicker").maxDate(e.date);
+	});
+});
 </script>
 
 {% include 'footer.html' %}

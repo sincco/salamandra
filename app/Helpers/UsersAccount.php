@@ -70,7 +70,12 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 	 */
 	public function createMenus() {
 		$this->checkLogin();
-		$menus = $this->menuOptions(0);
+		$opcionesBloqueadas = "";
+		$perfil = $this->getModel('Salamandra')->perfiles()->where('idPerfil', $_SESSION['extraPerfil'])->getData();
+		foreach ($perfil as $_perfil) {
+			$opcionesBloqueadas = implode(",", unserialize($_perfil['opcionesBloqueadas']));
+		}
+		$menus = $this->menuOptions(0, $opcionesBloqueadas);
 		$menus[] = ['text'=>'Salir', 'url'=>'login/salir'];
 		$response = $this->buildMenu($menus);
 		return $response;
@@ -94,11 +99,11 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 		return $menu . "</ul>";
 	}
 
-	private function menuOptions($parent) {
-		$menus = $this->getModel('Menus')->getByParent($parent);
+	private function menuOptions($parent, $blocked="") {
+		$menus = $this->getModel('Menus')->getByParent($parent,$blocked);
 		$response = [];
 		foreach ($menus as $menu) {
-			$nodes = $this->menuOptions($menu['menuId']);
+			$nodes = $this->menuOptions($menu['menuId'], $blocked);
 			if (count($nodes) > 0) {
 				$response[$menu['menuId']] = [
 					'text'=>$menu['menuText'],
