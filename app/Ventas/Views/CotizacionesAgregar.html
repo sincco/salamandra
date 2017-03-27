@@ -123,12 +123,13 @@ function crearTabla () {
     fixedRowsTop: 0,
     startCols: 4,
     contextMenu: ['remove_row'],
-    colHeaders: ['Clave', 'Descripcion', 'Unidad', 'Precio', 'Cantidad', 'Subtotal'],
+    colHeaders: ['Clave', 'Descripcion', 'Unidad', 'Precio', 'Descuento', 'Cantidad', 'Subtotal'],
     columns: [
       {data:'clave'},
       {data:'descripcionCorta',readOnly: false},
       {data:'unidad', readOnly: false},
       {data:'precio', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'descuento', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
       {data:'cantidad', type: 'numeric', format: '0,0.000', language: 'en'},
       {data:'subtotal', type: 'numeric', format: '0,0.000', language: 'en', readOnly: true},
     ], 
@@ -138,18 +139,20 @@ function crearTabla () {
           if (changes[0][3] == "@@") {
             hot.setDataAtCell(changes[0][0], 1, 'Producto personalizado')
             hot.setDataAtCell(changes[0][0], 2, 'N/A')
-            hot.setDataAtCell(changes[0][0], 3, '1.00')
-            hot.setDataAtCell(changes[0][0], 4, 1)
+            hot.setDataAtCell(changes[0][0], 3, '0.00')
+            hot.setDataAtCell(changes[0][0], 4, '0.00')
+            hot.setDataAtCell(changes[0][0], 5, 0)
           } else {
             var cve = changes[0][3];
             if (cve.trim() != '') {
               sincco.consumirAPI('POST', '{{constant("BASE_URL")}}catalogo/productos/apiClave', { data: cve.trim(), listaPrecio: $('#lista-precio').val() })
               .done(function(data) {
                 if (data.length) {
-                  hot.setDataAtCell(changes[0][0], 1, data[0].DESCR)
-                  hot.setDataAtCell(changes[0][0], 2, data[0].UNI_MED)
-                  hot.setDataAtCell(changes[0][0], 3, data[0].PRECIO)
-                  hot.setDataAtCell(changes[0][0], 4, 1)
+                  hot.setDataAtCell(changes[0][0], 1, data[0].DESCR);
+                  hot.setDataAtCell(changes[0][0], 2, data[0].UNI_MED);
+                  hot.setDataAtCell(changes[0][0], 3, data[0].PRECIO);
+                  hot.setDataAtCell(changes[0][0], 4, data[0].DESCUENTO);
+                  hot.setDataAtCell(changes[0][0], 5, 1);
                 } else {
                   hot.setDataAtCell(changes[0][0], 1, 'NO EXISTE')
                   toastr.error('El producto no existe.', 'Intenta de nuevo')
@@ -161,8 +164,8 @@ function crearTabla () {
           }
         }
         if (changes[0][1] == "cantidad") {
-          var subtotal = parseFloat(hot.getDataAtCell(changes[0][0], 3)) * parseFloat(hot.getDataAtCell(changes[0][0], 4))
-          hot.setDataAtCell(changes[0][0], 5, subtotal)
+          var subtotal = parseFloat(hot.getDataAtCell(changes[0][0], 3)) * parseFloat(hot.getDataAtCell(changes[0][0], 5)) * (1-(parseFloat(hot.getDataAtCell(changes[0][0], 4))/100));
+          hot.setDataAtCell(changes[0][0], 6, subtotal);
         }
         actualizaTotal()
       }
