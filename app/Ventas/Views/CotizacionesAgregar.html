@@ -81,19 +81,19 @@ var dropdownInput =[
   {% endfor %}
 ];
 $(function() {
-  $('.dropdown-menu a').click(function() {
+  $('.dropdown-input > .dropdown-menu a').click(function() {
       $(this).closest('.dropdown-input').find('input').val($(this).attr('data-value'));
     });
 
   $('.dropdown-input input').keyup(function() {
     var data = $(this).val();
     if(data.length > 2) {
-      $('.dropdown-menu').empty();
+      $('.dropdown-input > .dropdown-menu').empty();
       var result = searchStringInArray(data, dropdownInput);
       $(result).each(function() {
-        $('.dropdown-menu').append('<li><a href="#" data-value="' + this + '">'+ this + '</a></li>');
+        $('.dropdown-input > .dropdown-menu').append('<li><a href="#" data-value="' + this + '">'+ this + '</a></li>');
       });
-      $('.dropdown-menu a').click(function() {
+      $('.dropdown-input > .dropdown-menu a').click(function() {
         $(this).closest('.dropdown-input').find('input').val($(this).attr('data-value'));
       });
     }
