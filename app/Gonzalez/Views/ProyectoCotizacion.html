@@ -164,11 +164,13 @@ function crearTabla () {
               return;
             }
             if (cve.trim() != '' || cve.trim() != '@@') {
-              sincco.consumirAPI('POST', '{{constant("BASE_URL")}}catalogo/productos/apiClave', { data: cve.trim(), listaPrecio: $('#lista-precio').val() })
+              sincco.consumirAPI('POST', '{{constant("BASE_URL")}}gonzalez/proyectos/apiProducto', { data: cve.trim() })
               .done(function(data) {
                 if (data.length) {
                   hot.setDataAtCell(changes[0][0], 5, data[0].DESCR)
                   hot.setDataAtCell(changes[0][0], 12, data[0].PRECIO)
+                  hot.setDataAtCell(changes[0][0], 6, data[0].KGMETRO)
+                  hot.setDataAtCell(changes[0][0], 7, data[0].KGPC)
                 } else {
                   hot.setDataAtCell(changes[0][0], 5, 'NO EXISTE')
                   toastr.error('El producto no existe.', 'Intenta de nuevo')
@@ -207,7 +209,7 @@ function crearTabla () {
         e.stopImmediatePropagation();
         $('#tabla-productos').bootstrapTable({
           method: 'get',
-          url: '{{constant('BASE_URL')}}catalogo/productos/apicatalogo',
+          url: '{{constant('BASE_URL')}}gonzalez/proyectos/apiProductos',
           columns: [{ field:'CVE_ART', title:'Clave' }, { field:'DESCR', title:'Descripcion' }, { field:'UNI_MED', title:'Unidad' }],
           height: 300,
           striped: true,
