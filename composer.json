@@ -5,7 +5,8 @@
         "sincco/login": "dev-master",
         "sincco/elastic-email": ">=1.0",
         "sincco/excell": ">=1.0",
-        "sincco/gantt": "dev-master",
+        "sincco/gantt": ">=1.0",
+        "symfony/process": ">=3.2.4",
         "fbourigault/composer-mkdir": "^2.0"
     },
     "scripts": {
@@ -18,18 +19,14 @@
     },
     "extra": {
         "fbourigault-composer-mkdir": [
-            "app/Controllers",
-            "app/Models",
-            "app/Views",
-            "app/Helpers",
             "var/cache",
             "var/session",
             "var/log",
             "var/tmp",
             "etc/config",
-            "bkp",
-            "_proyectos",
-            "_entregas"
+            "bkp/",
+            "media/imagenes/proceso",
+            "media/imagenes/venta"
         ]
     }
 }

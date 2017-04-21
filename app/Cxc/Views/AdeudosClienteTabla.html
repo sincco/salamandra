@@ -1,0 +1,123 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	<div class="row">
+		<div class='col-xs-8'>
+			<h1>Adeudos</h1>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class='col-xs-1'>
+			Desde
+		</div>
+		<div class='col-xs-3'>
+			<div class="form-group">
+			<div class='input-group date' id='fecha-inicio'>
+			<input type='text' class="form-control" id="fechaInicio" value="{{fechaInicio}}"/>
+			<span class="input-group-addon">
+			<span class="glyphicon glyphicon-calendar"></span>
+			</span>
+			</div>
+			</div>
+		</div>
+		<div class='col-xs-1'>
+			Hasta
+		</div>
+		<div class='col-xs-3'>
+			<div class="form-group">
+			<div class='input-group date' id='fecha-fin'>
+			<input type='text' class="form-control" id="fechaFin" value="{{fechaFin}}"/>
+			<span class="input-group-addon">
+			<span class="glyphicon glyphicon-calendar"></span>
+			</span>
+			</div>
+			</div>
+		</div>
+		<div class='col-xs-2'>
+			<button type="button" class="btn btn-success btn-sm" onclick="filtrar()">Filtrar</button>
+		</div>
+	</div>
+	<div class="row">
+		<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
+			<thead>
+				<tr>
+					<th data-sortable="true">Cliente</th><th>Nombre</th><th>Factura</th><th>Emitida</th><th data-sortable="true" >Vencimiento</th><th data-sortable="true" >Atraso</th><th>Moneda</th><th>Cargo</th><th>Abono</th><th>Saldo</th><th>Ultimo Pago</th><th data-sortable="true" >Vendedor</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for adeudo in adeudos %}
+				<tr>
+					<td>{{ adeudo.CVE_CLIE|e }}</td>
+					<td>{{ adeudo.NOMBRE|e }}</td>
+					<td>{{ adeudo.NO_FACTURA|e }}</td>
+					<td>{{ adeudo.EMITIDA|e }}</td>
+					<td>{{ adeudo.VENCIMIENTO|e }}</td>
+					<td>{{ adeudo.ATRASO|e }}</td>
+					{% if adeudo.MONEDA == 1 %}
+						<td>MXP</td>
+					{% else %}
+						<td>USD</td>
+					{% endif %}
+					<td>{{ adeudo.CARGO|number_format(2, '.', ',') }}</td>
+					<td>{{ adeudo.ABONO|number_format(2, '.', ',') }}</td>
+					<td>{{ adeudo.SALDO|number_format(2, '.', ',') }}</td>
+					{% if adeudo.ULTIMO_PAGO is null %}
+					<td>-</td>
+					{% else %}
+						<td>{{ adeudo.ULTIMO_PAGO|e }}</td>
+					{% endif %}
+					<td>{{ adeudo.CVE_VEND|e }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<script type="text/javascript">
+function filtrar() {
+	$.redirect(BASE_URL + 'cxc/adeudos', { 'fechaInicio': $('#fechaInicio').val(), 'fechaFin': $('#fechaFin').val() });
+}
+
+function notificar() {
+	$('#modal-envio').modal('show');
+}
+function enviar() {
+	loader.show();
+	sincco.consumirAPI('POST', '{{constant("BASE_URL")}}cxc/adeudos/apinotificar', { clientes: $('#notificaciones').bootstrapTable('getSelections') })
+	.done(function(data) {
+		if(parseInt(data.avisos.primer) > 0)
+			toastr.success(data.avisos.primer + ' primeras notificaciones enviadas', 'Éxito')
+		if(parseInt(data.avisos.segundo) > 0)
+			toastr.success(data.avisos.segundo + ' segundas notificaciones enviadas', 'Éxito')
+		if(parseInt(data.avisos.tercer) > 0)
+			toastr.success(data.avisos.tercer + ' terceras notificaciones enviadas', 'Éxito')
+		loader.hide()
+		$('#modal-envio').modal('hide');
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		toastr.error('Error al efectuar la operación.', 'Intenta de nuevo')
+		loader.hide()
+	})
+}
+
+$(function() {
+	$('#fecha-fin').datetimepicker({
+		format: 'YYYY-MM-DD'
+	});
+	$('#fecha-inicio').datetimepicker({
+		useCurrent: true,
+		format: 'YYYY-MM-DD'
+	});
+	$("#fecha-inicio").on("dp.change", function (e) {
+		$('#fecha-fin').data("DateTimePicker").minDate(e.date);
+		$('#fecha-fin').data("DateTimePicker").date(e.date);
+	});
+	$("#fecha-fin").on("dp.change", function (e) {
+		$('#fecha-inicio').data("DateTimePicker").maxDate(e.date);
+	});
+});
+</script>
+
+{% include 'footer.html' %}

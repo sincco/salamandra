@@ -22,6 +22,22 @@ class AdeudosController extends Sincco\Sfphp\Abstracts\Controller {
 		$view->render();
 	}
 
+	public function cliente() {
+		$this->helper('UsersAccount')->checkLogin();
+		$mdlAdeudos = $this->getModel('Cxc\Adeudos');
+		$view = $this->newView('Cxc\AdeudosClienteTabla');
+		if (strlen($this->getParams('fechaInicio')) >0) {
+			$view->adeudos = $mdlAdeudos->getAdeudosCliente(false, $this->getParams('fechaInicio'), $this->getParams('fechaFin'));	
+		} else {
+			$view->adeudos = $mdlAdeudos->getAdeudosCliente();
+		}
+		#$view->clientes = $mdlAdeudos->getNotificaciones();
+		$view->fechaInicio = $this->getParams('fechaInicio');
+		$view->fechaFin = $this->getParams('fechaFin');
+		$view->menus = $this->helper('UsersAccount')->createMenus();
+		$view->render();
+	}
+
 	public function apiNotificar() {
 		$apiElastic = Reader::get('elasticemail');
 		if(file_exists(PATH_ROOT.'/html/img/logo_cliente_mail.jpg'))

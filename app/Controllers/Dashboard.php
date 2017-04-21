@@ -2,6 +2,7 @@
 
 use \Sincco\Sfphp\XML;
 use \Sincco\Sfphp\Response;
+use \Sincco\Sfphp\Request;
 use \Sincco\Tools\Debug;
 use \Sincco\Sfphp\Messages;
 
@@ -15,7 +16,9 @@ class DashboardController extends Sincco\Sfphp\Abstracts\Controller {
 	 * @return none
 	 */
 	public function index() {
-		Messages::add('ACCESO CORRECTO');
+		if ($_SESSION['extraFiltroClientes'] == 3) {
+			Request::redirect('cxc/adeudos/cliente');
+		}
 		$this->helper('UsersAccount')->checkLogin();
 		$xml = new XML('etc/config/dashboard' . $_SESSION[ 'companiaClave' ] . '.xml');
 		

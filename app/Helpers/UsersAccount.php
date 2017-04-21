@@ -55,6 +55,28 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 		}
 	}
 
+	public function createLogin() {
+		$db = Reader::get('bases');
+		$db = $db[ 'default' ];
+		$db[ 'password' ] = trim(Crypt::decrypt($db['password']));
+		Login::setDatabase($db);
+		if($data = Login::isLogged()) {
+			if(!defined('SESSION_USERID')) {
+				$empresas = $this->getModel('Catalogo\Usuarios')->empresasByUser($data[ 'userId' ]);
+				$empresas = array_shift($empresas);
+				$extra = $this->getModel('Catalogo\Usuarios')->extraByUser($data[ 'userId' ]);
+				$extra = array_shift($extra);
+				$_SESSION['companiaClave'] = $empresas[ 'empresa' ];
+				$_SESSION['companiaRazonSocial'] = $empresas[ 'razonSocial' ];
+				$_SESSION['extraPerfil'] = $extra[ 'idPerfil' ];
+				$_SESSION['extraFiltroClientes'] = $extra[ 'filtroClientes' ];
+				define('SESSION_USERID', $data[ 'userId' ]);
+				define('SESSION_USERNAME', $data[ 'userName' ]);
+				define('SESSION_USEREMAIL', $data[ 'userEmail' ]);
+			}
+		}
+	}
+
 	/**
 	 * Termina la sesion del usuario y lo envia a la pagina de login
 	 * @return [type] [description]
@@ -83,20 +105,27 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 
 	private function buildMenu(array $menu_array, $is_sub=false)
 	{
-		$ul_attrs = $is_sub ? 'class="dropdown-menu"' : 'class="nav navbar-nav navbar-right"';
-		$menu = "<ul $ul_attrs>";
-		foreach($menu_array as $attrs) {
-			$sub = isset($attrs['nodes']) 
-			? $this->buildMenu($attrs['nodes'], true) 
-			: null;
-			$li_attrs = $sub ? 'class="dropdown-submenu"' : null;
-			$a_attrs  = $sub ? 'class="dropdown-toggle" data-toggle="dropdown"' : null;
-			$carat    = $sub ? '<span class="caret"></span>' : null;
-			$menu .= "<li $li_attrs>";
-			$menu .= "<a href='".BASE_URL."${attrs['url']}' $a_attrs>${attrs['text']}$carat</a>$sub";
-			$menu .= "</li>";
+		if ($_SESSION['extraFiltroClientes'] == 3) {
+			$menu = "<ul class='nav navbar-nav navbar-right'>";
+			$menu .= '<li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Cuentas por Cobrar<span class="caret"></span></a><ul class="dropdown-menu"><li><a href="'.BASE_URL.'cxc/adeudos/cliente">Adeudos</a></li></ul></li>';
+			$menu .= '<li><a href="'.BASE_URL.'login/salir">Salir<span class="caret"></span></a></li></ul>';
+			return $menu;
+		} else {
+			$ul_attrs = $is_sub ? 'class="dropdown-menu"' : 'class="nav navbar-nav navbar-right"';
+			$menu = "<ul $ul_attrs>";
+			foreach($menu_array as $attrs) {
+				$sub = isset($attrs['nodes']) 
+				? $this->buildMenu($attrs['nodes'], true) 
+				: null;
+				$li_attrs = $sub ? 'class="dropdown-submenu"' : null;
+				$a_attrs  = $sub ? 'class="dropdown-toggle" data-toggle="dropdown"' : null;
+				$carat    = $sub ? '<span class="caret"></span>' : null;
+				$menu .= "<li $li_attrs>";
+				$menu .= "<a href='".BASE_URL."${attrs['url']}' $a_attrs>${attrs['text']}$carat</a>$sub";
+				$menu .= "</li>";
+			}
+			return $menu . "</ul>";
 		}
-		return $menu . "</ul>";
 	}
 
 	private function menuOptions($parent, $blocked="") {

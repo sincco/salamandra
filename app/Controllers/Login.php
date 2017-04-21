@@ -23,8 +23,9 @@ class LoginController extends Sincco\Sfphp\Abstracts\Controller {
 			else
 				$view->logo = 'html/img/logo.jpg';
 			$view->render();
-		} else
+		} else{
 			Request::redirect('dashboard');
+		}
 	}
 
 	/**
@@ -52,6 +53,11 @@ class LoginController extends Sincco\Sfphp\Abstracts\Controller {
 				$acceso = TRUE;
 			}
 		}
-		echo json_encode(array('acceso'=>$acceso));
+		$this->helper('UsersAccount')->createLogin();
+		if(isset($_SESSION['extraFiltroClientes'])) {
+			echo json_encode(array('acceso'=>$acceso,'redirect'=>$_SESSION['extraFiltroClientes']));
+		} else {
+			echo json_encode(array('acceso'=>$acceso,'redirect'=>'0'));
+		}
 	}
 }
