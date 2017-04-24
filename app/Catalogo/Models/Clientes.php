@@ -28,4 +28,8 @@ class ClientesModel extends Sincco\Sfphp\Abstracts\Model {
 			$query .= ' WHERE TRIM(CLAVE) = :CLIENTE';
 		return $this->connector->query($query, [ 'STATUS'=>$status, 'CLIENTE'=>$cliente ]);
 	}
+
+	public function getByIdRFC($id, $rfc) {
+		return $this->connector->query('SELECT * FROM CLIE01 WHERE TRIM(CLAVE)=:cliente AND TRIM(RFC)=:rfc', ['cliente'=>$id, 'rfc'=>$rfc]);
+	}
 }

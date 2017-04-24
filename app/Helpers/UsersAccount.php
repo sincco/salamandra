@@ -36,7 +36,9 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 		$db[ 'password' ] = trim(Crypt::decrypt($db['password']));
 		Login::setDatabase($db);
 		if(! $data = Login::isLogged()) {
-			Request::redirect('login');
+			if(!isset($_SESSION['SESSION_USERID'])) {
+				Request::redirect('login');
+			}
 		}
 		else {
 			if(!defined('SESSION_USERID')) {
@@ -55,7 +57,7 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 		}
 	}
 
-	public function createLogin() {
+	public function createLogin($params=false) {
 		$db = Reader::get('bases');
 		$db = $db[ 'default' ];
 		$db[ 'password' ] = trim(Crypt::decrypt($db['password']));
@@ -73,6 +75,21 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 				define('SESSION_USERID', $data[ 'userId' ]);
 				define('SESSION_USERNAME', $data[ 'userName' ]);
 				define('SESSION_USEREMAIL', $data[ 'userEmail' ]);
+			}
+		} else {
+			$cliente = $this->getModel('Catalogo\Clientes')->getByIdRFC($params['user'],$params['password']);
+			if(count($cliente) > 0) {
+				$cliente = $cliente[0];	
+				$_SESSION['companiaClave'] = '01';
+				$_SESSION['companiaRazonSocial'] = 'Mi Proveedor';
+				$_SESSION['extraPerfil'] = 2;
+				$_SESSION['extraFiltroClientes'] = 3;
+				define('SESSION_USERID', $cliente['CLAVE']);
+				define('SESSION_USERNAME', $cliente['NOMBRE']);
+				define('SESSION_USEREMAIL', $cliente['RFC']);
+				$_SESSION['SESSION_USERID'] = SESSION_USERID;
+				$_SESSION['SESSION_USERNAME'] = SESSION_USERNAME;
+				$_SESSION['SESSION_USEREMAIL'] = SESSION_USEREMAIL;
 			}
 		}
 	}

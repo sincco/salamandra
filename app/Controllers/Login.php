@@ -53,7 +53,11 @@ class LoginController extends Sincco\Sfphp\Abstracts\Controller {
 				$acceso = TRUE;
 			}
 		}
-		$this->helper('UsersAccount')->createLogin();
+		#var_dump($this->getModel('Firebird')->CLIE01()->getData());
+		$this->helper('UsersAccount')->createLogin($data);
+		if(defined('SESSION_USERID')) {
+			$acceso = TRUE;
+		}
 		if(isset($_SESSION['extraFiltroClientes'])) {
 			echo json_encode(array('acceso'=>$acceso,'redirect'=>$_SESSION['extraFiltroClientes']));
 		} else {

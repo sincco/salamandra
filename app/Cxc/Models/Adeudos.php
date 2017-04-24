@@ -98,7 +98,7 @@ class AdeudosModel extends Sincco\Sfphp\Abstracts\Model {
 		$query .= 'AND datediff (day from CAST(factura.FECHA_VEN AS DATE) to cast(current_date as date)) ' . ($cron ? ' IN (30,60,90) ' : ' > 1 ');
 		$query .= ' AND trim(saldos.CVE_CLIE) = :CVE_CLIE ';
 		$query .= 'ORDER BY ATRASO DESC, CVE_CLIE ASC, NO_FACTURA ASC';
-		$vendedor = SESSION_USERNAME;
+		$vendedor = $_SESSION['SESSION_USERID'];
 		return $this->connector->query($query, [ 'C_TIPO_MOV'=>'C', 'A_TIPO_MOV'=>'A', 'CVE_CLIE'=>$vendedor ]);
 	}
 
