@@ -124,7 +124,7 @@ class UsersAccountHelper extends Sincco\Sfphp\Abstracts\Helper {
 	{
 		if ($_SESSION['extraFiltroClientes'] == 3) {
 			$menu = "<ul class='nav navbar-nav navbar-right'>";
-			$menu .= '<li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Cuentas por Cobrar<span class="caret"></span></a><ul class="dropdown-menu"><li><a href="'.BASE_URL.'cxc/adeudos/cliente">Adeudos</a></li></ul></li>';
+			$menu .= '<li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Catálogos<span class="caret"></span></a><ul class="dropdown-menu"><li><a href="'.BASE_URL.'catalogo/productos">Productos</a></li></ul></li>';
 			$menu .= '<li><a href="'.BASE_URL.'login/salir">Salir<span class="caret"></span></a></li></ul>';
 			return $menu;
 		} else {

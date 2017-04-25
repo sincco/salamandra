@@ -111,7 +111,7 @@ var login = new function() {
 			loader.hide();
 			if(data.acceso) {
 				if(data.redirect == 3) {
-					window.location = BASE_URL + 'cxc/adeudos/cliente';
+					window.location = BASE_URL + 'catalogo/productos';
 				} else {
 					window.location = BASE_URL + 'dashboard';
 				}

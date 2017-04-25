@@ -14,6 +14,16 @@ class ProductosController extends Sincco\Sfphp\Abstracts\Controller {
 		$view->render();
 	}
 
+	public function clientes() {
+		$this->helper('UsersAccount')->checkLogin();
+		$mdlProductos = $this->getModel('Catalogo\Productos');
+		$data = $mdlProductos->getActivos();
+		$view = $this->newView('Catalogo\ProductosClientes');
+		$view->productos = $data;
+		$view->menus = $this->helper('UsersAccount')->createMenus();
+		$view->render();
+	}
+
 	public function cotizar() {
 		$this->helper('UsersAccount')->checkLogin();
 		$view = $this->newView('Catalogo\ProductosCotizar');
