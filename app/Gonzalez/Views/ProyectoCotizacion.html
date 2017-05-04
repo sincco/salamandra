@@ -188,9 +188,9 @@ function crearTabla () {
 
         if (changes[0][1] == "kgm" || changes[0][1] == "kgpzs" || changes[0][1] == "cant" || changes[0][1] == "long" || changes[0][1] == "scrap") {
           if (parseFloat(hot.getDataAtCell(changes[0][0], 6)) > 0) {
-            hot.setDataAtCell(changes[0][0], 11, (parseFloat(hot.getDataAtCell(changes[0][0], 6)) * parseFloat(hot.getDataAtCell(changes[0][0], 8))) * (1+(parseFloat(hot.getDataAtCell(changes[0][0], 10)) / 100)))
+            hot.setDataAtCell(changes[0][0], 11, (parseFloat(hot.getDataAtCell(changes[0][0], 6)) * parseFloat(hot.getDataAtCell(changes[0][0], 8))) * (1+(parseFloat(hot.getDataAtCell(changes[0][0], 7)) / 100)))
           } else {
-            hot.setDataAtCell(changes[0][0], 11, (parseFloat(hot.getDataAtCell(changes[0][0], 7)) * parseFloat(hot.getDataAtCell(changes[0][0], 8)) * parseFloat(hot.getDataAtCell(changes[0][0], 9))) * (1+(parseFloat(hot.getDataAtCell(changes[0][0], 10)) / 100)))
+            hot.setDataAtCell(changes[0][0], 11, (parseFloat(hot.getDataAtCell(changes[0][0], 7)) * parseFloat(hot.getDataAtCell(changes[0][0], 8))) * (1+(parseFloat(hot.getDataAtCell(changes[0][0], 9)) / 100)))
           }
         }
         actualizarTotales();
