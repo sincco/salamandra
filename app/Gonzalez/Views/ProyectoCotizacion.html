@@ -263,14 +263,14 @@ function actualizarTotales() {
   result['laserService'] = 0;
   result['installation'] = 0;
   $(hot.getSourceData()).each(function(){
-    if ($.isNumeric(this.cutFit)){ result['cutFit'] += this.cutFit; }
-    if ($.isNumeric(this.ncMach)){ result['ncMach'] += this.ncMach; }
-    if ($.isNumeric(this.conventionalMach)){ result['conventionalMach'] += this.conventionalMach; }
-    if ($.isNumeric(this.welding)){ result['welding'] += this.welding; }
-    if ($.isNumeric(this.finishing)){ result['finishing'] += this.finishing; }
-    if ($.isNumeric(this.assyPacking)){ result['assyPacking'] += this.assyPacking; }
-    if ($.isNumeric(this.laserService)){ result['laserService'] += this.laserService; }
-    if ($.isNumeric(this.installation)){ result['installation'] += this.installation; }
+    if ($.isNumeric(this.cutFit)){ result['cutFit'] += (this.cutFit * this.cant); }
+    if ($.isNumeric(this.ncMach)){ result['ncMach'] += (this.ncMach * this.cant); }
+    if ($.isNumeric(this.conventionalMach)){ result['conventionalMach'] += (this.conventionalMach * this.cant); }
+    if ($.isNumeric(this.welding)){ result['welding'] += (this.welding * this.cant); }
+    if ($.isNumeric(this.finishing)){ result['finishing'] += (this.finishing * this.cant); }
+    if ($.isNumeric(this.assyPacking)){ result['assyPacking'] += (this.assyPacking * this.cant); }
+    if ($.isNumeric(this.laserService)){ result['laserService'] += (this.laserService * this.cant); }
+    if ($.isNumeric(this.installation)){ result['installation'] += (this.installation * this.cant); }
   });
   
   $('.cutFit').html(result['cutFit']);
