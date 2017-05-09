@@ -182,11 +182,7 @@ function crearTabla () {
           }
         }
 
-        if (changes[0][1] == "pesoTotal" || changes[0][1] == "precio") {
-          hot.setDataAtCell(changes[0][0], 13, parseFloat(hot.getDataAtCell(changes[0][0], 11)) * parseFloat(hot.getDataAtCell(changes[0][0], 12)))
-        }
-console.log(changes[0][1]);
-        if (changes[0][1] == "kgm" || changes[0][1] == "kgpzs" || changes[0][1] == "cant" || changes[0][1] == "long" || changes[0][1] == "scrap") {
+        if (changes[0][1] == "kgm" || changes[0][1] == "kgpzs" || changes[0][1] == "cant" || changes[0][1] == "long" || changes[0][1] == "pesoTotal" || changes[0][1] == "scrap" || changes[0][1] == "precio") {
           if (parseFloat(hot.getDataAtCell(changes[0][0], 6)) > 0) {
             hot.setDataAtCell(changes[0][0], 11, (parseFloat(hot.getDataAtCell(changes[0][0], 6)) * parseFloat(hot.getDataAtCell(changes[0][0], 8))) * (1+(parseFloat(hot.getDataAtCell(changes[0][0], 10)) / 100)));
             hot.setDataAtCell(changes[0][0], 13, parseFloat(hot.getDataAtCell(changes[0][0], 11)) * parseFloat(hot.getDataAtCell(changes[0][0], 12)))
