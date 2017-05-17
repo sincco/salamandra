@@ -85,7 +85,7 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		$view = $this->newView('Gonzalez\ProyectoFormato');
 		$view->menus = $this->helper('UsersAccount')->createMenus();
 		$view->proyectos = $info;
-		$view->productos = $productos;
+		$view->productos = json_encode($productos);
 		$view->render();
 	}
 
