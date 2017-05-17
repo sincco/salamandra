@@ -117,13 +117,13 @@
 	
 <script type="text/javascript">
 var total = 0,
+	result = [],
 	costo = {{ costo|raw() }},
 	data = {{ productos|raw() }};
 
 actualizarTotales();
 
 function actualizarTotales() {
-	var result = [];
 	result['COMERCIAL PARTS'] = [];
 	result['EXTERNAL SERVICES'] = [];
 	result['MATERIAL'] = [];
@@ -181,7 +181,7 @@ function actualizarTotales() {
 	if ($.isNumeric(this.subTotal)){ result[this.seccion]['total'] += (this.subTotal); }
 	});
 
-	total = Number(result['COMERCIAL PARTS']['total']) + Number(result['EXTERNAL SERVICES']['total']) + Number(result['MATERIAL']['total']) + (Number(result['LABOR']['cutFit']) * costo.cutFitCosto) + (Number(result['LABOR']['ncMach']) * costo.ncMachCosto) + (Number(result['LABOR']['conventionalMach']) * costo.conventionalMach) + (Number(result['LABOR']['welding']) * costo.weldingCosto) + (Number(result['LABOR']['finishing']) * costo.finishingCosto) + (Number(result['LABOR']['assyPacking']) * costo.assyPackingCosto) + (Number(result['LABOR']['laserService']) * costo.laserService) + (Number(result['LABOR']['installation']) * costo.installationCosto);
+	total = Number(result['COMERCIAL PARTS']['total']) + Number(result['EXTERNAL SERVICES']['total']) + Number(result['MATERIAL']['total']) + (Number(result['LABOR']['cutFit']) * costo.cutFitCosto) + (Number(result['LABOR']['ncMach']) * costo.ncMachCosto) + (Number(result['LABOR']['conventionalMach']) * costo.conventionalMachCosto) + (Number(result['LABOR']['welding']) * costo.weldingCosto) + (Number(result['LABOR']['finishing']) * costo.finishingCosto) + (Number(result['LABOR']['assyPacking']) * costo.assyPackingCosto) + (Number(result['LABOR']['laserService']) * costo.laserService) + (Number(result['LABOR']['installation']) * costo.installationCosto);
 
 	$('.total').html(formatMoney(total, 2, '.', ',')); 
 }
