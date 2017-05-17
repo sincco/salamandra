@@ -77,6 +77,11 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		$this->helper('UsersAccount')->checkLogin();
 		$userData = $this->helper('UsersAccount')->getUserData();
 
+		$usuariosExtra = $this->getModel('Salamandra');
+		$user = $usuariosExtra->usuariosExtra()->where('userId', $userData['userId'])->getData();
+		$usuariosExtra->init();
+		$user = $user[0];
+
 		$model = $this->getModel('Salamandra');
 		$info = $model->gzlzProyectos()->where('idProyecto', $this->getParams('idProyecto'))->getData();
 		$model->init();
@@ -86,6 +91,11 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		$view->menus = $this->helper('UsersAccount')->createMenus();
 		$view->proyectos = $info;
 		$view->productos = json_encode($productos);
+		$view->vendedor = $user['nombre'];
+		$view->telefono1 = $user['telefono1'];
+		$view->telefono2 = $user['telefono2'];
+		$view->puesto = $user['puesto'];
+		$view->correo = $userData['email'];
 		$view->render();
 	}
 

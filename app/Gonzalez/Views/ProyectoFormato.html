@@ -1,175 +1,123 @@
 {% include 'header.html' %}
-{% include 'menu.html' %}
 
 <div class="container">
 	<div class="row">
-		<h1>Definición de Proyecto</h1>
+		<div class="col-xs-4">
+			<img src="http://gonzalezgroupmex.com/html/img/logo_cliente.jpg" width="100%">
+		</div>
+		<div class="col-xs-8">
+			<h4>González Production Services de México</h4>
+			<h5>R.F.C. GPS070122E63</h5>
+			<h5>AVENIDA DEL MARQUES No. 10 COL. PARQUE INDUSTRIAL BERNARDO QUINTANA</h5>
+			<h5>C.P. 76240, EL MARQUÉS, QUERÉTARO, MÉXICO TEL. 01 (442) 221 5368</h5>
+			<h5>Form RE-PC-B01-06</h5>
+		</div>
 	</div>
+
+	{% for proyecto in proyectos %}
 	
 	<div class="row">
-		{% for proyecto in proyectos %}
-		<div class="page-header">
-			<div class="col-xs-6">
-				<h2>{{ proyecto.clave|trim }}<small>{{ proyecto.titulo|trim }}</small></h2>
-			</div>
-			<div class="col-xs-6">
-				<h6>Resumen: {{ proyecto.resumen|trim }}</h6>
-			</div>
+		<div class="col-xs-6">
+			<h5>Customer: <strong><strong>{{ proyecto.cliente|trim }}</strong></strong></h5>
 		</div>
-		{% endfor %}
+		<div class="col-xs-6">
+			<h5>Date: <strong>{{ "now"|date("Y-m-d") }}</strong></h5>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-6">
+			<h5>Contact: <strong>{{ vendedor|trim }}</strong></h5>
+		</div>
+		<div class="col-xs-6">
+			<h5>Quote #: <strong>G-{{ proyecto.idProyecto|trim }}</strong></h5>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-6">
+			<h5>Project: <strong>{{ proyecto.clave|trim }}</strong></h5>
+		</div>
+		<div class="col-xs-6">
+			<h5>Rev: <strong>0</strong></h5>
+		</div>
 	</div>
 
-	<hr>
+	<div class="row">
+		<p>Dear / Mrs: {{ proyecto.cliente|trim }}</p>
+		<p>Per your request González Production Services de México is pleased to submit the following quote for your consideration.</p>
+		<h3>Scope of work:</h3>
+		<p>Materiales, maquinados, grabado y pavonado.</p>
+		<h3>Breakdown:</h3>
+	</div>
 
-	<div class="panel panel-default">
-    <div class="panel-heading">COMERCIAL PARTS</div>
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-xs-4"><strong>Total:</strong><span class="comercial_total"></span></div>
-      </div>
-    </div>
-  </div>
+	<table class="table">
+		<tr><td>Qty</td><td>Description</td><td>Unit Price</td><td>Total</td></tr>
+		<tr><td>1</td><td>{{ proyecto.titulo|trim }}</td><td><span class="total"></span></td><td><span class="total"></span></td></tr>
+		<tr></tr>
+		<tr></tr>
+		<tr><td colspan="2"></td><td><strong>Subtotal</strong></td><td><strong>$ <span class="total"></span></strong></td></tr>
+	</table>
+	{% endfor %}
+	
+	<div class="row">
+		<h3>Terms:</h3>
+		<div class="row">
+			<div class="col-xs-4">
+				Delivery Time:
+			</div>
+			<div class="col-xs-4">
+				<input type="text" name="" class="form-control">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-4">
+				Payment:
+			</div>
+			<div class="col-xs-4">
+				<input type="text" name="" class="form-control">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-4">
+				Taxes:
+			</div>
+			<div class="col-xs-4">
+				<input type="text" name="" class="form-control">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-4">
+				Incoterms:
+			</div>
+			<div class="col-xs-4">
+				<input type="text" name="" class="form-control">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-4">
+				P.O.:
+			</div>
+			<div class="col-xs-4">
+				<input type="text" name="" class="form-control">
+			</div>
+		</div>
+	</div>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">EXTERNAL SERVICES</div>
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-xs-4"><strong>Total:</strong><span class="external_total"></span></div>
-      </div>
-    </div>
-  </div>
+	<div class="row">
+		<p>We appreciate the opportunity to quote on your requirements and should any questions arise, please contact the undersigned. Any deviation from the original SOW or engeniering change will affect the costs</p>
+	</div>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">MATERIAL</div>
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-xs-4"><strong>Total:</strong><span class="material_total"></span></div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="panel panel-default">
-    <form id="laborForm">
-    <div class="panel-heading">LABOR</div>
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-xs-4">
-          <div class="row">
-            <div class="col-xs-4">
-              <strong>Cut&Fit:</strong><span class="labor_cutFit"></span>
-            </div>
-            <div class="col-xs-4">
-              <strong>Costo Hra:</strong><span class="cutFitCosto" class="form-control" data-class="labor_cutFit" data-total="labor_cutFitTotal"></span>
-            </div>
-            <div class="col-xs-4">
-              <strong>Total:</strong><span class="labor_cutFitTotal"></span>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-4">
-          <div class="row">
-            <div class="col-xs-4">
-              <strong>NC Mach:</strong><span class="labor_ncMach"></span>
-            </div>
-            <div class="col-xs-4">
-              <strong>Costo Hra:</strong><span class="ncMachCosto" class="form-control" data-class="labor_ncMach" data-total="labor_ncMachTotal"></span>
-            </div>
-            <div class="col-xs-4">
-              <strong>Total:</strong><span class="labor_ncMachTotal"></span>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-4">
-          <div class="row">
-            <div class="col-xs-4">
-              <strong>Mach:</strong><span class="labor_conventionalMach"></span>
-            </div>
-            <div class="col-xs-4">
-              <strong>Costo Hra:</strong><span class="conventionalMachCosto" class="form-control" data-class="labor_conventionalMach" data-total="labor_conventionalMachTotal"></span>
-            </div>
-            <div class="col-xs-4">
-              <strong>Total:</strong><span class="labor_conventionalMachTotal"></span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-4">
-          <div class="row">
-            <div class="col-xs-4">
-              <strong>Welding:</strong><span class="labor_welding"></span>
-            </div>
-            <div class="col-xs-4">
-              <strong>Costo Hra:</strong><span class="wendingCosto" class="form-control"  data-class="labor_welding" data-total="labor_weldingTotal"></span>
-            </div>
-            <div class="col-xs-4">
-              <strong>Total:</strong><span class="labor_weldingTotal"></span>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-4">
-          <div class="row">
-            <div class="col-xs-4">
-              <strong>Finishing:</strong><span class="labor_finishing"></span>
-            </div>
-            <div class="col-xs-4">
-              <strong>Costo Hra:</strong><span class="finishingCosto" class="form-control" data-class="labor_finishing" data-total="labor_finishingTotal"></span>
-            </div>
-            <div class="col-xs-4">
-              <strong>Total:</strong><span class="labor_finishingTotal"></span>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-4">
-          <div class="row">
-            <div class="col-xs-4">
-              <strong>Assy Packing:</strong><span class="labor_assyPacking"></span>
-            </div>
-            <div class="col-xs-4">
-              <strong>Costo Hra:</strong><span class="assyPackingCosto" class="form-control" data-class="labor_assyPacking" data-total="labor_assyPackingTotal"></span>
-            </div>
-            <div class="col-xs-4">
-              <strong>Total:</strong><span class="labor_assyPackingTotal"></span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-4">
-          <div class="row">
-            <div class="col-xs-4">
-              <strong>Laser Service:</strong><span class="labor_laserService"></span>
-            </div>
-            <div class="col-xs-4">
-              <strong>Costo Hra:</strong><span class="laserServiceCosto" class="form-control" data-class="labor_laserService" data-total="labor_laserServiceTotal"></span>
-            </div>
-            <div class="col-xs-4">
-              <strong>Total:</strong><span class="labor_laserServiceTotal"></span>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-4">
-          <div class="row">
-            <div class="col-xs-4">
-              <strong>Installation:<span class="labor_installation"></span></strong>
-            </div>
-            <div class="col-xs-4">
-              <strong>Costo Hra:</strong><span class="installationCosto" class="form-control"  data-class="labor_installation" data-total="labor_installationTotal"></span>
-            </div>
-            <div class="col-xs-4">
-              <strong>Total:</strong><span class="labor_installationTotal"></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </form>
-  </div>
+	<div class="row">
+		<h5>Gonzalez Production Services de México</h5>
+		<h5>{{ vendedor|trim }}{{ puesto|trim }}</h5>
+		<h5>Office. {{ telefono1|trim }}</h5>
+		<h5>Mobile. {{ telefono2|trim }}</h5>
+		<h5>{{ correo|trim }}</h5>
+	</div>
 </div>
 	
 <script type="text/javascript">
-data = {{ productos|raw() }};
+var total = 0,
+	data = {{ productos|raw() }};
 
 actualizarTotales();
 
@@ -232,47 +180,21 @@ function actualizarTotales() {
 	if ($.isNumeric(this.subTotal)){ result[this.seccion]['total'] += (this.subTotal); }
 	});
 
-	$('.comercial_cutFit').html(result['COMERCIAL PARTS']['cutFit']);
-	$('.comercial_ncMach').html(result['COMERCIAL PARTS']['ncMach']);
-	$('.comercial_conventionalMach').html(result['COMERCIAL PARTS']['conventionalMach']);
-	$('.comercial_welding').html(result['COMERCIAL PARTS']['welding']);
-	$('.comercial_finishing').html(result['COMERCIAL PARTS']['finishing']);
-	$('.comercial_assyPacking').html(result['COMERCIAL PARTS']['assyPacking']);
-	$('.comercial_laserService').html(result['COMERCIAL PARTS']['laserService']);
-	$('.comercial_installation').html(result['COMERCIAL PARTS']['installation']);  
-	$('.comercial_total').html(result['COMERCIAL PARTS']['total']);  
+	total = Number(result['COMERCIAL PARTS']['total']) + Number(result['EXTERNAL SERVICES']['total']) + Number(result['MATERIAL']['total']) + Number(result['LABOR']['cutFit']) + Number(result['LABOR']['ncMach']) + Number(result['LABOR']['conventionalMach']) + Number(result['LABOR']['welding']) + Number(result['LABOR']['finishing']) + Number(result['LABOR']['assyPacking']) + Number(result['LABOR']['laserService']) + Number(result['LABOR']['installation']);
 
-	$('.external_cutFit').html(result['EXTERNAL SERVICES']['cutFit']);
-	$('.external_ncMach').html(result['EXTERNAL SERVICES']['ncMach']);
-	$('.external_conventionalMach').html(result['EXTERNAL SERVICES']['conventionalMach']);
-	$('.external_welding').html(result['EXTERNAL SERVICES']['welding']);
-	$('.external_finishing').html(result['EXTERNAL SERVICES']['finishing']);
-	$('.external_assyPacking').html(result['EXTERNAL SERVICES']['assyPacking']);
-	$('.external_laserService').html(result['EXTERNAL SERVICES']['laserService']);
-	$('.external_installation').html(result['EXTERNAL SERVICES']['installation']); 
-	$('.external_total').html(result['EXTERNAL SERVICES']['total']); 
-
-	$('.material_cutFit').html(result['MATERIAL']['cutFit']);
-	$('.material_ncMach').html(result['MATERIAL']['ncMach']);
-	$('.material_conventionalMach').html(result['MATERIAL']['conventionalMach']);
-	$('.material_welding').html(result['MATERIAL']['welding']);
-	$('.material_finishing').html(result['MATERIAL']['finishing']);
-	$('.material_assyPacking').html(result['MATERIAL']['assyPacking']);
-	$('.material_laserService').html(result['MATERIAL']['laserService']);
-	$('.material_installation').html(result['MATERIAL']['installation']); 
-	$('.material_total').html(result['MATERIAL']['total']); 
-
-	$('.labor_cutFit').html(result['LABOR']['cutFit']);
-	$('.labor_ncMach').html(result['LABOR']['ncMach']);
-	$('.labor_conventionalMach').html(result['LABOR']['conventionalMach']);
-	$('.labor_welding').html(result['LABOR']['welding']);
-	$('.labor_finishing').html(result['LABOR']['finishing']);
-	$('.labor_assyPacking').html(result['LABOR']['assyPacking']);
-	$('.labor_laserService').html(result['LABOR']['laserService']);
-	$('.labor_installation').html(result['LABOR']['installation']); 
-	$('.labor_total').html(result['LABOR']['total']); 
+	$('.total').html(formatMoney(total, 2, '.', ',')); 
 }
 
+function formatMoney(value, c, d, t){
+	var n = value, 
+	c = isNaN(c = Math.abs(c)) ? 2 : c, 
+	d = d == undefined ? "." : d, 
+	t = t == undefined ? "," : t, 
+	s = n < 0 ? "-" : "", 
+	i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+	j = (j = i.length) > 3 ? j % 3 : 0;
+	return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+ };
 </script>
 
 {% include 'footer.html' %}
