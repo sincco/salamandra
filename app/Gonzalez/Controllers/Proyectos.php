@@ -141,6 +141,16 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 		new Response('json', ['respuesta'=>true]);
 	}
 
+	public function costoLabor() {
+		$model = $this->getModel('Salamandra');
+		$data = $this->getParams('data');
+		$data = $data[0]['data'];
+		$data['idProyecto'] = $this->getParams('data')[0]['idProyecto'];
+		$model->init();
+		$id = $model->gzlzProyectoCstoLabor()->insert($data);
+		new Response('json', ['respuesta'=>$id]);
+	}
+
 	public function apiProducto() {
 		$productos = $this->getModel('Salamandra')->gzlzProductos()->where('CVE_ART', $this->getParams('data'))->getData();
 		new Response('json', $productos);	
