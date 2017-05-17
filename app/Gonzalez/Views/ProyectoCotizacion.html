@@ -372,9 +372,12 @@ function guardar(idProyecto) {
   .done(function(data) {
     if (data.respuesta) {
       hot.loadData([])
-      toastr.success('Cotización asignada a la tarea.', 'Éxito');
-      $.redirect(BASE_URL + 'gonzalez/proyectos',{idProyecto:$('#idProyecto').val()}, 'POST');
-      loader.hide()
+      //sincco.consumirAPI('POST',BASE_URL + 'gonzalez/proyectos/costolabor', { data: [{idProyecto: idProyecto, productos: hot.getData() }] })
+      //.done(function(data) {
+        toastr.success('Cotización asignada a la tarea.', 'Éxito');
+        $.redirect(BASE_URL + 'gonzalez/proyectos',{idProyecto:$('#idProyecto').val()}, 'POST');
+        loader.hide()
+      //});
     } else {
        toastr.error('Hubo un error al guardar los datos.', 'Intenta de nuevo');
        loader.hide()
