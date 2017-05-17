@@ -75,11 +75,17 @@ class ProyectosController extends Sincco\Sfphp\Abstracts\Controller {
 
 	public function formato() {
 		$this->helper('UsersAccount')->checkLogin();
-		$view = $this->newView('Proyectos\ProyectoFormato');
+		$userData = $this->helper('UsersAccount')->getUserData();
+
+		$model = $this->getModel('Salamandra');
+		$info = $model->gzlzProyectos()->where('idProyecto', $this->getParams('idProyecto'))->getData();
+		$model->init();
+		$productos = $model->gzlzProyectosProductos()->where('idProyecto', $this->getParams('idProyecto'))->getData();
+
+		$view = $this->newView('Gonzalez\ProyectoFormato');
 		$view->menus = $this->helper('UsersAccount')->createMenus();
-		$view->proyectos = $this->getModel('Proyectos\Proyectos')->getById($this->getParams('idProyecto'));
-		$view->tareas = $this->getModel('Proyectos\Tareas')->getByIdProyecto($this->getParams('idProyecto'));
-		$view->idProyecto = $this->getParams('idProyecto');
+		$view->proyectos = $info;
+		$view->productos = $productos;
 		$view->render();
 	}
 

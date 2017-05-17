@@ -17,7 +17,11 @@
 					<td>{{ proyecto.clave|trim }}</td>
 					<td>{{ proyecto.titulo|trim }}</td>
 					<td>{{ proyecto.estatus|trim }}</td>
-					<td><button type="button" class="btn btn-primary btn-xs" onclick="jQuery.redirect(BASE_URL + 'gonzalez/proyectos/cotizacion', { 'idProyecto': {{ proyecto.idProyecto|trim }} });"><i class="fa fa-tasks" aria-hidden="true"> <span>Lista de productos</span></i></button><button type="button" class="btn btn-warning btn-xs" onclick="adjuntarArchivos('{{ proyecto.clave|trim }}');"><i class="fa fa-paperclip" aria-hidden="true"> <span>Archivos</span></i></button></td>
+					<td>
+						<button type="button" class="btn btn-primary btn-xs" onclick="jQuery.redirect(BASE_URL + 'gonzalez/proyectos/cotizacion', { 'idProyecto': {{ proyecto.idProyecto|trim }} });"><i class="fa fa-tasks" aria-hidden="true"> <span>Lista de productos</span></i></button>
+						<button type="button" class="btn btn-info btn-xs" onclick="jQuery.redirect(BASE_URL + 'gonzalez/proyectos/formato', { 'idProyecto': {{ proyecto.idProyecto|trim }} });"><i class="fa fa-print" aria-hidden="true"> <span>Formato</span></i></button>
+						<button type="button" class="btn btn-warning btn-xs" onclick="adjuntarArchivos('{{ proyecto.clave|trim }}');"><i class="fa fa-paperclip" aria-hidden="true"> <span>Archivos</span></i></button>
+					</td>
 				</tr>
 				{% endfor %}
 			</tbody>
