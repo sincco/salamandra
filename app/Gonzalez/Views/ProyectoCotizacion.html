@@ -46,19 +46,85 @@
 
   <hr>
 
-  <div class="row">
-    <div class="col-xs-4"><strong>Cut&Fit:</strong><span class="cutFit"></span></div>
-    <div class="col-xs-4"><strong>NC Mach:</strong><span class="ncMach"></span></div>
-    <div class="col-xs-4"><strong>Mach:</strong><span class="conventionalMach"></span></div>
+  <div class="panel panel-default">
+    <div class="panel-heading">COMERCIAL PARTS</div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-xs-4"><strong>Cut&Fit:</strong><span class="comercial_cutFit"></span></div>
+        <div class="col-xs-4"><strong>NC Mach:</strong><span class="comercial_ncMach"></span></div>
+        <div class="col-xs-4"><strong>Mach:</strong><span class="comercial_conventionalMach"></span></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>Welding:</strong><span class="comercial_welding"></span></div>
+        <div class="col-xs-4"><strong>Finishing:</strong><span class="comercial_finishing"></span></div>
+        <div class="col-xs-4"><strong>Assy Packing:</strong><span class="comercial_assyPacking"></span></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>Laser Service:</strong><span class="comercial_laserService"></span></div>
+        <div class="col-xs-4"><strong>Installation:<span class="comercial_installation"></span></strong></div>
+      </div>
+    </div>
   </div>
-  <div class="row">
-    <div class="col-xs-4"><strong>Welding:</strong><span class="welding"></span></div>
-    <div class="col-xs-4"><strong>Finishing:</strong><span class="finishing"></span></div>
-    <div class="col-xs-4"><strong>Assy Packing:</strong><span class="assyPacking"></span></div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">EXTERNAL SERVICES</div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-xs-4"><strong>Cut&Fit:</strong><span class="extrernal_cutFit"></span></div>
+        <div class="col-xs-4"><strong>NC Mach:</strong><span class="extrernal_ncMach"></span></div>
+        <div class="col-xs-4"><strong>Mach:</strong><span class="extrernal_conventionalMach"></span></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>Welding:</strong><span class="extrernal_welding"></span></div>
+        <div class="col-xs-4"><strong>Finishing:</strong><span class="extrernal_finishing"></span></div>
+        <div class="col-xs-4"><strong>Assy Packing:</strong><span class="extrernal_assyPacking"></span></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>Laser Service:</strong><span class="extrernal_laserService"></span></div>
+        <div class="col-xs-4"><strong>Installation:<span class="extrernal_installation"></span></strong></div>
+      </div>
+    </div>
   </div>
-  <div class="row">
-    <div class="col-xs-4"><strong>Laser Service:</strong><span class="laserService"></span></div>
-    <div class="col-xs-4"><strong>Installation:<span class="installation"></span></div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">MATERIAL</div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-xs-4"><strong>Cut&Fit:</strong><span class="material_cutFit"></span></div>
+        <div class="col-xs-4"><strong>NC Mach:</strong><span class="material_ncMach"></span></div>
+        <div class="col-xs-4"><strong>Mach:</strong><span class="material_conventionalMach"></span></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>Welding:</strong><span class="material_welding"></span></div>
+        <div class="col-xs-4"><strong>Finishing:</strong><span class="material_finishing"></span></div>
+        <div class="col-xs-4"><strong>Assy Packing:</strong><span class="material_assyPacking"></span></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>Laser Service:</strong><span class="material_laserService"></span></div>
+        <div class="col-xs-4"><strong>Installation:<span class="material_installation"></span></strong></div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="panel panel-default">
+    <div class="panel-heading">LABOR</div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-xs-4"><strong>Cut&Fit:</strong><span class="labor_cutFit"></span></div>
+        <div class="col-xs-4"><strong>NC Mach:</strong><span class="labor_ncMach"></span></div>
+        <div class="col-xs-4"><strong>Mach:</strong><span class="labor_conventionalMach"></span></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>Welding:</strong><span class="labor_welding"></span></div>
+        <div class="col-xs-4"><strong>Finishing:</strong><span class="labor_finishing"></span></div>
+        <div class="col-xs-4"><strong>Assy Packing:</strong><span class="labor_assyPacking"></span></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>Laser Service:</strong><span class="labor_laserService"></span></div>
+        <div class="col-xs-4"><strong>Installation:<span class="labor_installation"></span></strong></div>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -257,33 +323,93 @@ $('#tabla-productos').on('dbl-click-row.bs.table', function (row, element) {
 
 function actualizarTotales() {
   var result = [];
-  result['cutFit'] = 0;
-  result['ncMach'] = 0;
-  result['conventionalMach'] = 0;
-  result['welding'] = 0;
-  result['finishing'] = 0;
-  result['assyPacking'] = 0;
-  result['laserService'] = 0;
-  result['installation'] = 0;
+  result['COMERCIAL PARTS'] = [];
+  result['EXTERNAL SERVICES'] = [];
+  result['MATERIAL'] = [];
+  result['LABOR'] = [];
+
+  result['COMERCIAL PARTS']['cutFit'] = 0;
+  result['COMERCIAL PARTS']['ncMach'] = 0;
+  result['COMERCIAL PARTS']['conventionalMach'] = 0;
+  result['COMERCIAL PARTS']['welding'] = 0;
+  result['COMERCIAL PARTS']['finishing'] = 0;
+  result['COMERCIAL PARTS']['assyPacking'] = 0;
+  result['COMERCIAL PARTS']['laserService'] = 0;
+  result['COMERCIAL PARTS']['installation'] = 0;
+
+  result['EXTERNAL SERVICES']['cutFit'] = 0;
+  result['EXTERNAL SERVICES']['ncMach'] = 0;
+  result['EXTERNAL SERVICES']['conventionalMach'] = 0;
+  result['EXTERNAL SERVICES']['welding'] = 0;
+  result['EXTERNAL SERVICES']['finishing'] = 0;
+  result['EXTERNAL SERVICES']['assyPacking'] = 0;
+  result['EXTERNAL SERVICES']['laserService'] = 0;
+  result['EXTERNAL SERVICES']['installation'] = 0;
+
+  result['MATERIAL']['cutFit'] = 0;
+  result['MATERIAL']['ncMach'] = 0;
+  result['MATERIAL']['conventionalMach'] = 0;
+  result['MATERIAL']['welding'] = 0;
+  result['MATERIAL']['finishing'] = 0;
+  result['MATERIAL']['assyPacking'] = 0;
+  result['MATERIAL']['laserService'] = 0;
+  result['MATERIAL']['installation'] = 0;
+
+  result['LABOR']['cutFit'] = 0;
+  result['LABOR']['ncMach'] = 0;
+  result['LABOR']['conventionalMach'] = 0;
+  result['LABOR']['welding'] = 0;
+  result['LABOR']['finishing'] = 0;
+  result['LABOR']['assyPacking'] = 0;
+  result['LABOR']['laserService'] = 0;
+  result['LABOR']['installation'] = 0;
+
   $(hot.getSourceData()).each(function(){
-    if ($.isNumeric(this.cutFit)){ result['cutFit'] += (this.cutFit * this.cant); }
-    if ($.isNumeric(this.ncMach)){ result['ncMach'] += (this.ncMach * this.cant); }
-    if ($.isNumeric(this.conventionalMach)){ result['conventionalMach'] += (this.conventionalMach * this.cant); }
-    if ($.isNumeric(this.welding)){ result['welding'] += (this.welding * this.cant); }
-    if ($.isNumeric(this.finishing)){ result['finishing'] += (this.finishing * this.cant); }
-    if ($.isNumeric(this.assyPacking)){ result['assyPacking'] += (this.assyPacking * this.cant); }
-    if ($.isNumeric(this.laserService)){ result['laserService'] += (this.laserService * this.cant); }
-    if ($.isNumeric(this.installation)){ result['installation'] += (this.installation * this.cant); }
+    if ($.isNumeric(this.cutFit)){ result[this.seccion]['cutFit'] += (this.cutFit * this.cant); }
+    if ($.isNumeric(this.ncMach)){ result[this.seccion]['ncMach'] += (this.ncMach * this.cant); }
+    if ($.isNumeric(this.conventionalMach)){ result[this.seccion]['conventionalMach'] += (this.conventionalMach * this.cant); }
+    if ($.isNumeric(this.welding)){ result[this.seccion]['welding'] += (this.welding * this.cant); }
+    if ($.isNumeric(this.finishing)){ result[this.seccion]['finishing'] += (this.finishing * this.cant); }
+    if ($.isNumeric(this.assyPacking)){ result[this.seccion]['assyPacking'] += (this.assyPacking * this.cant); }
+    if ($.isNumeric(this.laserService)){ result[this.seccion]['laserService'] += (this.laserService * this.cant); }
+    if ($.isNumeric(this.installation)){ result[this.seccion]['installation'] += (this.installation * this.cant); }
   });
   
-  $('.cutFit').html(result['cutFit']);
-  $('.ncMach').html(result['ncMach']);
-  $('.conventionalMach').html(result['conventionalMach']);
-  $('.welding').html(result['welding']);
-  $('.finishing').html(result['finishing']);
-  $('.assyPacking').html(result['assyPacking']);
-  $('.laserService').html(result['laserService']);
-  $('.installation').html(result['installation']);  
+  $('.comercial_cutFit').html(result['COMERCIAL PARTS']['cutFit']);
+  $('.comercial_ncMach').html(result['COMERCIAL PARTS']['ncMach']);
+  $('.comercial_conventionalMach').html(result['COMERCIAL PARTS']['conventionalMach']);
+  $('.comercial_welding').html(result['COMERCIAL PARTS']['welding']);
+  $('.comercial_finishing').html(result['COMERCIAL PARTS']['finishing']);
+  $('.comercial_assyPacking').html(result['COMERCIAL PARTS']['assyPacking']);
+  $('.comercial_laserService').html(result['COMERCIAL PARTS']['laserService']);
+  $('.comercial_installation').html(result['COMERCIAL PARTS']['installation']);  
+
+  $('.external_cutFit').html(result['EXTERNAL SERVICES']['cutFit']);
+  $('.external_ncMach').html(result['EXTERNAL SERVICES']['ncMach']);
+  $('.external_conventionalMach').html(result['EXTERNAL SERVICES']['conventionalMach']);
+  $('.external_welding').html(result['EXTERNAL SERVICES']['welding']);
+  $('.external_finishing').html(result['EXTERNAL SERVICES']['finishing']);
+  $('.external_assyPacking').html(result['EXTERNAL SERVICES']['assyPacking']);
+  $('.external_laserService').html(result['EXTERNAL SERVICES']['laserService']);
+  $('.external_installation').html(result['EXTERNAL SERVICES']['installation']); 
+
+  $('.material_cutFit').html(result['MATERIAL']['cutFit']);
+  $('.material_ncMach').html(result['MATERIAL']['ncMach']);
+  $('.material_conventionalMach').html(result['MATERIAL']['conventionalMach']);
+  $('.material_welding').html(result['MATERIAL']['welding']);
+  $('.material_finishing').html(result['MATERIAL']['finishing']);
+  $('.material_assyPacking').html(result['MATERIAL']['assyPacking']);
+  $('.material_laserService').html(result['MATERIAL']['laserService']);
+  $('.material_installation').html(result['MATERIAL']['installation']); 
+
+  $('.labor_cutFit').html(result['LABOR']['cutFit']);
+  $('.labor_ncMach').html(result['LABOR']['ncMach']);
+  $('.labor_conventionalMach').html(result['LABOR']['conventionalMach']);
+  $('.labor_welding').html(result['LABOR']['welding']);
+  $('.labor_finishing').html(result['LABOR']['finishing']);
+  $('.labor_assyPacking').html(result['LABOR']['assyPacking']);
+  $('.labor_laserService').html(result['LABOR']['laserService']);
+  $('.labor_installation').html(result['LABOR']['installation']); 
 }
 </script>
 {% include 'footer.html' %}
