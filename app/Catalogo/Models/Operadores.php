@@ -19,7 +19,7 @@ class OperadoresModel extends Sincco\Sfphp\Abstracts\Model {
 		return $this->connector->query('SELECT  * FROM operadores WHERE ' . implode(",", $where), $data);
 	}
 
-	public function update($set,$where) {
+	public function update($set,$where,$table=false) {
 		$campos = [];
 		$condicion = [];
 		foreach ($set as $campo => $valor)

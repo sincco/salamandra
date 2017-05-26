@@ -6,7 +6,7 @@ class EmpresasModel extends Sincco\Sfphp\Abstracts\Model {
 		return $this->connector->query('SELECT empresa, razonSocial, estatus FROM empresas ORDER BY empresa ASC');
 	}
 
-	public function insert($data) {
+	public function insert($data,$table=false) {
 		$campos = [];
 		$variables = [];
 		foreach ($data as $campo => $valor){
@@ -20,7 +20,7 @@ class EmpresasModel extends Sincco\Sfphp\Abstracts\Model {
 		return $this->connector->query($query, $data);
 	}
 
-	public function update($set, $where) {
+	public function update($set, $where,$table=false) {
 		$campos = [];
 		$condicion = [];
 		foreach ($set as $campo => $valor)

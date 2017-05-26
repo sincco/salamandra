@@ -7,7 +7,7 @@ class PerfilesModel extends Sincco\Sfphp\Abstracts\Model {
 		return $this->connector->query($query);
 	}
 
-	public function insert($data) {
+	public function insert($data,$table = false) {
 		$campos = [];
 		foreach ($data as $campo => $valor)
 			$campos[] = $campo . "=:" . $campo;
@@ -17,7 +17,7 @@ class PerfilesModel extends Sincco\Sfphp\Abstracts\Model {
 		return $this->connector->query($query, $data);
 	}
 
-	public function update($set,$where) {
+	public function update($set,$where,$table=false) {
 		$campos = [];
 		$condicion = [];
 		foreach ($set as $campo => $valor)

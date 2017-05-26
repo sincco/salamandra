@@ -27,7 +27,7 @@ class ProyectosModel extends Sincco\Sfphp\Abstracts\Model {
 		return $this->connector->query($query, $data);
 	}
 
-	public function update($set,$where) {
+	public function update($set,$where,$table=false) {
 		$campos = [];
 		$condicion = [];
 		foreach ($set as $campo => $valor)

@@ -36,7 +36,7 @@ class EnviosModel extends Sincco\Sfphp\Abstracts\Model
 		return $this->connector->query($query, $params);
 	}
 
-	public function update($set,$where) {
+	public function update($set,$where,$table=false) {
 		$campos = [];
 		$condicion = [];
 		foreach ($set as $campo => $valor)

@@ -30,7 +30,7 @@ class AuthqrController extends Sincco\Sfphp\Abstracts\Controller {
 		new Response('json', $codigo);
 	}
 
-	public function config() {
+	public function configurar() {
 		$tiempo = floor(time() / 30);
 		$view = $this->newView('AuthQRConfig');
 		$view->menus = $this->helper('UsersAccount')->createMenus();

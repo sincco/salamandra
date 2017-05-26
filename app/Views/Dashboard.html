@@ -68,32 +68,6 @@
 			</div>
 			{% endfor %}
 		</div>
-
-		<div class="row">
-			<h1>Compras</h1>
-			<table data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
-				<thead>
-					<tr>
-						<th>Clave</th><th>Articulo</th><th>Existencias</th><th>ComprasXRecibir</th><th>PendientesSurtir</th><th>Proveedor</th><th>UltimaVta</th><th>UltimaCompra</th><th>Vendidos</th><th>Comprados</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for compra in compras %}
-					<tr>
-						<td>{{ compra.CVE_ART|e }}</td>
-						<td>{{ compra.DESCR|e }}</td>
-						<td>{{ compra.EXIST|e }}</td>
-						<td>{{ compra.COMP_X_REC|e }}</td>
-						<td>{{ compra.PEND_SURT|e }}</td>
-						<td>{{ compra.PROVEEDOR|e }}</td>
-						<td>{{ compra.VENTA|date("d/m/Y") }}</td>
-						<td>{{ compra.VENDIDOS|e }}</td>
-						<td>{{ compra.COMPRADOS|e }}</td>
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
 	</div>
 </div>
 
