@@ -1,0 +1,52 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	<div class="row">
+		<h1>Productos por producir</h1>
+		<button type="button" class="btn btn-warning" onclick="surtir();"><i class="fa fa-lock" aria-hidden="true"><span> Marcar como producidos</span></i></button>
+		<table id="productos" data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
+			<thead>
+				<tr>
+					<th data-checkbox="true"></th><th>Pedido</th><th>Producto</th><th>Descripcion</th><th>Cantidad</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for producto in productos %}
+				<tr>
+					<td></td>
+					<td>{{ producto.CVE_DOC|e }}</td>
+					<td>{{ producto.CVE_ART|e }}</td>
+					<td>{{ producto.DESCR|e }}</td>
+					<td>{{ producto.CANT|e }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+function surtir() {
+	loader.show();
+	sincco.consumirAPI('POST', BASE_URL + 'ventas/pedidos/setproductosproducidos', { productos: $('#productos').bootstrapTable('getSelections') })
+	.done(function(data) {
+		console.log(data);
+		if(data.id) {
+			toastr.success('Se han marcado las piezas', 'Éxito');
+			window.location.reload()
+		}
+		else {
+			toastr.error(data.error, 'Intenta de nuevo');
+		}
+		loader.hide();
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		toastr.error('Error al efectuar la operación.', 'Intenta de nuevo');
+		loader.hide();
+	})
+}
+</script>
+
+
+{% include 'footer.html' %}

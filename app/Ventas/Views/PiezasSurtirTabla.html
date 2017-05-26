@@ -1,0 +1,53 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	<div class="row">
+		<h1>Piezas por surtir</h1>
+		<button type="button" class="btn btn-warning" onclick="surtir();"><i class="fa fa-lock" aria-hidden="true"><span> Marcar como surtidas</span></i></button>
+		<table id="piezas" data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
+			<thead>
+				<tr>
+					<th data-checkbox="true"></th><th>Pedido</th><th>A Producir</th><th>Producto</th><th>Descripcion</th><th>Cantidad</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for pieza in piezas %}
+				<tr>
+					<td></td>
+					<td>{{ pieza.pedido|e }}</td>
+					<td>{{ pieza.parent|e }}</td>
+					<td>{{ pieza.producto|e }}</td>
+					<td>{{ pieza.descripcion|e }}</td>
+					<td>{{ pieza.cantidad|e }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+function surtir() {
+	loader.show();
+	sincco.consumirAPI('POST', BASE_URL + 'ventas/pedidos/setpiezassurtidas', { piezas: $('#piezas').bootstrapTable('getSelections'), estatus:'Autorizado' })
+	.done(function(data) {
+		console.log(data);
+		if(data.id) {
+			toastr.success('Se han marcado las piezas', 'Éxito');
+			window.location.reload()
+		}
+		else {
+			toastr.error(data.error, 'Intenta de nuevo');
+		}
+		loader.hide();
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		toastr.error('Error al efectuar la operación.', 'Intenta de nuevo');
+		loader.hide();
+	})
+}
+</script>
+
+
+{% include 'footer.html' %}
