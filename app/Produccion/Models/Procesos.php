@@ -2,7 +2,7 @@
 
 class ProcesosModel extends Sincco\Sfphp\Abstracts\Model {
 
-	public function insert($data) {
+	public function insert($data, $table=false) {
 		foreach ($data as $registro) {
 			$registro[ 'empresa' ] = $_SESSION[ 'companiaClave' ];
 			$query = "INSERT INTO almacenes VALUES (:empresa,:almacen,:descripcion,'Activo');";

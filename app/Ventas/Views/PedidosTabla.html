@@ -3,11 +3,11 @@
 
 <div class="container">
 	<div class="row">
-		<h1>Pedidos</h1>
+		<h1>Estatus de pedidos</h1>
 		<table id="pedidos" data-toggle="table" data-search="true" data-show-export="true" data-page-size="20" data-pagination="true" data-show-pagination-switch="true" data-show-columns="true" data-mobile-responsive="true" data-sortable="true">
 			<thead>
 				<tr>
-					<th>Folio</th><th>Fecha</th><th>Cliente</th><th>Importe</th><th>Vendedor</th>
+					<th data-sortable="true">Folio</th><th data-sortable="true">Fecha</th><th>Cliente</th><th>Importe</th><th>Vendedor</th><th data-sortable="true">Estatus</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -18,6 +18,7 @@
 					<td>{{ pedido.CLIENTE|e }}</td>
 					<td>{{ pedido.IMPORTE|number_format(2, '.', ',') }}</td>
 					<td>{{ pedido.VENDEDOR|e }}</td>
+					<td>{{ pedido.ESTATUS|e }}</td>
 				</tr>
 				{% endfor %}
 			</tbody>
@@ -30,7 +31,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="decoder.stop();">&times;</button>
-				<h4 id="modal-titulo" class="modal-title">Detalle de pedidos</h4>
+				<h4 id="modal-titulo" class="modal-title">Detalle de pedido</h4>
 			</div>
 			<div class="modal-body">
 				<table id="pedido-detalle"></table>
@@ -39,9 +40,26 @@
 	</div>
 </div>
 
+<div id="receta" class="modal fade">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="decoder.stop();">&times;</button>
+				<h4 id="modal-titulo" class="modal-title">Material para producción</h4>
+			</div>
+			<div class="modal-body">
+				<table id="receta-detalle"></table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <script type="text/javascript">
 $('#pedidos').on('dbl-click-row.bs.table', function ( row, element ) {
-	var cols = [{"field":"CVE_ART","title":"Clave","sortable":true},
+	var cols = [
+		{"field":"CVE_DOC","title":"Pedido","sortable":true},
+		{"field":"CVE_ART","title":"Clave","sortable":true},
 		{"field":"DESCR","title":"Producto","sortable":true},
 		{"field":"CANT","title":"Cantidad","sortable":true}];
 	var data = false;
@@ -67,10 +85,46 @@ $('#pedidos').on('dbl-click-row.bs.table', function ( row, element ) {
 		minimumCountColumns: 2
 	});
 
+
 	$('#modal').modal('show');
 
 	loader.hide();
 });
+$('#pedido-detalle').on('dbl-click-row.bs.table', function ( row, element ) {
+	var cols = [
+		{"field":"pedido","title":"Pedido","sortable":true},
+		{"field":"padre","title":"Producto","sortable":true},
+		{"field":"producto","title":"Pieza","sortable":true},
+		{"field":"descripcion","title":"Producto","sortable":true},
+		{"field":"cantidad","title":"Cantidad","sortable":true}];
+	var data = false;
+	
+	loader.show();
+
+	$('#receta-detalle').bootstrapTable( 'destroy' );
+
+	$('#receta-detalle').bootstrapTable({
+		method: 'get',
+		url: BASE_URL + 'catalogo/productos/receta/producto/' + element.CVE_ART.trim() + '/pedido/' + element.CVE_DOC.trim(),
+		columns: cols,
+		height: 600,
+		striped: true,
+		pagination: true,
+		pageSize: 25,
+		pageList: [10, 25, 50, 100, 200],
+		search: true,
+		showColumns: true,
+		showRefresh: true,
+		showExport: true,
+		mobileResponsive: true,
+		minimumCountColumns: 2
+	});
+
+	$('#receta').modal('show');
+
+	loader.hide();
+});
+
 </script>
 
 

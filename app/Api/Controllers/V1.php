@@ -238,10 +238,37 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 
 	public function detallePedido() {
 		$model = $this->getModel('Ventas\Pedidos');
+		$salamandra = $this->getModel('Salamandra');
 		$data = $this->getParams('data');
 		switch ($this->getRequest()['method']) {
 			case 'GET':
-				new Response('json', $model->getDetallePedido($this->getParams('pedido')));
+				$model->init();
+				$detalle = $model->getDetallePedido($this->getParams('pedido'));
+				foreach ($detalle as $key=>$producto) {
+					$surtido = 'En Producción';
+
+					$piezas = $this->getModel('Salamandra')->pedidospiezassurtidas()->where('producto', trim($producto['CVE_ART']))->where('pedido', trim($producto['CVE_DOC']))->getData();
+					
+					$salamandra->init();
+					$receta = $salamandra->produccionrecetas()->where('producto', trim($producto['CVE_ART']))->getData();
+					$receta = $receta[0];
+
+					$salamandra->init();
+					$receta = $salamandra->produccionrecetasdetalle()->where('receta', trim($receta['receta']))->getData();					
+					$conteoPiezas = count($receta);
+
+					if (count($piezas) != $conteoPiezas) {
+						$surtido = 'Pendiente';
+					} else {
+						foreach ($piezas as $pieza) {
+							if (intval($pieza['surtido'] )== 0) {
+								$surtido = 'Pendiente';
+							}
+						}
+					}
+					$detalle[$key]['SURTIDO'] = $surtido;
+				}
+				new Response('json', $detalle);
 				break;
 			default:
 				new Response('htmlstatuscode', 'Operacion no soportada');
@@ -261,6 +288,23 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 							$this->getModel('Ventas\ControlPedidos')->insert(['empresa'=>$_SESSION['companiaClave'], 'pedido'=>trim($_pedido['CVE_DOC']), 'estatus'=>'Pendiente'], 'pedidosEstatus');
 						}
 						new Response('json', ['actualizado'=>true]);
+						break;
+					case 'marcar_terminados':
+						$model = $this->getModel('Ventas\Pedidos');
+						$salamandra = $this->getModel('Salamandra');
+						$salamandra->init();
+						$aprobados = $salamandra->pedidosestatus()->where('estatus','Autorizado')->getData();
+
+						$pedidosTerminados = [];
+						foreach ($aprobados as $pedido) {
+							$model->init();
+							$detalle = $model->getDetallePedido($pedido['pedido']);
+							$producido = $salamandra->pedidosproductossurtidos()->where('pedido', trim($pedido['pedido']))->where('producido',1)->getData();
+							if (count($detalle) == count($producido)) {
+								$salamandra->init();
+								$salamandra->pedidosestatus()->update(['estatus'=>'Terminado'],['empresa'=>$_SESSION['companiaClave'], 'pedido'=>$pedido['pedido']]);
+							}
+						}
 						break;
 					case 'cambio_estatus':
 						if(! $this->helper('Google2Step')->validaCodigo('GEAKO2IJW4PKLBXF', $this->getParams('auth'))){

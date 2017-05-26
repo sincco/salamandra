@@ -69,8 +69,10 @@ function buscar() {
 	loader.show();
 	sincco.consumirAPI('POST',BASE_URL + 'catalogo/productos/apibuscar',{ campo:'DESCR', valor:'%' + $('#buscar').val().toUpperCase() + '%', comparacion:'LIKE' })
 	.done(function(data) {
-		if(data)
+		if(data) {
 			$("#productos").html('')
+			loader.hide();
+		}
 		$(data).each(function() {
 			var elemento = '<li class="list-group-item" data-clave="' + this.CVE_ART + '" data-costo="' + 0 + '" data-descr="' + this.DESCR + '"><span>' + this.CVE_ART + ' ' + this.DESCR + '</span></li>';
 			$("#productos").html($("#productos").html() + elemento);
@@ -98,7 +100,7 @@ function guardar() {
 	.done(function(data) {
 		if(data.respuesta > 0) {
 			toastr.success('Receta guardada', 'Éxito');
-			window.location = '{BASE_URL}produccion/recetas'
+			window.location = BASE_URL + 'produccion/recetas'
 			loader.hide();
 		}
 		else {

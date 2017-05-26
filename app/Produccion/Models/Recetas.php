@@ -1,7 +1,7 @@
 <?php
 
 class RecetasModel extends Sincco\Sfphp\Abstracts\Model {
-	public function insert($data) {
+	public function insert($data,$table=false) {
 		$ingredientes = $data[ 'ingredientes' ];
 		unset($data[ 'ingredientes' ]);
 
@@ -11,7 +11,8 @@ class RecetasModel extends Sincco\Sfphp\Abstracts\Model {
 			foreach ($ingredientes as $ingrediente) {
 				$ingrediente[ 'receta' ] = $idReceta;
 				$query = "INSERT INTO produccionRecetasDetalle VALUES (:receta,:clave,:descripcion,:cantidad,:costo);";
-				$this->connector->query($query, $ingrediente);
+				var_dump($query,$ingrediente);
+				#$this->connector->query($query, $ingrediente);
 			}
 		}
 		return $idReceta;

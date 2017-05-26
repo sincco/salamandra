@@ -55,4 +55,29 @@ class ProductosController extends Sincco\Sfphp\Abstracts\Controller {
 			->getData();
 		new Response('json', $data);
 	}
+
+	public function receta() {
+		$salamandra = $this->getModel('Salamandra');
+		$salamandra->init();
+		$receta = $salamandra->produccionrecetas()->where('producto', trim($this->getParams('producto')))->getData();
+		$receta = $receta[0];
+		$salamandra->init();
+		$recetaDetalle = $salamandra->produccionrecetasdetalle()->where('receta', $receta['receta'])->getData();
+		foreach ($recetaDetalle as $key=>$producto) {
+			$surtido = 'Surtido';
+			$salamandra->init();
+			$piezas = $salamandra->pedidospiezassurtidas()->where('producto', trim($this->getParams('producto')))->where('pieza', trim($producto['producto']))->getData();
+			if (count($piezas) == 0) {
+				$surtido = 'Pendiente';
+			} else {
+				if(intval($piezas[0]['surtido']) == 0) {
+					$surtido = 'Pendiente';
+				}
+			}
+			$recetaDetalle[$key]['surtido'] = $surtido;
+			$recetaDetalle[$key]['padre'] = trim($this->getParams('producto'));
+			$recetaDetalle[$key]['pedido'] = trim($this->getParams('pedido'));
+		}
+		new Response('json', $recetaDetalle);
+	}
 }

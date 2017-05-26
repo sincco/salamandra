@@ -151,7 +151,7 @@ function crearTabla () {
                   hot.setDataAtCell(changes[0][0], 1, data[0].DESCR);
                   hot.setDataAtCell(changes[0][0], 2, data[0].UNI_MED);
                   hot.setDataAtCell(changes[0][0], 3, data[0].PRECIO);
-                  hot.setDataAtCell(changes[0][0], 4, data[0].DESCUENTO);
+                  hot.setDataAtCell(changes[0][0], 4, 0);
                   hot.setDataAtCell(changes[0][0], 5, 1);
                 } else {
                   hot.setDataAtCell(changes[0][0], 1, 'NO EXISTE')
@@ -164,6 +164,10 @@ function crearTabla () {
           }
         }
         if (changes[0][1] == "cantidad") {
+          var subtotal = parseFloat(hot.getDataAtCell(changes[0][0], 3)) * parseFloat(hot.getDataAtCell(changes[0][0], 5)) * (1-(parseFloat(hot.getDataAtCell(changes[0][0], 4))/100));
+          hot.setDataAtCell(changes[0][0], 6, subtotal);
+        }
+        if (changes[0][1] == "precio") {
           var subtotal = parseFloat(hot.getDataAtCell(changes[0][0], 3)) * parseFloat(hot.getDataAtCell(changes[0][0], 5)) * (1-(parseFloat(hot.getDataAtCell(changes[0][0], 4))/100));
           hot.setDataAtCell(changes[0][0], 6, subtotal);
         }

@@ -172,5 +172,4 @@ class PedidosModel extends Sincco\Sfphp\Abstracts\Model {
 		}
 		return $this->connector->query($query, $params);
 	}
-
 }
