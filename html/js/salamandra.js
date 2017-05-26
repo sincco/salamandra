@@ -109,10 +109,16 @@ var login = new function() {
 		sincco.consumirAPI('POST',BASE_URL + 'login/apilogin',{userData:$("#acceso").serializeJSON()})
 		.done(function(data) {
 			loader.hide();
-			if(data.acceso)
-				window.location = BASE_URL + 'dashboard';
-			else
+			if(data.acceso) {
+				if(data.redirect == 3) {
+					window.location = BASE_URL + 'catalogo/productos';
+				} else {
+					window.location = BASE_URL + 'dashboard';
+				}
+			}
+			else {
 				toastr.warning('Verifica tu usuario y contraseña.', 'Error de acceso');
+			}
 		})
 		.fail(function(jqXHR, textStatus, errorThrown) {
 			console.log(errorThrown);

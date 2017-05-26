@@ -17,14 +17,14 @@ class CotizacionesModel extends Sincco\Sfphp\Abstracts\Model {
 
 	public function getById($data) {
 		return $this->connector->query('SELECT cot.cotizacion, cot.fecha, cot.razonSocial, cot.estatus,
-			det.producto, det.descripcion, det.unidad, det.cantidad, det.precio, det.cantidad * det.precio AS subtotal
+			det.producto, det.descripcion, det.unidad, det.cantidad, det.precio, det.descuento, (det.cantidad * det.precio) * (1-(det.descuento/100)) AS subtotal
 			FROM cotizaciones cot
 			INNER JOIN cotizacionesDetalle det USING(cotizacion)
 			WHERE cotizacion = :Cotizacion
 			ORDER BY det.descripcion', [ 'Cotizacion'=>$data ]);
 	}
 
-	public function insert($data) {
+	public function insert($data, $tabla = '') {
 		$query = 'INSERT INTO cotizaciones 
 			SET fecha=NOW(), cliente=:Cliente, 
 			razonSocial=:RazonSocial, email=:Email, 
@@ -43,21 +43,22 @@ class CotizacionesModel extends Sincco\Sfphp\Abstracts\Model {
 				$query = 'INSERT INTO cotizacionesDetalle 
 				SET cotizacion=:Cotizacion, producto=:Producto, 
 				descripcion=:Descripcion, unidad=:Unidad,
-				cantidad=:Cantidad, precio=:Precio';
+				cantidad=:Cantidad, precio=:Precio, descuento=:Descuento';
 				$detalle = $this->connector->query($query, [
 					'Cotizacion'=>$id,
 					'Producto'=>$producto[ 0 ],
 					'Descripcion'=>$producto[ 1 ],
 					'Unidad'=>$producto[ 2 ],
-					'Cantidad'=>$producto[ 3 ],
-					'Precio'=>$producto[ 4 ]
+					'Precio'=>$producto[ 3 ],
+					'Descuento'=>$producto[ 4 ],
+					'Cantidad'=>$producto[ 5 ]
 					]);
 			}
 			return $id;
 		}
 	}
 
-	public function update($set, $where) {
+	public function update($set, $where, $table="") {
 		$campos = [];
 		$condicion = [];
 		foreach ($set as $campo => $valor)

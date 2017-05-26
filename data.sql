@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `cotizaciones` (
   `userId` int(11) NOT NULL,
   PRIMARY KEY (`cotizacion`),
   UNIQUE KEY `cotizacion_cliente` (`cliente`,`fecha`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Cotizaciones a clientes' AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Cotizaciones a clientes';
 
 -- --------------------------------------------------------
 
@@ -189,13 +189,13 @@ CREATE TABLE `__menus` (
   `menuURL` varchar(150) DEFAULT NULL,
   `menuParent` int(11) NOT NULL,
   PRIMARY KEY (`menuId`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1 COMMENT='System menus';
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1 COMMENT='System menus';
 
 --
 -- Dumping data for table `__menus`
 --
 
-INSERT INTO `__menus` VALUES (1,'Catálogos',NULL,0),(2,'Clientes','catalogo/clientes',1),(3,'Proveedores','catalogo/proveedores',1),(4,'Productos','catalogo/productos',1),(5,'Configuración',NULL,1),(6,'Usuarios','catalogo/usuarios',5),(7,'Producción',NULL,0),(8,'Recetas','produccion/recetas',7),(9,'Ventas',NULL,0),(10,'Cotizaciones','ventas/cotizaciones',9),(11,'Seleccionar Compañía','selcia',5),(12,'Pedidos','ventas/pedidos',9),(13,'Cuentas por Cobrar',NULL,0),(14,'Adeudos','cxc/adeudos',13),(15,'Reportes',NULL,0),(16,'Consultar','reportes/consultar',15),(17,'Seguridad 2 Pasos','authqr/config',5),(18,'Almacenes','catalogo/almacenes',1),(19,'Procesos','produccion/procesos',7),(20,'Remisiones','ventas/pedidos/remisiones',7),(21,'Envíos',NULL,9),(22,'Transporte',NULL,1),(23,'Operadores','catalogo/operadores',22),(24,'Unidades','catalogo/unidades',22),(25,'Perfiles','catalogo/perfiles',5),(26,'Control de Proyectos','',0),(27,'Proyectos','proyectos/proyectos',26),(28,'Programar','transporte/envios',21),(29,'Agenda','transporte/entregas',21),(30,'Por aprobar','ventas/pedidos/poraprobar',12),(31,'Aprobados','ventas/pedidos/aprobados',12);
+INSERT INTO `__menus` VALUES (1,'Catálogos',NULL,0),(2,'Clientes','catalogo/clientes',1),(3,'Proveedores','catalogo/proveedores',1),(4,'Productos','catalogo/productos',1),(5,'Configuración',NULL,1),(6,'Usuarios','catalogo/usuarios',5),(7,'Producción',NULL,0),(8,'Recetas','produccion/recetas',7),(9,'Ventas',NULL,0),(10,'Cotizaciones','ventas/cotizaciones',9),(11,'Seleccionar Compañía','selcia',5),(12,'Pedidos','ventas/pedidos',9),(13,'Cuentas por Cobrar',NULL,0),(14,'Adeudos','cxc/adeudos',13),(15,'Reportes',NULL,0),(16,'Consultar','reportes/consultar',15),(17,'Seguridad 2 Pasos','authqr/config',5),(18,'Almacenes','catalogo/almacenes',1),(19,'Procesos','produccion/procesos',7),(20,'Remisiones','ventas/pedidos/remisiones',7),(21,'Envíos',NULL,9),(22,'Transporte',NULL,1),(23,'Operadores','catalogo/operadores',22),(24,'Unidades','catalogo/unidades',22),(25,'Perfiles','catalogo/perfiles',5),(26,'Control de Proyectos','',0),(27,'Proyectos','proyectos/proyectos',26),(28,'Programar','transporte/envios',21),(29,'Agenda','transporte/entregas',21),(30,'Por aprobar','ventas/pedidos/poraprobar',12),(31,'Aprobados','ventas/pedidos/aprobados',12),(32,'Entrega','transporte/entregas/visita',21),(33,'Entregas Realizadas','transporte/entregas/entregados',21);
 
 -- --------------------------------------------------------
 
@@ -238,7 +238,7 @@ CREATE TABLE `entregas` (
   `cantidad` FLOAT NULL,
   `idUnidad` INT NULL,
   `idOperador` INT NULL,
-  `entregado` BIT NULL,
+  `entregado` INT NULL,
   `tarimasPorRecoger` INT NULL COMMENT 'Control de entregas',
   PRIMARY KEY (`idEntrega`));
 
@@ -305,7 +305,38 @@ CREATE TABLE `pedidosEstatus` (
   `empresa` char(3) NOT NULL,
   `pedido` char(12) NOT NULL,
   `estatus` ENUM('Pendiente', 'Autorizado', 'No Autorizado') NOT NULL COMMENT 'Control de pedidos',
-  PRIMARY KEY (`idLoggeo`));
+  PRIMARY KEY (`empresa`, `pedido`));
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `proyectosCotizacion`
+--
+DROP TABLE IF EXISTS `proyectosCotizacion`;
+CREATE TABLE IF NOT EXISTS `proyectosCotizacion` (
+  `idProyectoCotizacion` int(11) NOT NULL AUTO_INCREMENT,
+  `idTarea` int(11) NOT NULL,
+  PRIMARY KEY (`idProyectoCotizacion`),
+  UNIQUE KEY `proyecto_cotizacion` (`idTarea`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Cotizacion  de proyectos';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `proyectosCotizacionDetalle`
+--
+DROP TABLE IF EXISTS `proyectosCotizacionDetalle`;
+CREATE TABLE IF NOT EXISTS `proyectosCotizacionDetalle` (
+  `idProyectoCotizacionDetalle` int(11) NOT NULL AUTO_INCREMENT,
+  `idProyectoCotizacion` int(11) NOT NULL,
+  `producto` varchar(16) NOT NULL,
+  `descripcion` varchar(150) NOT NULL,
+  `unidad` varchar(10) NOT NULL,
+  `cantidad` float NOT NULL,
+  `precio` float NOT NULL,
+  PRIMARY KEY (`idProyectoCotizacionDetalle`),
+  UNIQUE KEY `proyecto_cotizacion_detalle` (`idProyectoCotizacion`, `descripcion`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Detalle de cotizacion de proyecto';
 
 -- --------------------------------------------------------
 

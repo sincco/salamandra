@@ -1,0 +1,496 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+  {% for proyecto in proyectos %}
+  <div class="page-header">
+    <div class="col-xs-6">
+      <h2>{{ proyecto.clave|trim }}<small>{{ proyecto.titulo|trim }}</small></h2>
+      <h4>{{ proyecto.estatus|trim }}</h4>
+    </div>
+    <div class="col-xs-6">
+      <h6>{{ proyecto.resumen|trim }}</h6>
+    </div>
+  </div>
+  <input type="hidden" id="idProyecto" value="{{proyecto.idProyecto}}">
+  <input type="hidden" id="cantidadLh" value="{{proyecto.cantidadLh}}">
+  <input type="hidden" id="cantidadRh" value="{{proyecto.cantidadRh}}">
+  {% endfor %}
+	</div>
+
+
+	<div class="row">
+    <div class="col-xs-6">
+      <button type="button" class="btn btn-default" onclick="$.redirect(BASE_URL + 'gonzalez/proyectos',{idProyecto:$('#idProyecto').val()}, 'POST');"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"><span> Regresar</span></i></button>
+    </div>
+    <div class="col-xs-6">
+    </div>
+  </div>
+  
+  <hr>
+
+  <div class="row">
+    <div class="col-xs-10"></div>
+    <div class="col-xs-2">
+      <button type="button" class="btn btn-success" onclick="guardar($('#idProyecto').val());"><i class="fa fa-hdd-o" aria-hidden="true"><span> Guardar</span></i></button>
+    </div>
+	</div>
+
+  <hr>
+
+	<div class="row">
+    <div class="col-xs-12">
+		  <div id="grid-venta" class="handsontable"></div>
+    </div>
+	</div>
+
+  <hr>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">COMERCIAL PARTS</div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-xs-4"><strong>Total:</strong><span class="comercial_total"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">EXTERNAL SERVICES</div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-xs-4"><strong>Total:</strong><span class="external_total"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">MATERIAL</div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-xs-4"><strong>Total:</strong><span class="material_total"></span></div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="panel panel-default">
+    <form id="laborForm">
+    <div class="panel-heading">LABOR</div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <strong>Cut&Fit:</strong><span class="labor_cutFit"></span>
+            </div>
+            <div class="col-xs-4">
+              <strong>Costo Hra:</strong><input type="text" name="cutFitCosto" class="form-control" data-class="labor_cutFit" data-total="labor_cutFitTotal">
+            </div>
+            <div class="col-xs-4">
+              <strong>Total:</strong><span class="labor_cutFitTotal"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <strong>NC Mach:</strong><span class="labor_ncMach"></span>
+            </div>
+            <div class="col-xs-4">
+              <strong>Costo Hra:</strong><input type="text" name="ncMachCosto" class="form-control" data-class="labor_ncMach" data-total="labor_ncMachTotal">
+            </div>
+            <div class="col-xs-4">
+              <strong>Total:</strong><span class="labor_ncMachTotal"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <strong>Mach:</strong><span class="labor_conventionalMach"></span>
+            </div>
+            <div class="col-xs-4">
+              <strong>Costo Hra:</strong><input type="text" name="conventionalMachCosto" class="form-control" data-class="labor_conventionalMach" data-total="labor_conventionalMachTotal">
+            </div>
+            <div class="col-xs-4">
+              <strong>Total:</strong><span class="labor_conventionalMachTotal"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <strong>Welding:</strong><span class="labor_welding"></span>
+            </div>
+            <div class="col-xs-4">
+              <strong>Costo Hra:</strong><input type="text" name="wendingCosto" class="form-control"  data-class="labor_welding" data-total="labor_weldingTotal">
+            </div>
+            <div class="col-xs-4">
+              <strong>Total:</strong><span class="labor_weldingTotal"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <strong>Finishing:</strong><span class="labor_finishing"></span>
+            </div>
+            <div class="col-xs-4">
+              <strong>Costo Hra:</strong><input type="text" name="finishingCosto" class="form-control" data-class="labor_finishing" data-total="labor_finishingTotal">
+            </div>
+            <div class="col-xs-4">
+              <strong>Total:</strong><span class="labor_finishingTotal"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <strong>Assy Packing:</strong><span class="labor_assyPacking"></span>
+            </div>
+            <div class="col-xs-4">
+              <strong>Costo Hra:</strong><input type="text" name="assyPackingCosto" class="form-control" data-class="labor_assyPacking" data-total="labor_assyPackingTotal">
+            </div>
+            <div class="col-xs-4">
+              <strong>Total:</strong><span class="labor_assyPackingTotal"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <strong>Laser Service:</strong><span class="labor_laserService"></span>
+            </div>
+            <div class="col-xs-4">
+              <strong>Costo Hra:</strong><input type="text" name="laserServiceCosto" class="form-control" data-class="labor_laserService" data-total="labor_laserServiceTotal">
+            </div>
+            <div class="col-xs-4">
+              <strong>Total:</strong><span class="labor_laserServiceTotal"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <strong>Installation:<span class="labor_installation"></span></strong>
+            </div>
+            <div class="col-xs-4">
+              <strong>Costo Hra:</strong><input type="text" name="installationCosto" class="form-control"  data-class="labor_installation" data-total="labor_installationTotal">
+            </div>
+            <div class="col-xs-4">
+              <strong>Total:</strong><span class="labor_installationTotal"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </form>
+  </div>
+
+</div>
+
+<div id="modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 id="modal-titulo" class="modal-title">Buscar producto</h4>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="fila-actual">
+        <table id="tabla-productos"></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+var
+  grid = document.getElementById('grid-venta'),
+  hot,
+  data = [
+    {% for data in productos %}
+      ['{{data.seccion}}', {{data.hoja}}, {{data.det}}, {{data.subDet}}, '{{data.producto}}', '{{data.descripcion}}', {{data.kgm}}, {{data.kgpzs}}, {{data.cant}}, {{data.lng}}, {{data.scrap}}, {{data.pesoTotal}}, {{data.precio}}, {{data.cutFit}}, {{data.ncMach}}, {{data.conventionalMach}}, {{data.welding}}, {{data.finishing}}, {{data.assyPacking}}, {{data.laserService}}, {{data.installation}}],
+    {% endfor %}];
+crearTabla();
+var fila = 0;
+$(data).each(function() {
+  hot.setDataAtCell(fila, 0, data[fila][0]);
+  hot.setDataAtCell(fila, 1, data[fila][1]);
+  hot.setDataAtCell(fila, 2, data[fila][2]);
+  hot.setDataAtCell(fila, 3, data[fila][3]);
+  hot.setDataAtCell(fila, 4, data[fila][4]);
+  hot.setDataAtCell(fila, 5, data[fila][5]);
+  hot.setDataAtCell(fila, 6, data[fila][6]);
+  hot.setDataAtCell(fila, 7, data[fila][7]);
+  hot.setDataAtCell(fila, 8, data[fila][8]);
+  hot.setDataAtCell(fila, 9, data[fila][9]);
+  hot.setDataAtCell(fila, 10, data[fila][10]);
+  hot.setDataAtCell(fila, 11, data[fila][11]);
+  hot.setDataAtCell(fila, 12, data[fila][12]);
+  hot.setDataAtCell(fila, 14, data[fila][13]);
+  hot.setDataAtCell(fila, 15, data[fila][14]);
+  hot.setDataAtCell(fila, 16, data[fila][15]);
+  hot.setDataAtCell(fila, 17, data[fila][16]);
+  hot.setDataAtCell(fila, 18, data[fila][17]);
+  hot.setDataAtCell(fila, 19, data[fila][18]);
+  hot.setDataAtCell(fila, 20, data[fila][19]);
+  hot.setDataAtCell(fila, 21, data[fila][20]);
+  fila++;
+})
+
+$('#laborForm input').change(function() {
+  $('.' + $(this).attr('data-total')).html($('.' + $(this).attr('data-class')).html() * $(this).val());
+  console.log($(this).attr('data-total'),$(this).attr('data-class'));
+});
+
+function crearTabla () {
+  hot = new Handsontable(grid, {
+    data: data,
+    minSpareRows: 1,
+    colHeaders: true,
+    rowHeaders: true,
+    fixedRowsTop: 0,
+    startCols: 4,
+    stretchH: "all",
+    contextMenu: [],
+    colHeaders: ['Seccion', 'Hoja', 'Det', 'Sub-Det', 'Clave', 'Descripcion', 'kg/m', 'kg/pzs', 'cant', 'long', 'scrap', 'Peso total', 'Precio kg/pza', 'Subtotal', 'Cut & Fit','NC Mach','Conventional Mach','Welding','Finishing','Assy / Packing','Laser Service','Installation'],
+    columns: [
+      {data:'seccion',type: 'dropdown',
+        source: ['COMERCIAL PARTS', 'EXTERNAL SERVICES', 'MATERIAL', 'LABOR']
+      },
+      {data:'hoja',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'det',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'subDet',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'clave'},
+      {data:'descripcionCorta',readOnly: false},
+      {data:'kgm',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'kgpzs',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'cant',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'long',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'scrap',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'pesoTotal',readOnly: false, type: 'numeric', format: '0,0.000', language: 'en'},
+      {data:'precio', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'subTotal', type: 'numeric', format: '0,0.000', language: 'en', readOnly: true},
+      {data:'cutFit', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'ncMach', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'conventionalMach', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'welding', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'finishing', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'assyPacking', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'laserService', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false},
+      {data:'installation', type: 'numeric', format: '0,0.000', language: 'en', readOnly: false}
+    ], 
+    afterChange: function (changes, source) {
+      if ((source == 'edit' || source == 'paste')) {
+        if (changes[0][1] == "clave") {
+          if (changes[0][3] == "@@") {
+            hot.setDataAtCell(changes[0][0], 5, 'Producto personalizado')
+            hot.setDataAtCell(changes[0][0], 8, '1.00')
+            hot.setDataAtCell(changes[0][0], 12, '1.00')
+          } else {
+            var cve = changes[0][3];
+            if (typeof cve === 'undefined') {
+              return;
+            }
+            if (cve.trim() != '' || cve.trim() != '@@') {
+              sincco.consumirAPI('POST', '{{constant("BASE_URL")}}gonzalez/proyectos/apiProducto', { data: cve.trim() })
+              .done(function(data) {
+                if (data.length) {
+                  hot.setDataAtCell(changes[0][0], 5, data[0].DESCR)
+                  hot.setDataAtCell(changes[0][0], 12, data[0].PRECIO)
+                  hot.setDataAtCell(changes[0][0], 6, data[0].KGMETRO)
+                  hot.setDataAtCell(changes[0][0], 7, data[0].KGPC)
+                } else {
+                  hot.setDataAtCell(changes[0][0], 5, 'NO EXISTE')
+                  toastr.error('El producto no existe.', 'Intenta de nuevo')
+                }
+              }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.log(errorThrown)
+              })
+            }
+          }
+        }
+        if(hot.getDataAtCell(changes[0][0], 0) == 'MATERIAL') {
+          if (changes[0][1] == "kgm" || changes[0][1] == "kgpzs" || changes[0][1] == "cant" || changes[0][1] == "long" || changes[0][1] == "pesoTotal" || changes[0][1] == "scrap" || changes[0][1] == "precio") {
+            if (parseFloat(hot.getDataAtCell(changes[0][0], 7)) > 0) {
+              hot.setDataAtCell(changes[0][0], 11, (parseFloat(hot.getDataAtCell(changes[0][0], 7)) * parseFloat(hot.getDataAtCell(changes[0][0], 8))) * (1+(parseFloat(hot.getDataAtCell(changes[0][0], 10)) / 100)));
+              hot.setDataAtCell(changes[0][0], 13, parseFloat(hot.getDataAtCell(changes[0][0], 11)) * parseFloat(hot.getDataAtCell(changes[0][0], 12)))
+            } else {
+              hot.setDataAtCell(changes[0][0], 11, (parseFloat(hot.getDataAtCell(changes[0][0], 6)) * parseFloat(hot.getDataAtCell(changes[0][0], 8)) * parseFloat(hot.getDataAtCell(changes[0][0], 9))) * (1+(parseFloat(hot.getDataAtCell(changes[0][0], 10)) / 100)));
+              hot.setDataAtCell(changes[0][0], 13, parseFloat(hot.getDataAtCell(changes[0][0], 11)) * parseFloat(hot.getDataAtCell(changes[0][0], 12)))
+            }
+          }
+        } else {
+          hot.setDataAtCell(changes[0][0], 13, parseFloat(hot.getDataAtCell(changes[0][0], 8)) * parseFloat(hot.getDataAtCell(changes[0][0], 12)))
+        }
+        actualizarTotales();
+      }
+    }
+  })
+
+  hot.updateSettings({
+    beforeKeyDown: function (e) {
+      var selection = hot.getSelected()
+      if (e.keyCode == 113) {
+        $('#fila-actual').val(selection[0])
+        loader.show()
+        e.preventDefault()
+        lastChange = null
+        e.stopImmediatePropagation();
+        $('#tabla-productos').bootstrapTable({
+          method: 'get',
+          url: '{{constant('BASE_URL')}}gonzalez/proyectos/apiProductos',
+          columns: [{ field:'CVE_ART', title:'Clave' }, { field:'DESCR', title:'Descripcion' }, { field:'UNI_MED', title:'Unidad' }],
+          height: 300,
+          striped: true,
+          pagination: true,
+          pageSize: 50,
+          pageList: [50, 100, 200],
+          search: true,
+          showColumns: true,
+          showRefresh: true,
+          showExport: true,
+          mobileResponsive: true,
+          minimumCountColumns: 2
+        })
+        $('#modal').modal('show')
+        loader.hide()
+      }
+    }
+  })
+}
+
+function guardar(idProyecto) {
+  loader.show()
+  sincco.consumirAPI('POST',BASE_URL + 'gonzalez/proyectos/cotiza', { data: [{idProyecto: idProyecto, productos: hot.getData() }] })
+  .done(function(data) {
+    if (data.respuesta) {
+      hot.loadData([])
+      sincco.consumirAPI('POST',BASE_URL + 'gonzalez/proyectos/costolabor', { data: [{idProyecto: idProyecto, data: $('#laborForm').serializeJSON() }] })
+      .done(function(data) {
+        toastr.success('Cotización asignada a la tarea.', 'Éxito');
+        $.redirect(BASE_URL + 'gonzalez/proyectos',{idProyecto:$('#idProyecto').val()}, 'POST');
+        loader.hide()
+      });
+    } else {
+       toastr.error('Hubo un error al guardar los datos.', 'Intenta de nuevo');
+       loader.hide()
+     }
+  }).fail(function(jqXHR, textStatus, errorThrown) {
+    console.log('Error',errorThrown)
+    loader.hide()
+  })
+}
+
+$('#tabla-productos').on('dbl-click-row.bs.table', function (row, element) {
+  hot.setDataAtCell($('#fila-actual').val(), 4, element.CVE_ART)
+  $('#modal').modal('hide')
+})
+
+function actualizarTotales() {
+  var result = [];
+  result['COMERCIAL PARTS'] = [];
+  result['EXTERNAL SERVICES'] = [];
+  result['MATERIAL'] = [];
+  result['LABOR'] = [];
+
+  result['COMERCIAL PARTS']['cutFit'] = 0;
+  result['COMERCIAL PARTS']['ncMach'] = 0;
+  result['COMERCIAL PARTS']['conventionalMach'] = 0;
+  result['COMERCIAL PARTS']['welding'] = 0;
+  result['COMERCIAL PARTS']['finishing'] = 0;
+  result['COMERCIAL PARTS']['assyPacking'] = 0;
+  result['COMERCIAL PARTS']['laserService'] = 0;
+  result['COMERCIAL PARTS']['installation'] = 0;
+  result['COMERCIAL PARTS']['total'] = 0;
+
+  result['EXTERNAL SERVICES']['cutFit'] = 0;
+  result['EXTERNAL SERVICES']['ncMach'] = 0;
+  result['EXTERNAL SERVICES']['conventionalMach'] = 0;
+  result['EXTERNAL SERVICES']['welding'] = 0;
+  result['EXTERNAL SERVICES']['finishing'] = 0;
+  result['EXTERNAL SERVICES']['assyPacking'] = 0;
+  result['EXTERNAL SERVICES']['laserService'] = 0;
+  result['EXTERNAL SERVICES']['installation'] = 0;
+  result['EXTERNAL SERVICES']['total'] = 0;
+
+  result['MATERIAL']['cutFit'] = 0;
+  result['MATERIAL']['ncMach'] = 0;
+  result['MATERIAL']['conventionalMach'] = 0;
+  result['MATERIAL']['welding'] = 0;
+  result['MATERIAL']['finishing'] = 0;
+  result['MATERIAL']['assyPacking'] = 0;
+  result['MATERIAL']['laserService'] = 0;
+  result['MATERIAL']['installation'] = 0;
+  result['MATERIAL']['total'] = 0;
+
+  result['LABOR']['cutFit'] = 0;
+  result['LABOR']['ncMach'] = 0;
+  result['LABOR']['conventionalMach'] = 0;
+  result['LABOR']['welding'] = 0;
+  result['LABOR']['finishing'] = 0;
+  result['LABOR']['assyPacking'] = 0;
+  result['LABOR']['laserService'] = 0;
+  result['LABOR']['installation'] = 0;
+  result['LABOR']['total'] = 0;
+
+  $(hot.getSourceData()).each(function(){
+    if ($.isNumeric(this.cutFit)){ result[this.seccion]['cutFit'] += (this.cutFit * this.cant); }
+    if ($.isNumeric(this.ncMach)){ result[this.seccion]['ncMach'] += (this.ncMach * this.cant); }
+    if ($.isNumeric(this.conventionalMach)){ result[this.seccion]['conventionalMach'] += (this.conventionalMach * this.cant); }
+    if ($.isNumeric(this.welding)){ result[this.seccion]['welding'] += (this.welding * this.cant); }
+    if ($.isNumeric(this.finishing)){ result[this.seccion]['finishing'] += (this.finishing * this.cant); }
+    if ($.isNumeric(this.assyPacking)){ result[this.seccion]['assyPacking'] += (this.assyPacking * this.cant); }
+    if ($.isNumeric(this.laserService)){ result[this.seccion]['laserService'] += (this.laserService * this.cant); }
+    if ($.isNumeric(this.installation)){ result[this.seccion]['installation'] += (this.installation * this.cant); }
+    if ($.isNumeric(this.subTotal)){ result[this.seccion]['total'] += (this.subTotal); }
+  });
+  
+  $('.comercial_cutFit').html(result['COMERCIAL PARTS']['cutFit']);
+  $('.comercial_ncMach').html(result['COMERCIAL PARTS']['ncMach']);
+  $('.comercial_conventionalMach').html(result['COMERCIAL PARTS']['conventionalMach']);
+  $('.comercial_welding').html(result['COMERCIAL PARTS']['welding']);
+  $('.comercial_finishing').html(result['COMERCIAL PARTS']['finishing']);
+  $('.comercial_assyPacking').html(result['COMERCIAL PARTS']['assyPacking']);
+  $('.comercial_laserService').html(result['COMERCIAL PARTS']['laserService']);
+  $('.comercial_installation').html(result['COMERCIAL PARTS']['installation']);  
+  $('.comercial_total').html(result['COMERCIAL PARTS']['total']);  
+
+  $('.external_cutFit').html(result['EXTERNAL SERVICES']['cutFit']);
+  $('.external_ncMach').html(result['EXTERNAL SERVICES']['ncMach']);
+  $('.external_conventionalMach').html(result['EXTERNAL SERVICES']['conventionalMach']);
+  $('.external_welding').html(result['EXTERNAL SERVICES']['welding']);
+  $('.external_finishing').html(result['EXTERNAL SERVICES']['finishing']);
+  $('.external_assyPacking').html(result['EXTERNAL SERVICES']['assyPacking']);
+  $('.external_laserService').html(result['EXTERNAL SERVICES']['laserService']);
+  $('.external_installation').html(result['EXTERNAL SERVICES']['installation']); 
+  $('.external_total').html(result['EXTERNAL SERVICES']['total']); 
+
+  $('.material_cutFit').html(result['MATERIAL']['cutFit']);
+  $('.material_ncMach').html(result['MATERIAL']['ncMach']);
+  $('.material_conventionalMach').html(result['MATERIAL']['conventionalMach']);
+  $('.material_welding').html(result['MATERIAL']['welding']);
+  $('.material_finishing').html(result['MATERIAL']['finishing']);
+  $('.material_assyPacking').html(result['MATERIAL']['assyPacking']);
+  $('.material_laserService').html(result['MATERIAL']['laserService']);
+  $('.material_installation').html(result['MATERIAL']['installation']); 
+  $('.material_total').html(result['MATERIAL']['total']); 
+
+  $('.labor_cutFit').html(result['LABOR']['cutFit']);
+  $('.labor_ncMach').html(result['LABOR']['ncMach']);
+  $('.labor_conventionalMach').html(result['LABOR']['conventionalMach']);
+  $('.labor_welding').html(result['LABOR']['welding']);
+  $('.labor_finishing').html(result['LABOR']['finishing']);
+  $('.labor_assyPacking').html(result['LABOR']['assyPacking']);
+  $('.labor_laserService').html(result['LABOR']['laserService']);
+  $('.labor_installation').html(result['LABOR']['installation']); 
+  $('.labor_total').html(result['LABOR']['total']); 
+}
+</script>
+{% include 'footer.html' %}

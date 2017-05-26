@@ -4,6 +4,17 @@ use \Sincco\Sfphp\Response;
 
 class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 
+	public function clientes() {
+		switch ($this->getRequest()['method']) {
+			case 'GET':
+				new Response('json', $this->getModel('Catalogo\Clientes')->getById($this->getParams('cliente')));
+				break;
+			default:
+				new Response('json', 'Metodo no soportado');
+				break;
+		}
+	}
+
 	public function almacenProductos() {
 		switch ($this->getRequest()['method']) {
 			case 'GET':
@@ -51,7 +62,7 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 				$model = $this->getModel('Catalogo\Unidades');
 				$data = $this->getParams('data');
 				unset($data['idUnidad']);
-				$id = $model->insert($data);
+				$id = $model->insert($data, 'unidades');
 				new Response('json', ['respuesta'=>$id]);
 				break;
 			case 'PUT':
@@ -74,7 +85,7 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 				$model = $this->getModel('Catalogo\Operadores');
 				$data = $this->getParams('data');
 				unset($data['idOperador']);
-				$id = $model->insert($data);
+				$id = $model->insert($data, 'operadores');
 				new Response('json', ['respuesta'=>$id]);
 				break;
 			case 'PUT':
@@ -100,7 +111,7 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 				break;
 			case 'POST':
 				unset($data['idProyecto']);
-				$id = $model->insert($data);
+				$id = $model->insert($data, 'proyectos');
 				new Response('json', ['respuesta'=>$id]);
 				break;
 			case 'PUT':
@@ -124,7 +135,7 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 				break;
 			case 'POST':
 				unset($data['idTarea']);
-				$id = $model->insert($data);
+				$id = $model->insert($data, 'proyectosTareas');
 				new Response('json', ['respuesta'=>$id]);
 				break;
 			case 'PUT':
@@ -182,7 +193,7 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 							$_data['idOperador'] = explode('|', $_data['idOperador'])[0];
 							$_data['idOperador'] = $this->getModel('Catalogo\Operadores')->getBy(['clave'=>$_data['idOperador']])[0]['idOperador'];
 							$_data['idUnidad'] = $this->getModel('Catalogo\Unidades')->getBy(['noEco'=>$_data['idUnidad']])[0]['idUnidad'];
-							$id[] = $model->insert($_data);
+							$id[] = $model->insert($_data, 'entregas');
 						}
 					}
 				} catch (Exception $e) {
@@ -198,6 +209,25 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 				$where = ['idTarea'=>$data['idTarea']];
 				unset($data['idTarea']);
 				$model->update($data, $where);
+				new Response('json', ['respuesta'=>true]);
+				break;
+			default:
+				new Response('htmlstatuscode', 'Operacion no soportada');
+				break;
+		}
+	}
+
+	public function entregas() {
+		$model = $this->getModel('Transporte\Envios');
+		$data = $this->getParams('data');
+		switch ($this->getRequest()['method']) {
+			case 'GET':
+				if ($this->getParams('tipo') == 'dia') {
+					new Response('json', ['respuesta'=>$model->getPedidoEntregaDia($this->getParams('pedido'))]);
+				}
+				break;
+			case 'PUT':
+				$model->update(['entregado'=>1], ['pedido'=>$this->getParams('pedido'), 'fechaEntrega'=>date('Y-m-d')]);
 				new Response('json', ['respuesta'=>true]);
 				break;
 			default:
@@ -228,7 +258,7 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 					case 'por_aprobar':
 						$enProceso = $this->getModel('Ventas\ControlPedidos')->getAll();
 						foreach ($model->getNotIn($enProceso) as $_pedido) {
-							$this->getModel('Ventas\ControlPedidos')->insert(['empresa'=>$_SESSION['companiaClave'], 'pedido'=>$_pedido['CVE_DOC'], 'estatus'=>'Pendiente'], 'pedidosEstatus');
+							$this->getModel('Ventas\ControlPedidos')->insert(['empresa'=>$_SESSION['companiaClave'], 'pedido'=>trim($_pedido['CVE_DOC']), 'estatus'=>'Pendiente'], 'pedidosEstatus');
 						}
 						new Response('json', ['actualizado'=>true]);
 						break;
@@ -246,6 +276,13 @@ class V1Controller extends Sincco\Sfphp\Abstracts\Controller {
 						new Response('json', $model->getAll());
 						break;
 				}
+				break;
+			case 'GET':
+				$pedidos = [];
+				foreach (explode(',', $this->getParams('pedidos')) as $_pedido) {
+					$pedidos[] = ['pedido'=>$_pedido];
+				}
+				new Response('json', ['pedidos'=>$model->_getIn($pedidos)]);
 				break;
 			default:
 				new Response('htmlstatuscode', 'Operacion no soportada');

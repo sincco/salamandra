@@ -18,7 +18,8 @@ class IndexController extends Sincco\Sfphp\Abstracts\Controller {
 			else
 				$view->logo = 'html/img/logo.jpg';
 			$view->render();
-		} else
+		} else {
 			Request::redirect('dashboard');
+		}
 	}
 }

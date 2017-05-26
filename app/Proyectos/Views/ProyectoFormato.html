@@ -1,0 +1,48 @@
+{% include 'header.html' %}
+{% include 'menu.html' %}
+
+<div class="container">
+	<div class="row">
+		<h1>Definición de Proyecto</h1>
+	</div>
+	<div class="row">
+		{% for proyecto in proyectos %}
+		<div class="page-header">
+			<div class="col-xs-6">
+				<h2>{{ proyecto.clave|trim }}<small>{{ proyecto.titulo|trim }}</small></h2>
+				<h4>Status: {{ proyecto.estatus|trim }}</h4>
+			</div>
+			<div class="col-xs-6">
+				<h6>Resumen: {{ proyecto.resumen|trim }}</h6>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+
+	<hr>
+	
+	<div class="row">
+		<h4>Actividades</h4>
+		{% for tarea in tareas %}
+		<ul class="list-group">
+			<li class="list-group-item">
+				<span class="badge">{{ tarea.fechaInicioProyectado|trim }} - {{ tarea.fechaFinProyectado|trim }}</span>
+				{{ tarea.titulo|trim }}
+			</li>
+		</ul>
+		{% endfor %}
+<!--
+{% for tarea in tareas %}
+<tr>
+	<td>{{ tarea.idTarea|trim }}</td>
+	<td>{{ tarea.titulo|trim }}</td>
+	<td>{{ tarea.estatus|trim }}</td>
+	<td>{{ tarea.fechaInicioProyectado|trim }}</td>
+	<td>{{ tarea.fechaFinProyectado|trim }}</td>
+</tr>
+{% endfor %}
+-->
+	</div>
+</div>
+
+{% include 'footer.html' %}

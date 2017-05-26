@@ -1,0 +1,201 @@
+{% include 'header.html' %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-xs-4">
+			<img src="http://gonzalezgroupmex.com/html/img/logo_cliente.jpg" width="100%">
+		</div>
+		<div class="col-xs-8">
+			<h4>González Production Services de México</h4>
+			<h5>R.F.C. GPS070122E63</h5>
+			<h5>AVENIDA DEL MARQUES No. 10 COL. PARQUE INDUSTRIAL BERNARDO QUINTANA</h5>
+			<h5>C.P. 76240, EL MARQUÉS, QUERÉTARO, MÉXICO TEL. 01 (442) 221 5368</h5>
+			<h5>Form RE-PC-B01-06</h5>
+		</div>
+	</div>
+
+	{% for proyecto in proyectos %}
+	
+	<div class="row">
+		<div class="col-xs-6">
+			<h5>Customer: <strong><strong>{{ proyecto.cliente|trim }}</strong></strong></h5>
+		</div>
+		<div class="col-xs-6">
+			<h5>Date: <strong>{{ "now"|date("Y-m-d") }}</strong></h5>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-6">
+			<h5>Contact: <strong>{{ vendedor|trim }}</strong></h5>
+		</div>
+		<div class="col-xs-6">
+			<h5>Quote #: <strong>G-{{ proyecto.idProyecto|trim }}</strong></h5>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-6">
+			<h5>Project: <strong>{{ proyecto.clave|trim }}</strong></h5>
+		</div>
+		<div class="col-xs-6">
+			<h5>Rev: <strong>0</strong></h5>
+		</div>
+	</div>
+
+	<div class="row">
+		<p>Dear / Mrs: {{ proyecto.cliente|trim }}</p>
+		<p>Per your request González Production Services de México is pleased to submit the following quote for your consideration.</p>
+		<h3>Scope of work:</h3>
+		<p>Materiales, maquinados, grabado y pavonado.</p>
+		<h3>Breakdown:</h3>
+	</div>
+
+	<table class="table">
+		<tr><td>Qty</td><td>Description</td><td>Unit Price</td><td>Total</td></tr>
+		<tr><td>1</td><td>{{ proyecto.titulo|trim }}</td><td><span class="total"></span></td><td><span class="total"></span></td></tr>
+		<tr></tr>
+		<tr></tr>
+		<tr><td colspan="2"></td><td><strong>Subtotal</strong></td><td><strong>$ <span class="total"></span></strong></td></tr>
+	</table>
+	{% endfor %}
+	
+	<div class="row">
+		<h3>Terms:</h3>
+		<div class="row">
+			<div class="col-xs-4">
+				Delivery Time:
+			</div>
+			<div class="col-xs-4">
+				<input type="text" name="" class="form-control">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-4">
+				Payment:
+			</div>
+			<div class="col-xs-4">
+				<input type="text" name="" class="form-control">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-4">
+				Taxes:
+			</div>
+			<div class="col-xs-4">
+				<input type="text" name="" class="form-control">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-4">
+				Incoterms:
+			</div>
+			<div class="col-xs-4">
+				<input type="text" name="" class="form-control">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-4">
+				P.O.:
+			</div>
+			<div class="col-xs-4">
+				<input type="text" name="" class="form-control">
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<p>We appreciate the opportunity to quote on your requirements and should any questions arise, please contact the undersigned. Any deviation from the original SOW or engeniering change will affect the costs</p>
+	</div>
+
+	<div class="row">
+		<h5>Gonzalez Production Services de México</h5>
+		<h5>{{ vendedor|trim }}{{ puesto|trim }}</h5>
+		<h5>Office. {{ telefono1|trim }}</h5>
+		<h5>Mobile. {{ telefono2|trim }}</h5>
+		<h5>{{ correo|trim }}</h5>
+	</div>
+</div>
+	
+<script type="text/javascript">
+var total = 0,
+	result = [],
+	costo = {{ costo|raw() }},
+	data = {{ productos|raw() }};
+
+actualizarTotales();
+
+function actualizarTotales() {
+	result['COMERCIAL PARTS'] = [];
+	result['EXTERNAL SERVICES'] = [];
+	result['MATERIAL'] = [];
+	result['LABOR'] = [];
+
+	result['COMERCIAL PARTS']['cutFit'] = 0;
+	result['COMERCIAL PARTS']['ncMach'] = 0;
+	result['COMERCIAL PARTS']['conventionalMach'] = 0;
+	result['COMERCIAL PARTS']['welding'] = 0;
+	result['COMERCIAL PARTS']['finishing'] = 0;
+	result['COMERCIAL PARTS']['assyPacking'] = 0;
+	result['COMERCIAL PARTS']['laserService'] = 0;
+	result['COMERCIAL PARTS']['installation'] = 0;
+	result['COMERCIAL PARTS']['total'] = 0;
+
+	result['EXTERNAL SERVICES']['cutFit'] = 0;
+	result['EXTERNAL SERVICES']['ncMach'] = 0;
+	result['EXTERNAL SERVICES']['conventionalMach'] = 0;
+	result['EXTERNAL SERVICES']['welding'] = 0;
+	result['EXTERNAL SERVICES']['finishing'] = 0;
+	result['EXTERNAL SERVICES']['assyPacking'] = 0;
+	result['EXTERNAL SERVICES']['laserService'] = 0;
+	result['EXTERNAL SERVICES']['installation'] = 0;
+	result['EXTERNAL SERVICES']['total'] = 0;
+
+	result['MATERIAL']['cutFit'] = 0;
+	result['MATERIAL']['ncMach'] = 0;
+	result['MATERIAL']['conventionalMach'] = 0;
+	result['MATERIAL']['welding'] = 0;
+	result['MATERIAL']['finishing'] = 0;
+	result['MATERIAL']['assyPacking'] = 0;
+	result['MATERIAL']['laserService'] = 0;
+	result['MATERIAL']['installation'] = 0;
+	result['MATERIAL']['total'] = 0;
+
+	result['LABOR']['cutFit'] = 0;
+	result['LABOR']['ncMach'] = 0;
+	result['LABOR']['conventionalMach'] = 0;
+	result['LABOR']['welding'] = 0;
+	result['LABOR']['finishing'] = 0;
+	result['LABOR']['assyPacking'] = 0;
+	result['LABOR']['laserService'] = 0;
+	result['LABOR']['installation'] = 0;
+	result['LABOR']['total'] = 0;
+
+	$(data).each(function(){
+	if ($.isNumeric(this.cutFit)){ result[this.seccion]['cutFit'] += (this.cutFit * this.cant); }
+	if ($.isNumeric(this.ncMach)){ result[this.seccion]['ncMach'] += (this.ncMach * this.cant); }
+	if ($.isNumeric(this.conventionalMach)){ result[this.seccion]['conventionalMach'] += (this.conventionalMach * this.cant); }
+	if ($.isNumeric(this.welding)){ result[this.seccion]['welding'] += (this.welding * this.cant); }
+	if ($.isNumeric(this.finishing)){ result[this.seccion]['finishing'] += (this.finishing * this.cant); }
+	if ($.isNumeric(this.assyPacking)){ result[this.seccion]['assyPacking'] += (this.assyPacking * this.cant); }
+	if ($.isNumeric(this.laserService)){ result[this.seccion]['laserService'] += (this.laserService * this.cant); }
+	if ($.isNumeric(this.installation)){ result[this.seccion]['installation'] += (this.installation * this.cant); }
+	if ($.isNumeric(this.subTotal)){ result[this.seccion]['total'] += (this.subTotal); }
+	});
+
+	total = Number(result['COMERCIAL PARTS']['total']) + Number(result['EXTERNAL SERVICES']['total']) + Number(result['MATERIAL']['total']) + (Number(result['LABOR']['cutFit']) * costo.cutFitCosto) + (Number(result['LABOR']['ncMach']) * costo.ncMachCosto) + (Number(result['LABOR']['conventionalMach']) * costo.conventionalMachCosto) + (Number(result['LABOR']['welding']) * costo.wendingCosto) + (Number(result['LABOR']['finishing']) * costo.finishingCosto) + (Number(result['LABOR']['assyPacking']) * costo.assyPackingCosto) + (Number(result['LABOR']['laserService']) * costo.laserServiceCosto) + (Number(result['LABOR']['installation']) * costo.installationCosto);
+
+	$('.total').html(formatMoney(total, 2, '.', ',')); 
+}
+
+function formatMoney(value, c, d, t){
+	var n = value, 
+	c = isNaN(c = Math.abs(c)) ? 2 : c, 
+	d = d == undefined ? "." : d, 
+	t = t == undefined ? "," : t, 
+	s = n < 0 ? "-" : "", 
+	i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+	j = (j = i.length) > 3 ? j % 3 : 0;
+	return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+ };
+</script>
+
+{% include 'footer.html' %}

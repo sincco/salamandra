@@ -1,6 +1,7 @@
 <?php
 
 use \Sincco\Sfphp\Response;
+use \Sincco\Sfphp\Config\Reader;
 
 class CotizacionesController extends Sincco\Sfphp\Abstracts\Controller {
 
@@ -32,23 +33,34 @@ class CotizacionesController extends Sincco\Sfphp\Abstracts\Controller {
 	}
 
 	public function previo() {
+		$user = unserialize($_SESSION['sincco\login\controller']);
 		$model = $this->getModel('Ventas\Cotizaciones');
 		$view 			= $this->newView('Ventas\CotizacionesPrevio');
 		$data 			= $model->getById($this->getParams('id'));
 		$view->cotizacion  = $data[ 0 ];
 		$view->detalle  = $data;
+		$view->vendedor = $user['userName'];
 		$view->render();
 	}
 
 	public function apiEnviar() {
+		$apiElastic = Reader::get('elasticemail');
+		$user = unserialize($_SESSION['sincco\login\controller']);
 		$model = $this->getModel('Ventas\Cotizaciones');
 		$model->update([ 'estatus'=>'Enviada' ], [ 'cotizacion'=>$this->getParams('id') ]);
 		$view 			= $this->newView('Ventas\CotizacionesPrevio');
 		$data 			= $model->getById($this->getParams('id'));
 		$view->cotizacion  = $data[ 0 ];
 		$view->detalle  = $data;
+		$view->vendedor = $user['userName'];
+		$correoVendedor = $this->getModel('Catalogo\Vendedores')->getVendedor($user['userName']);
+		if(count($correoVendedor) > 0) {
+			$correoVendedor = ";" . trim($correoVendedor[0]['CORREOE']);
+		} else {
+			$correoVendedor = "";
+		}
 		$cotizacion 	= $view->getContent();
-		$respuesta 		= $this->helper('ElasticEmail')->send($this->getParams('email'), 'Cotización', '', $cotizacion, 'contacto@tricorp.com', APP_COMPANY);
+		$respuesta 		= $this->helper('ElasticEmail')->send($this->getParams('email') . $correoVendedor, 'Cotización', '', $cotizacion, $apiElastic['from'], APP_COMPANY);
 		new Response('json', [ 'respuesta'=>$respuesta ]);
 	}
 

@@ -10,6 +10,10 @@ class ClientesModel extends Sincco\Sfphp\Abstracts\Model {
 		return $this->connector->query('SELECT cli.*,ven.NOMBRE VENDEDOR FROM CLIE' . $_SESSION[ 'companiaClave' ] . ' cli LEFT JOIN VEND' . $_SESSION[ 'companiaClave' ] . ' ven ON ven.CVE_VEND=cli.CVE_VEND');
 	}
 
+	public function getById($id) {
+		return $this->connector->query('SELECT * FROM CLIE' . $_SESSION[ 'companiaClave' ] . ' WHERE TRIM(CLAVE)=:cliente', ['cliente'=>$id]);
+	}
+
 	public function getContactos($cliente) {
 		return $this->connector->query('SELECT LIST(EMAIL,\';\') EMAIL FROM CONTAC' . $_SESSION[ 'companiaClave' ] . ' WHERE EMAIL IS NOT NULL AND TRIM(CVE_CLIE) = :CLIENTE', [ 'CLIENTE'=>$cliente ]);
 	}
@@ -23,5 +27,9 @@ class ClientesModel extends Sincco\Sfphp\Abstracts\Model {
 		if($cliente)
 			$query .= ' WHERE TRIM(CLAVE) = :CLIENTE';
 		return $this->connector->query($query, [ 'STATUS'=>$status, 'CLIENTE'=>$cliente ]);
+	}
+
+	public function getByIdRFC($id, $rfc) {
+		return $this->connector->query('SELECT * FROM CLIE01 WHERE TRIM(CLAVE)=:cliente AND TRIM(RFC)=:rfc', ['cliente'=>$id, 'rfc'=>$rfc]);
 	}
 }

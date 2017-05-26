@@ -29,14 +29,11 @@ class EnviosModel extends Sincco\Sfphp\Abstracts\Model
 		return $this->connector->query($query, $params);
 	}
 
-	public function insert($data) {
-		$campos = [];
-		foreach ($data as $campo => $valor)
-			$campos[] = $campo . "=:" . $campo;
-		$campos = implode(",", $campos);
-		$query = 'INSERT INTO entregas 
-			SET ' . $campos;
-		return $this->connector->query($query, $data);
+	public function getPedidoEntregaDia($pedido)
+	{
+		$query = 'SELECT ent.*, noEco unidad, concat(concat(clave,\'|\'),nombre) operador FROM entregas ent INNER JOIN unidades USING (idUnidad) INNER JOIN operadores USING (idOperador) WHERE ent.pedido = :pedido AND ent.fechaEntrega = CURDATE();';
+		$params['pedido'] = $pedido;
+		return $this->connector->query($query, $params);
 	}
 
 	public function update($set,$where) {
