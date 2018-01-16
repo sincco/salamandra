@@ -42,11 +42,11 @@
 $('#almacenes').on('dbl-click-row.bs.table', function ( row, element ) {
 	var cols = [{"field":"CVE_ART","title":"Producto","sortable":true},
 		{"field":"DESCR","title":"Descripción","sortable":true},
-		{"field":"Cantidad_Vendida_2017","title":"Ventas","sortable":true},
-		{"field":"Ultima_Compra","title":"UltCompra","sortable":true},
-		{"field":"Ultima_Venta","title":"UltVenta","sortable":true},
-		   {"field":"Minimo","title":"Minimo","sortable":false},
-		   {"field":"Maximo","title":"Maximo","sortable":false}];
+		{"field":"CANTIDAD_VENDIDA_2017","title":"Ventas","sortable":true},
+		{"field":"ULTIMA_COMPRA","title":"UltCompra","sortable":true},
+		{"field":"ULTIMA_VENTA","title":"UltVenta","sortable":true},
+		   {"field":"MINIMO","title":"Minimo","sortable":false},
+		   {"field":"MAXIMO","title":"Maximo","sortable":false}];
 	var data = false;
 	loader.show();
 	$('#almacen-productos').bootstrapTable( 'destroy' );
