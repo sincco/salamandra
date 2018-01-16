@@ -45,8 +45,8 @@ $('#almacenes').on('dbl-click-row.bs.table', function ( row, element ) {
 		{"field":"CANTIDAD_VENDIDA_2017","title":"Ventas","sortable":true,formatter:"numero"},
 		{"field":"ULTIMA_COMPRA","title":"UltCompra","sortable":true},
 		{"field":"ULTIMA_VENTA","title":"UltVenta","sortable":true},
-		   {"field":"MINIMO","title":"Minimo","sortable":false},
-		   {"field":"MAXIMO","title":"Maximo","sortable":false}];
+		   {"field":"MINIMO","title":"Minimo","sortable":false,formatter:"numero"},
+		   {"field":"MAXIMO","title":"Maximo","sortable":false,formatter:"numero"}];
 	var data = false;
 	loader.show();
 	$('#almacen-productos').bootstrapTable( 'destroy' );
@@ -73,6 +73,11 @@ $('#almacenes').on('dbl-click-row.bs.table', function ( row, element ) {
 function numero(value, row) {
 	var icon = row.id % 2 === 0 ? 'glyphicon-star' : 'glyphicon-star-empty'
 	return Number(value).toFixed(3);
+}
+	
+function formatDate(value, row) {
+	var temp = new Date(value);
+	return temp.toLocaleFormat('%d-%b-%Y');
 }
 </script>
 
