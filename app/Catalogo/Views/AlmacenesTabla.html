@@ -63,7 +63,7 @@ $('#almacenes').on('dbl-click-row.bs.table', function ( row, element ) {
 		showColumns: true,
 		showRefresh: true,
 		showExport: true,
-		mobileResponsive: true,
+		mobileResponsive: tr.format('dd-m-yy')ue,
 		minimumCountColumns: 2
 	});
 	$('#modal').modal('show');
@@ -77,7 +77,8 @@ function numero(value, row) {
 	
 function formatDate(value, row) {
 	var temp = new Date(value);
-	return temp.format('%d-%b-%Y');
+	console.log(temp);
+	return temp.format('dd-m-yy');
 }
 </script>
 
