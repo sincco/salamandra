@@ -13,7 +13,7 @@ class AlmacenesModel extends Sincco\Sfphp\Abstracts\Model {
 			INNER JOIN INVE" . $_SESSION[ 'companiaClave' ] . " I ON M.CVE_ART=I.CVE_ART
 			INNER JOIN PAR_FACTF" . $_SESSION[ 'companiaClave' ] . " PF ON I.CVE_ART=PF.CVE_ART
 			INNER JOIN FACTF" . $_SESSION[ 'companiaClave' ] . " F ON PF.CVE_DOC=F.CVE_DOC
-			WHERE F.STATUS = 'E' AND F.FECHA_DOC BETWEEN '01/01/2017' AND '12/31/2017'  AND CHAR_LENGTH(trim(M.CVE_ART)) = 5 AND CVE_ALM = ' . $almacen);'
+			WHERE F.STATUS = 'E' AND F.FECHA_DOC BETWEEN '01/01/2017' AND '12/31/2017'  AND CHAR_LENGTH(trim(M.CVE_ART)) = 5 AND CVE_ALM = " . $almacen . " 
 			GROUP BY M.CVE_ART, I.DESCR, I.FCH_ULTCOM, I.FCH_ULTVTA, I.STOCK_MIN, I.STOCK_MAX
 			ORDER BY I.DESCR ASC");
 	}
