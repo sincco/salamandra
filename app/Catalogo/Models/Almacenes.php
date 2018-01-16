@@ -8,7 +8,7 @@ class AlmacenesModel extends Sincco\Sfphp\Abstracts\Model {
 
 	public function getProductos($almacen) {
 		#return $this->connector->query('SELECT m.CVE_ART, i.DESCR, m.STATUS, m.EXIST FROM MULT' . $_SESSION[ 'companiaClave' ] . ' m INNER JOIN INVE' . $_SESSION[ 'companiaClave' ] . ' i ON m.CVE_ART=i.CVE_ART WHERE CVE_ALM = ' . $almacen);
-		return $this->connector->query("SELECT M.CVE_ART Clave_Articulo, I.DESCR Descriocion, SUM(PF.CANT) Cantidad_Vendida_2017, I.FCH_ULTCOM Ultima_Compra, I.FCH_ULTVTA Ultima_Venta, I.STOCK_MIN Minimo, I.STOCK_MAX Maximo
+		return $this->connector->query("SELECT M.CVE_ART, I.DESCR, SUM(PF.CANT) Cantidad_Vendida_2017, I.FCH_ULTCOM Ultima_Compra, I.FCH_ULTVTA Ultima_Venta, I.STOCK_MIN Minimo, I.STOCK_MAX Maximo
 			FROM MULT" . $_SESSION[ 'companiaClave' ] . " M
 			INNER JOIN INVE" . $_SESSION[ 'companiaClave' ] . " I ON M.CVE_ART=I.CVE_ART
 			INNER JOIN PAR_FACTF" . $_SESSION[ 'companiaClave' ] . " PF ON I.CVE_ART=PF.CVE_ART
