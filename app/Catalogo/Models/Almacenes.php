@@ -23,8 +23,7 @@ class AlmacenesModel extends Sincco\Sfphp\Abstracts\Model {
 			AND PF.NUM_ALM=  " . $almacen . " 
 			GROUP BY PF.NUM_ALM, PF.CVE_ART
 			) MOV ON M.CVE_ALM=MOV.NUM_ALM AND M.CVE_ART = MOV.CVE_ART
-			WHERE M.CVE_ALM =  " . $almacen . " AND CHAR_LENGTH(TRIM(I.CVE_ART)) = 5
-			ORDER BY I.DESCR ASC");
+			WHERE M.CVE_ALM =  " . $almacen . " AND CHAR_LENGTH(TRIM(I.CVE_ART)) = 5");
 	}
 
 }
